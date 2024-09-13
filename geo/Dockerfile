@@ -8,4 +8,4 @@ RUN pip install --no-cache-dir -r /geo/requirements.txt
 
 COPY . .
 
-CMD ["fastapi", "run", "main.py"]
+CMD fastapi run main.py
