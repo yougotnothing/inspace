@@ -24,8 +24,6 @@ export class MoonPhaseService {
       throw new HttpException('Unknown country', 434);
     }
 
-    console.log(hemisphere);
-
     return {
       phase: Moon.lunarPhase(date, { hemisphere }),
     };

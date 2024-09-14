@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -14,24 +8,34 @@ datasource db {
 }
 
 model User {
-  id      String   @id @default(uuid()) @db.Uuid()
-  name    String
-  email   String   @unique
-  actions Action[]
+  role         Role     @default(USER)
+  id           String   @id @default(uuid()) @db.Uuid
+  name         String   @unique
+  email        String   @unique
+  avatar       String   @default("")
+  isHaveAvatar Boolean  @default(false)
+  isVerified   Boolean  @default(false)
+  password     String
+  actions      Action[]
 }
 
 model Action {
-  id          String     @id @default(uuid()) @db.Uuid()
+  id          String     @id @default(uuid()) @db.Uuid
   type        ActionType
   description String
-  date        DateTime   @db.Date()
+  date        DateTime   @db.Date
   isSpotted   Boolean    @default(false)
+  userId      String?    @db.Uuid
   User        User?      @relation(fields: [userId], references: [id])
-  userId      String?    @db.Uuid()
 }
 
 enum ActionType {
   SOLAR_ECLIPSE
   LUNAR_ECLIPSE
   METEOR_SHOWER
+}
+
+enum Role {
+  ADMIN
+  USER
 }

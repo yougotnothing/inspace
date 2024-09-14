@@ -21,7 +21,11 @@
       "controller/*": ["src/main/controller/*.controller"],
       "service/*": ["src/main/service/*.service"],
       "module/*": ["src/main/module/*.module"],
-      "utils/*": ["src/utils/enum/*.enum", "src/utils/*.util"],
+      "utils/*": [
+        "src/utils/enum/*.enum",
+        "src/utils/regexp/*.regexp",
+        "src/utils/*.util"
+      ],
       "templates/*": ["src/templates/*.template.hbs"],
       "interceptor/*": ["src/main/interceptor/*.interceptor"],
       "dto/*": ["src/main/dto/*.dto"],

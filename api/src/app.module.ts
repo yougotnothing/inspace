@@ -3,6 +3,8 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ConfigModule } from '@nestjs/config';
 import { MoonPhaseModule } from 'module/moon-phase';
+import { GeolocationModule } from 'module/geolocation';
+import { AuthModule } from 'module/auth';
 
 @Module({
   imports: [
@@ -12,6 +14,8 @@ import { MoonPhaseModule } from 'module/moon-phase';
       expandVariables: true,
     }),
     MoonPhaseModule,
+    GeolocationModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],
