@@ -1,6 +1,6 @@
 # INSPACE
 
-### <a href="#idea">Project idea</a> <a href="#stack">Tech stack</a> <a href="#backend_docs">Backend</a> <a href="#frontend">Frontend</a> <a href="#fastapi">Python backend</a>
+### <a href="#en_idea">Project idea</a> <a href="#stack">Tech stack</a> <a href="#backend_docs">Backend</a> <a href="#frontend">Frontend</a> <a href="#fastapi">Python backend</a>
 
 ---
 
