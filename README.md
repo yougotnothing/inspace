@@ -1,6 +1,6 @@
 # INSPACE
 
-### <a href="#idea">Project idea</a> <a href="#stack">Tech stack</a> <a href="#backend_docs">Backend</a> <a href="#frontend">Frontend</a> <a href="#fastapi">Python backend</a>
+### <a href="#en_idea">Project idea</a> <a href="#stack">Tech stack</a> <a href="#backend_docs">Backend</a> <a href="#frontend">Frontend</a> <a href="#fastapi">Python backend</a>
 
 ---
 
@@ -8,7 +8,7 @@
 
 [![My Skills](https://skillicons.dev/icons?i=nestjs,postgres,prisma,typescript,docker,webpack,yarn,python,fastapi,html,css,react,vite,styledcomponents)](https://skillicons.dev)
 
-### **_<a href="#en_idea">en</a> <a href="ru_idea">ru</a>_**
+### **_<a href="#en_idea">en</a> <a href="#ru_idea">ru</a>_**
 
 ## <h2 id="en_idea">en:</h2>
 
