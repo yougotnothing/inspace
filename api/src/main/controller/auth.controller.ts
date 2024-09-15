@@ -26,4 +26,9 @@ export class AuthController {
   ): Promise<{ message: string }> {
     return await this.authService.login(loginDto, request, response);
   }
+
+  @Post('logout')
+  async logout(@Req() req: Request): Promise<{ message: string }> {
+    return await this.authService.logout(req);
+  }
 }

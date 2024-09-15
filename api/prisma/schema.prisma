@@ -17,6 +17,21 @@ model User {
   isVerified   Boolean  @default(false)
   password     String
   actions      Action[]
+  Session      Session?
+}
+
+model Session {
+  id        String   @id @default(uuid()) @db.Uuid
+  sessionId String   @unique
+  devices   Device[]
+  User      User     @relation(fields: [userId], references: [id])
+  userId    String   @unique @db.Uuid
+}
+
+model Device {
+  device    String  @unique
+  Session   Session @relation(fields: [sessionId], references: [id])
+  sessionId String  @db.Uuid
 }
 
 model Action {

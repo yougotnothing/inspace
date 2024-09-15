@@ -4,6 +4,8 @@ import { PrismaService } from 'service/prisma';
 import * as bcrypt from 'bcrypt';
 import { LoginDto } from 'dto/login';
 import { Request, Response } from 'express';
+import { User } from '@prisma/client';
+import { validateEmailRegexp } from 'utils/validate-email';
 
 @Injectable()
 export class AuthService {
@@ -41,13 +43,71 @@ export class AuthService {
     req: Request,
     res: Response
   ): Promise<{ message: string }> {
-    const user =
-      (await this.prismaService.user.findUnique({
-        where: { email: loginDto.login },
-      })) ??
-      (await this.prismaService.user.findFirst({
-        where: { name: loginDto.login },
-      }));
+    const user = await this.validateUser(loginDto);
+
+    req.session['user'] = {
+      name: user.name,
+      id: user.id,
+    };
+
+    res.cookie('sid', req.sessionID, {
+      httpOnly: true,
+      secure: true,
+      maxAge: 360000,
+      path: '/',
+    });
+
+    if (req.session['visits']) {
+      req.session['visits']++;
+    } else {
+      req.session['visits'] = 1;
+    }
+
+    return {
+      message: `user ${user.name} signed in success.`,
+    };
+  }
+
+  async logout(req: Request): Promise<{ message: string }> {
+    const user = await this.prismaService.user.findFirst({
+      where: {
+        Session: {
+          sessionId: req.sessionID,
+        },
+      },
+      include: {
+        Session: true,
+      },
+    });
+
+    if (!user) {
+      throw new HttpException(
+        'User not found by this session id',
+        HttpStatus.BAD_REQUEST
+      );
+    }
+
+    req.session.destroy(err => {
+      if (err) throw err;
+    });
+
+    await this.prismaService.session.delete({
+      where: {
+        sessionId: req.sessionID,
+      },
+    });
+
+    return {
+      message: `user ${user.name} logged out success.`,
+    };
+  }
+
+  async validateUser({ login, password }: LoginDto): Promise<User> {
+    const user = await this.prismaService.user.findFirst({
+      where: !validateEmailRegexp.test(login)
+        ? { name: login }
+        : { email: login },
+    });
 
     if (!user) {
       throw new HttpException(
@@ -56,21 +116,10 @@ export class AuthService {
       );
     }
 
-    req.session.save(err => {
-      if (err) {
-        throw new HttpException(err.message, err.status);
-      }
-    });
+    if (!(await bcrypt.compare(password, user.password))) {
+      throw new HttpException("Passwords don't match.", HttpStatus.CONFLICT);
+    }
 
-    req.session['user'] = {
-      name: user.name,
-      id: user.id,
-    };
-
-    res.cookie('sid', req.sessionID);
-
-    return {
-      message: `user ${user.name} signed in success.`,
-    };
+    return user;
   }
 }
