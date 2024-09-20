@@ -5,6 +5,7 @@ import { ConfigModule } from '@nestjs/config';
 import { MoonPhaseModule } from 'module/moon-phase';
 import { GeolocationModule } from 'module/geolocation';
 import { AuthModule } from 'module/auth';
+import { GraphQLModule } from 'module/graphql';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { AuthModule } from 'module/auth';
     MoonPhaseModule,
     GeolocationModule,
     AuthModule,
+    GraphQLModule,
   ],
   controllers: [AppController],
   providers: [AppService],

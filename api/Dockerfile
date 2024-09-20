@@ -8,9 +8,9 @@ COPY prisma ./prisma/
 
 RUN apt-get update && \
     apt-get install -y make gcc g++ python3 && \
-    yarn install --force && \
+    yarn install && \
     npx prisma generate
-    
+
 COPY . .
     
 EXPOSE 5174

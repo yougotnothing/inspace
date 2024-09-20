@@ -1,0 +1,82 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+"""action"""
+type Action {
+  date: DateTime!
+  description: String!
+  id: String!
+  isSpotted: Boolean!
+  type: String!
+  userId: String!
+}
+
+input ActionSettingsInput {
+  date: DateTime!
+  description: String!
+  type: String!
+}
+
+input BrandInput {
+  brand: String!
+  version: String!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+input GenerateSessionInput {
+  id: String!
+  name: String!
+}
+
+input LoginDtoInput {
+  login: String!
+  password: String!
+  userPhatform: UserPlatformInput!
+}
+
+type Mutation {
+  destroy: String!
+  generate(generateDto: GenerateSessionInput!): Session!
+  login(loginDto: LoginDtoInput!): String!
+  logout: String!
+  register: String!
+}
+
+type Query {
+  getActionByDescription(description: String!): Action!
+  getActionById(id: String!): Action!
+  getActionsBy(settings: ActionSettingsInput!): [Action!]!
+  getUserById(id: String!): User!
+  getUserByName(name: String!): User!
+}
+
+"""session"""
+type Session {
+  devices: [String!]!
+  id: String!
+  sessionId: String!
+  userId: String!
+}
+
+"""user"""
+type User {
+  avatar: String!
+  email: String!
+  id: ID!
+  isHaveAvatar: String!
+  isVerified: Boolean!
+  name: String!
+  password: String!
+  role: String!
+}
+
+input UserPlatformInput {
+  brands: [BrandInput!]!
+  mobile: Boolean!
+  platform: String!
+}

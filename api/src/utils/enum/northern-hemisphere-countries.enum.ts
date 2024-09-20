@@ -3,7 +3,7 @@ export enum NorthernHemisphereCountries {
   ALBANIA = 'Albania',
   ALGERIA = 'Algeria',
   ANDORRA = 'Andorra',
-  ANGOLA = 'Angola', // Mostly northern
+  ANGOLA = 'Angola',
   ANTIGUA_AND_BARBUDA = 'Antigua and Barbuda',
   ARMENIA = 'Armenia',
   AUSTRIA = 'Austria',
@@ -17,11 +17,11 @@ export enum NorthernHemisphereCountries {
   BENIN = 'Benin',
   BHUTAN = 'Bhutan',
   BOSNIA_AND_HERZEGOVINA = 'Bosnia and Herzegovina',
-  BOTSWANA = 'Botswana', // Mostly northern
+  BOTSWANA = 'Botswana',
   BRUNEI = 'Brunei',
   BULGARIA = 'Bulgaria',
   BURKINA_FASO = 'Burkina Faso',
-  BURUNDI = 'Burundi', // Mostly northern
+  BURUNDI = 'Burundi',
   CAMBODIA = 'Cambodia',
   CAMEROON = 'Cameroon',
   CANADA = 'Canada',
@@ -39,13 +39,13 @@ export enum NorthernHemisphereCountries {
   DJIBOUTI = 'Djibouti',
   DOMINICA = 'Dominica',
   DOMINICAN_REPUBLIC = 'Dominican Republic',
-  ECUADOR = 'Ecuador', // Equator runs through it but mostly northern
+  ECUADOR = 'Ecuador',
   EGYPT = 'Egypt',
   EL_SALVADOR = 'El Salvador',
   ERITREA = 'Eritrea',
   ESTONIA = 'Estonia',
   ESWATINI = 'Eswatini',
-  ETHIOPIA = 'Ethiopia', // Mostly northern
+  ETHIOPIA = 'Ethiopia',
   FINLAND = 'Finland',
   FRANCE = 'France',
   GABON = 'Gabon',
@@ -64,7 +64,7 @@ export enum NorthernHemisphereCountries {
   HUNGARY = 'Hungary',
   ICELAND = 'Iceland',
   INDIA = 'India',
-  INDONESIA = 'Indonesia', // Equator runs through it but mostly northern
+  INDONESIA = 'Indonesia',
   IRAN = 'Iran',
   IRAQ = 'Iraq',
   IRELAND = 'Ireland',
@@ -88,7 +88,7 @@ export enum NorthernHemisphereCountries {
   LIECHTENSTEIN = 'Liechtenstein',
   LITHUANIA = 'Lithuania',
   LUXEMBOURG = 'Luxembourg',
-  MADAGASCAR = 'Madagascar', // Mostly northern
+  MADAGASCAR = 'Madagascar',
   MALAWI = 'Malawi',
   MALAYSIA = 'Malaysia',
   MALDIVES = 'Maldives',
@@ -103,7 +103,7 @@ export enum NorthernHemisphereCountries {
   MOROCCO = 'Morocco',
   MOZAMBIQUE = 'Mozambique',
   MYANMAR = 'Myanmar',
-  NAMIBIA = 'Namibia', // Partly southern
+  NAMIBIA = 'Namibia',
   NEPAL = 'Nepal',
   NETHERLANDS = 'Netherlands',
   NICARAGUA = 'Nicaragua',

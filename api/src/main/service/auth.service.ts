@@ -1,17 +1,21 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { CreateUserDto } from 'dto/create-user';
 import { PrismaService } from 'service/prisma';
 import * as bcrypt from 'bcrypt';
-import { LoginDto } from 'dto/login';
 import { Request, Response } from 'express';
 import { User } from '@prisma/client';
 import { validateEmailRegexp } from 'utils/validate-email';
+import { SessionService } from './session.service';
+import { LoginDtoInput } from 'model/login-dto';
+import { RegisterInput } from 'model/register';
 
 @Injectable()
 export class AuthService {
-  constructor(private readonly prismaService: PrismaService) {}
+  constructor(
+    private readonly prismaService: PrismaService,
+    private readonly sessionService: SessionService
+  ) {}
 
-  async register(createUserDto: CreateUserDto): Promise<{ message: string }> {
+  async register(createUserDto: RegisterInput): Promise<string> {
     const hashedPassword = await bcrypt.hash(createUserDto.password, 10);
 
     const user = await this.prismaService.user.findUnique({
@@ -33,42 +37,63 @@ export class AuthService {
       },
     });
 
-    return {
-      message: `user ${createUserDto.name} created success.`,
-    };
+    return `user ${createUserDto.name} created success.`;
   }
 
   async login(
-    loginDto: LoginDto,
+    loginDto: LoginDtoInput,
     req: Request,
     res: Response
-  ): Promise<{ message: string }> {
+  ): Promise<string> {
     const user = await this.validateUser(loginDto);
+    const session = await this.sessionService.generate(
+      {
+        name: user.name,
+        id: user.id,
+      },
+      req
+    );
+
+    if (!session.devices.includes(req.headers['user-agent'])) {
+      await this.prismaService.session.update({
+        where: {
+          sessionId: session.sessionId,
+        },
+        data: {
+          devices: [...session.devices, req.headers['user-agent']],
+        },
+      });
+    }
 
     req.session['user'] = {
       name: user.name,
       id: user.id,
     };
 
-    res.cookie('sid', req.sessionID, {
+    res.cookie('session', req.sessionID, {
       httpOnly: true,
       secure: true,
       maxAge: 360000,
       path: '/',
     });
 
-    if (req.session['visits']) {
-      req.session['visits']++;
-    } else {
-      req.session['visits'] = 1;
-    }
+    req.session['visits'] = session.devices.length;
+
+    return `user ${user.name} signed in success.`;
+  }
+
+  async refresh(req: Request): Promise<{ message: string; session: any }> {
+    req.session.regenerate(err => {
+      if (err) throw err;
+    });
 
     return {
-      message: `user ${user.name} signed in success.`,
+      message: 'session refreshed',
+      session: req.session,
     };
   }
 
-  async logout(req: Request): Promise<{ message: string }> {
+  async logout(req: Request): Promise<string> {
     const user = await this.prismaService.user.findFirst({
       where: {
         Session: {
@@ -97,12 +122,10 @@ export class AuthService {
       },
     });
 
-    return {
-      message: `user ${user.name} logged out success.`,
-    };
+    return `user ${user.name} logged out success.`;
   }
 
-  async validateUser({ login, password }: LoginDto): Promise<User> {
+  async validateUser({ login, password }: LoginDtoInput): Promise<User> {
     const user = await this.prismaService.user.findFirst({
       where: !validateEmailRegexp.test(login)
         ? { name: login }

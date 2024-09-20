@@ -30,7 +30,9 @@
       "interceptor/*": ["src/main/interceptor/*.interceptor"],
       "dto/*": ["src/main/dto/*.dto"],
       "type/*": ["src/main/type/*.type"],
-      "pipe/*": ["src/main/pipe/*.pipe"]
+      "pipe/*": ["src/main/pipe/*.pipe"],
+      "model/*": ["src/main/model/*.model"],
+      "resolver/*": ["src/main/resolver/*.resolver"]
     }
   }
 }

@@ -22,15 +22,10 @@ CREATE TABLE "User" (
 CREATE TABLE "Session" (
     "id" UUID NOT NULL,
     "sessionId" TEXT NOT NULL,
+    "devices" TEXT[],
     "userId" UUID NOT NULL,
 
     CONSTRAINT "Session_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "Device" (
-    "device" TEXT NOT NULL,
-    "sessionId" UUID NOT NULL
 );
 
 -- CreateTable
@@ -57,14 +52,8 @@ CREATE UNIQUE INDEX "Session_sessionId_key" ON "Session"("sessionId");
 -- CreateIndex
 CREATE UNIQUE INDEX "Session_userId_key" ON "Session"("userId");
 
--- CreateIndex
-CREATE UNIQUE INDEX "Device_device_key" ON "Device"("device");
-
 -- AddForeignKey
 ALTER TABLE "Session" ADD CONSTRAINT "Session_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "Device" ADD CONSTRAINT "Device_sessionId_fkey" FOREIGN KEY ("sessionId") REFERENCES "Session"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Action" ADD CONSTRAINT "Action_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE SET NULL ON UPDATE CASCADE;
