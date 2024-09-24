@@ -14,7 +14,7 @@ def get_reverse_geolocation(longitude: float, latitude: float):
 
   if geo.address:
     return {
-      "address": translated_geo
+      'address': translated_geo
     }
   else:
-    raise HTTPException(422, "invalid data (longitude or latitude)")
+    raise HTTPException(422, 'invalid data (longitude or latitude)')

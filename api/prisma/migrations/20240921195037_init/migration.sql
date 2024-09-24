@@ -20,12 +20,11 @@ CREATE TABLE "User" (
 
 -- CreateTable
 CREATE TABLE "Session" (
-    "id" UUID NOT NULL,
     "sessionId" TEXT NOT NULL,
-    "devices" TEXT[],
+    "device" TEXT NOT NULL,
     "userId" UUID NOT NULL,
 
-    CONSTRAINT "Session_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "Session_pkey" PRIMARY KEY ("sessionId")
 );
 
 -- CreateTable
@@ -48,6 +47,9 @@ CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Session_sessionId_key" ON "Session"("sessionId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Session_device_key" ON "Session"("device");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Session_userId_key" ON "Session"("userId");

@@ -1,6 +1,6 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { PrismaService } from './prisma.service';
-import { Request } from 'express';
+import { Request, Response } from 'express';
 import { Session } from 'model/session';
 
 @Injectable()
@@ -9,35 +9,54 @@ export class SessionService {
 
   async generate(
     user: { name: string; id: string },
-    req: Request
+    res: Response
   ): Promise<Session> {
-    const session = req.sessionID
-      ? await this.prismaService.session.findFirst({
-          where: {
-            sessionId: req.sessionID,
-          },
-        })
-      : await this.prismaService.session.create({
-          data: {
-            sessionId: req.sessionID,
-            userId: user.id,
-          },
-        });
+    const userAgent = res.req.headers['user-agent'];
 
-    if (!session.devices.includes(req.headers['user-agent'])) {
-      await this.prismaService.session.update({
-        where: {
-          sessionId: session.sessionId,
-        },
-        data: {
-          devices: [...session.devices, req.headers['user-agent']],
-        },
-      });
+    const existingSession = await this.prismaService.session.findFirst({
+      where: {
+        userId: user.id,
+      },
+    });
+
+    console.log('Existing session:', existingSession);
+
+    if (existingSession) {
+      if (existingSession.device === userAgent) {
+        throw new HttpException(
+          'this device is already logged in',
+          HttpStatus.CONFLICT
+        );
+      }
+      return existingSession;
     }
 
-    req.session['visits'] = session.devices.length;
+    try {
+      const session = await this.prismaService.session.create({
+        data: {
+          sessionId: res.req.sessionID,
+          userId: user.id,
+          device: userAgent,
+        },
+      });
 
-    return session;
+      res.req.session['user'] = user;
+
+      res.cookie('session', res.req.sessionID, {
+        httpOnly: true,
+        secure: true,
+        maxAge: 360000,
+        path: '/',
+      });
+
+      return session;
+    } catch (error) {
+      console.error('Error creating session:', error);
+      throw new HttpException(
+        `Failed to create session: ${error.message}`,
+        HttpStatus.INTERNAL_SERVER_ERROR
+      );
+    }
   }
 
   async destroy(req: Request): Promise<string> {
@@ -55,7 +74,7 @@ export class SessionService {
 
     await this.prismaService.session.delete({
       where: {
-        id: session.id,
+        sessionId: session.sessionId,
       },
     });
 

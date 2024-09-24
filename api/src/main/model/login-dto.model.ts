@@ -1,15 +1,12 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { Field, InputType } from '@nestjs/graphql';
-import { UserPlatformInput } from './user-platform.model';
+import { LoginDto } from 'dto/login';
 
 @InputType()
-export class LoginDtoInput {
+export class LoginDtoInput implements LoginDto {
   @Field(type => String)
   login: string;
 
   @Field(type => String)
   password: string;
-
-  @Field(type => UserPlatformInput)
-  userPhatform: UserPlatformInput;
 }

@@ -8,12 +8,12 @@ COPY prisma ./prisma/
 
 RUN apt-get update && \
     apt-get install -y make gcc g++ python3 && \
-    yarn install && \
+    yarn global add prisma && \
     npx prisma generate
 
 COPY . .
-    
-EXPOSE 5174
-    
 
-CMD yarn start:hmr
+EXPOSE 5174
+
+CMD yarn add bcrypt && \ 
+    yarn start:hmr

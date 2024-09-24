@@ -1,12 +1,12 @@
 import { HttpService } from '@nestjs/axios';
 import { HttpException, Injectable } from '@nestjs/common';
-import { CoordsDto, CoordsPromiseDto } from 'dto/coords';
+import { Geolocation, GeolocationInput } from 'model/geolocation';
 
 @Injectable()
 export class GeolocationService {
   constructor(private readonly http: HttpService) {}
 
-  async parseLocation(coords: CoordsDto): Promise<CoordsPromiseDto> {
+  async parseLocation(coords: GeolocationInput): Promise<Geolocation> {
     try {
       const response = await this.http.axiosRef.get('/reverse', {
         params: {

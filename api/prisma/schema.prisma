@@ -1,5 +1,6 @@
 generator client {
   provider = "prisma-client-js"
+  log      = ["query", "info", "warn", "error"]
 }
 
 datasource db {
@@ -8,24 +9,23 @@ datasource db {
 }
 
 model User {
-  role         Role     @default(USER)
-  id           String   @id @default(uuid()) @db.Uuid
-  name         String   @unique
-  email        String   @unique
-  avatar       String   @default("")
-  isHaveAvatar Boolean  @default(false)
-  isVerified   Boolean  @default(false)
+  role         Role      @default(USER)
+  id           String    @id @default(uuid()) @db.Uuid
+  name         String    @unique
+  email        String    @unique
+  avatar       String    @default("")
+  isHaveAvatar Boolean   @default(false)
+  isVerified   Boolean   @default(false)
   password     String
   actions      Action[]
-  Session      Session?
+  sessions     Session[]
 }
 
 model Session {
-  id        String   @id @default(uuid()) @db.Uuid
-  sessionId String   @unique
-  devices   String[]
-  User      User     @relation(fields: [userId], references: [id])
-  userId    String   @unique @db.Uuid
+  sessionId String @id @unique
+  device    String @unique
+  User      User   @relation(fields: [userId], references: [id])
+  userId    String @unique @db.Uuid
 }
 
 model Action {

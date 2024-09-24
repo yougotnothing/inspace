@@ -60,7 +60,7 @@ services:
       - VITE_HMR_HOST=${VITE_HMR_HOST}
       - CHOKIDAR_USEPOLLING=${CHOKIDAR_USEPOLLING}
       - API_URL=http://nestjs-api:5174/
-      - GRAPHQL_SERVER_URI=http://nestjs-api:5174/graphql
+      - GRAPHQL_SERVER_URI=${GRAPHQL_SERVER_URI}
     tty: true
 
 volumes:

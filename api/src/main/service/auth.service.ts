@@ -40,44 +40,9 @@ export class AuthService {
     return `user ${createUserDto.name} created success.`;
   }
 
-  async login(
-    loginDto: LoginDtoInput,
-    req: Request,
-    res: Response
-  ): Promise<string> {
+  async login(loginDto: LoginDtoInput, res: Response): Promise<string> {
     const user = await this.validateUser(loginDto);
-    const session = await this.sessionService.generate(
-      {
-        name: user.name,
-        id: user.id,
-      },
-      req
-    );
-
-    if (!session.devices.includes(req.headers['user-agent'])) {
-      await this.prismaService.session.update({
-        where: {
-          sessionId: session.sessionId,
-        },
-        data: {
-          devices: [...session.devices, req.headers['user-agent']],
-        },
-      });
-    }
-
-    req.session['user'] = {
-      name: user.name,
-      id: user.id,
-    };
-
-    res.cookie('session', req.sessionID, {
-      httpOnly: true,
-      secure: true,
-      maxAge: 360000,
-      path: '/',
-    });
-
-    req.session['visits'] = session.devices.length;
+    await this.sessionService.generate({ name: user.name, id: user.id }, res);
 
     return `user ${user.name} signed in success.`;
   }
@@ -96,12 +61,14 @@ export class AuthService {
   async logout(req: Request): Promise<string> {
     const user = await this.prismaService.user.findFirst({
       where: {
-        Session: {
-          sessionId: req.sessionID,
+        sessions: {
+          some: {
+            sessionId: req.session.id,
+          },
         },
       },
       include: {
-        Session: true,
+        sessions: true,
       },
     });
 

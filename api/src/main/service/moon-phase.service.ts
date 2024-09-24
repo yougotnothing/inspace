@@ -6,7 +6,11 @@ import { SouthernHemisphereCountries } from 'utils/southern-hemisphere-countries
 
 @Injectable()
 export class MoonPhaseService {
-  async getMoonPhase({ date, country }: MoonPhaseDto) {
+  async getMoonPhase({ date, country }: MoonPhaseDto): Promise<{
+    phase: string;
+    age: number;
+    hemisphere: Hemisphere;
+  }> {
     let hemisphere: Hemisphere = Hemisphere.NORTHERN;
 
     if (
@@ -26,6 +30,8 @@ export class MoonPhaseService {
 
     return {
       phase: Moon.lunarPhase(date, { hemisphere }),
+      age: Moon.lunarAgePercent(date),
+      hemisphere,
     };
   }
 }

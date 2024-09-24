@@ -7,6 +7,7 @@ import {
   PipeTransform,
 } from '@nestjs/common';
 import { CreateUserDto } from 'dto/create-user';
+import { RegisterInput } from 'model/register';
 import {
   hasDigitRegexp,
   hasLowerCaseRegexp,
@@ -15,8 +16,8 @@ import {
 } from 'utils/validate-password';
 
 @Injectable()
-export class RegisterValidationPipe implements PipeTransform<CreateUserDto> {
-  transform(value: CreateUserDto, metadata: ArgumentMetadata) {
+export class RegisterValidationPipe implements PipeTransform<RegisterInput> {
+  transform(value: RegisterInput, metadata: ArgumentMetadata) {
     const password = value?.password;
     const name = value?.name;
 

@@ -10,6 +10,6 @@ translator = Translator(
 
 def translate_address(input_str: str) -> str:
   splitted_input_str = input_str.split(', ')
-  city = f"{splitted_input_str[2]}, {splitted_input_str[-1]}"
+  city = f'{splitted_input_str[2]}, {splitted_input_str[-1]}'
 
   return translator.translate(city)

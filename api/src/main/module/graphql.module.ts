@@ -2,15 +2,14 @@ import { Module } from '@nestjs/common';
 import { GraphQLModule as GQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { join } from 'path';
-import { UserService } from 'service/user';
 import { PrismaService } from 'service/prisma';
-import { SessionService } from 'service/session';
-import { AuthService } from 'service/auth';
-import { SessionResolver } from 'resolver/session';
-import { UserResolver } from 'resolver/user';
-import { AuthResolver } from 'resolver/auth';
 import { ActionResolver } from 'resolver/action';
 import { ActionService } from 'service/action';
+import { GeolocationModule } from './geolocation.module';
+import { MoonPhaseModule } from './moon-phase.module';
+import { AuthModule } from './auth.module';
+import { UserModule } from './user.module';
+import { SessionModule } from './session.module';
 
 @Module({
   imports: [
@@ -18,19 +17,15 @@ import { ActionService } from 'service/action';
       driver: ApolloDriver,
       sortSchema: true,
       playground: true,
+      context: ({ req, res }) => ({ req, res }),
       autoSchemaFile: join(process.cwd(), 'src/main/schema.gql'),
     }),
+    GeolocationModule,
+    MoonPhaseModule,
+    AuthModule,
+    UserModule,
+    SessionModule,
   ],
-  providers: [
-    UserResolver,
-    UserService,
-    PrismaService,
-    SessionResolver,
-    SessionService,
-    AuthResolver,
-    AuthService,
-    ActionResolver,
-    ActionService,
-  ],
+  providers: [PrismaService, ActionResolver, ActionService],
 })
 export class GraphQLModule {}

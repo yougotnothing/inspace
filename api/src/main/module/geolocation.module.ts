@@ -1,7 +1,7 @@
 import { HttpModule } from '@nestjs/axios';
 import { Module } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { GeolocationController } from 'controller/geolocation';
+import { GeolocationResolver } from 'resolver/geolocation';
 import { GeolocationService } from 'service/geolocation';
 
 @Module({
@@ -13,7 +13,6 @@ import { GeolocationService } from 'service/geolocation';
       inject: [ConfigService],
     }),
   ],
-  providers: [GeolocationService],
-  controllers: [GeolocationController],
+  providers: [GeolocationService, GeolocationResolver],
 })
 export class GeolocationModule {}
