@@ -25,7 +25,8 @@ const Wrapper = styled('div')<WrapperProps>`
   position: relative;
   overflow: hidden;
   z-index: 1;
-  background-blend-mode: lighten;
+  border-radius: 50%;
+  background-blend-mode: difference;
 
   &::before {
     content: '';
