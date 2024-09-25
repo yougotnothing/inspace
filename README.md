@@ -4,11 +4,12 @@
 
 <br id="stack">
 [![My Skills](https://skillicons.dev/icons?i=nestjs,postgres,prisma,typescript,docker,webpack,yarn,python,fastapi,html,css,react,vite,styledcomponents,graphql,threejs)](https://skillicons.dev)
-### ***<a href="#en_idea">en</a> <a href="ru_idea">ru</a>***
+
+### **_<a href="#en_idea">en</a> <a href="ru_idea">ru</a>_**
 
 <br id="en_idea">
-## en: 
----
+
+## en:
 
 ### The idea of the project is to create an application that will show all sorts of space events (moon phase, lunar, solar eclipse, and meteor showers). in order to improve the use of the application for their own purposes (namely tracking these events in real life) it is planned to add functionality to display light and air pollution. it is planned to integrate technology to send messages to the mail to the user a hundred percent was notified in a new event outside of our planet, also planned to add functionality within this application, let's call it “to spot”. with its help the user can mark events that he saw. in the future it is planned to create a mobile application and telegram bot, at the present time the development of web application will be started.
 
