@@ -13,13 +13,30 @@ export class MoonPhaseService {
     );
   }
 
-  private calculateMoonIllumination(date: Date): number {
-    const lunarAge = Moon.lunarAge(date);
-    const synodicMonth = 29.530588853;
-    const illumination =
-      50 * (1 - Math.cos(((2 * Math.PI) / synodicMonth) * lunarAge));
+  private degToRad(deg: number): number {
+    return (deg * Math.PI) / 180;
+  }
 
-    return Math.max(0, Math.min(illumination, 100));
+  // Получение возраста Луны (в днях) на основе метода lunarAge
+  private lunarAge(date: Date): number {
+    const synodicMonth = 29.53058867; // Средняя продолжительность синодического месяца
+    const newMoonDate = new Date('2000-01-06T18:14:00Z'); // Дата известного новолуния
+    const timeDifference = date.getTime() - newMoonDate.getTime();
+    return (timeDifference / (1000 * 60 * 60 * 24)) % synodicMonth;
+  }
+
+  // Новый расчет освещенности Луны
+  private calculateMoonIllumination(date: Date): number {
+    const synodicMonth = 29.53058867;
+    const age = Moon.lunarAge(date);
+
+    // Вычисляем освещенность на основе фазового угла
+    const phaseAngle = (age / synodicMonth) * 360; // В градусах
+
+    // Основная формула освещенности на основе фазового угла
+    const illumination = (1 - Math.cos(this.degToRad(phaseAngle))) / 2;
+
+    return +(illumination * 100).toFixed(2); // Освещенность в процентах
   }
 
   private calculateMoonDeclination(daysSinceJ2000: number): number {
