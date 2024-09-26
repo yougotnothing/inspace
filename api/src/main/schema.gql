@@ -43,8 +43,9 @@ input LoginDtoInput {
 }
 
 type MoonPhase {
-  age: Float!
+  declination: Float!
   hemisphere: String!
+  illumination: Float!
   phase: String!
 }
 
