@@ -2,7 +2,7 @@
 import { UsePipes } from '@nestjs/common';
 import { Args, Context, Mutation, Resolver } from '@nestjs/graphql';
 import { Request, Response } from 'express';
-import { LoginDtoInput } from 'model/login-dto';
+import { Login, LoginDtoInput, LoginError } from 'model/login';
 import { RegisterInput } from 'model/register';
 import { User } from 'model/user';
 import { EmailValidationPipe } from 'pipe/email-validation';
@@ -23,7 +23,7 @@ export class AuthResolver {
   async login(
     @Args('loginDto') loginDto: LoginDtoInput,
     @Context('res') res: Response
-  ): Promise<string> {
+  ): Promise<Login | LoginError> {
     return await this.authService.login(loginDto, res);
   }
 

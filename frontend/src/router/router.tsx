@@ -1,3 +1,4 @@
+import { Login } from 'components/login/Login';
 import { MoonPhase } from 'components/moon-phase/Moon-phase';
 import { Welcome } from 'components/welcome/Welcome';
 import { createBrowserRouter } from 'react-router-dom';
@@ -11,5 +12,9 @@ export const router = createBrowserRouter([
     path: '/',
     element: <Welcome />,
     loader: () => <h1>loading...</h1>,
+  },
+  {
+    path: 'login',
+    element: <Login />,
   },
 ]);

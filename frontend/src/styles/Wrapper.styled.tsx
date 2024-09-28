@@ -11,5 +11,5 @@ export const Wrapper = styled('div')`
   height: 100svh;
   background-color: black;
   position: relative;
-  z-index: 11;
+  z-index: 1;
 `;

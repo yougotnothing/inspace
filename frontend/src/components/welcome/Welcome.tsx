@@ -17,10 +17,12 @@ import gsap from 'gsap';
 import { GithubIcon, InstagramIcon, TelegramIcon } from 'hugeicons-react';
 import { Link } from 'styles/Link';
 import { Button } from 'styles/Button';
+import { useNavigate } from 'react-router-dom';
 
 export const Welcome = () => {
   const starfieldRef = useRef<HTMLDivElement>(null);
   const wrapperRef = useRef<HTMLDivElement>(null);
+  const navigate = useNavigate();
 
   useGSAP(() => {
     gsap.to('.wrapper', {
@@ -151,7 +153,9 @@ export const Welcome = () => {
             <Paragraph $weight={500}>&#183; Air & Light pollution</Paragraph>
             <Paragraph $weight={500}>&#183; And other events</Paragraph>
           </Categories>
-          <Button $marginTop="auto">let's started</Button>
+          <Button $marginTop="auto" onClick={() => navigate('login')}>
+            let's started
+          </Button>
         </TextWrapper>
       </Wrapper>
     </Starfield>

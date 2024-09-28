@@ -5,7 +5,7 @@ import { Request, Response } from 'express';
 import { User } from '@prisma/client';
 import { validateEmailRegexp } from 'utils/validate-email';
 import { SessionService } from './session.service';
-import { LoginDtoInput } from 'model/login-dto';
+import { Login, LoginDtoInput, LoginError } from 'model/login';
 import { RegisterInput } from 'model/register';
 
 @Injectable()
@@ -40,11 +40,25 @@ export class AuthService {
     return `user ${createUserDto.name} created success.`;
   }
 
-  async login(loginDto: LoginDtoInput, res: Response): Promise<string> {
+  async login(
+    loginDto: LoginDtoInput,
+    res: Response
+  ): Promise<Login | LoginError> {
     const user = await this.validateUser(loginDto);
-    await this.sessionService.generate({ name: user.name, id: user.id }, res);
 
-    return `user ${user.name} signed in success.`;
+    if (!user) {
+      return {
+        message: `user ${loginDto.login} is not found.`,
+      };
+    }
+
+    return {
+      ...(await this.sessionService.generate(
+        { name: user.name, id: user.id },
+        res
+      )),
+      message: `user ${user.name} logged in success.`,
+    };
   }
 
   async refresh(req: Request): Promise<{ message: string; session: any }> {
