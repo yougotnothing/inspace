@@ -7,6 +7,8 @@ export const GET_MOON_PHASE = gql`
       hemisphere
       illumination
       declination
+      x
+      z
     }
   }
 `;

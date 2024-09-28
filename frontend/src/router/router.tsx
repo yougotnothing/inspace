@@ -10,5 +10,6 @@ export const router = createBrowserRouter([
   {
     path: '/',
     element: <Welcome />,
+    loader: () => <h1>loading...</h1>,
   },
 ]);

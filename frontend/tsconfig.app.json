@@ -18,7 +18,10 @@
       "pages/*": ["./src/pages/*"],
       "types/*": ["./src/types/*.type"],
       "@router": ["./src/router"],
-      "styles/*": ["./src/styles/*.styled"]
+      "styles/*": ["./src/styles/*.styled"],
+      "apollo/*": ["./src/apollo/*"],
+      "query/*": ["./src/apollo/queries/*.query"],
+      "mutation/*": ["./src/apollo/mutations/*.mutation"]
     },
 
     /* Bundler mode */

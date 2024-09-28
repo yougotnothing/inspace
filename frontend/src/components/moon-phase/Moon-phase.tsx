@@ -1,5 +1,5 @@
 import { useQuery } from '@apollo/client';
-import { GET_MOON_PHASE } from '../../apollo/queries/moon-phase.query';
+import { GET_MOON_PHASE } from 'query/moon-phase';
 import { useEffect, useMemo, useRef } from 'react';
 import * as THREE from 'three';
 import moonTexture from '../../assets/moon-texture.jpg';
@@ -15,9 +15,7 @@ export const MoonPhase = () => {
     []
   );
   const threeRef = useRef<HTMLDivElement>(null);
-  const { loading, error, data } = useQuery(GET_MOON_PHASE, {
-    variables,
-  });
+  const { loading, error, data } = useQuery(GET_MOON_PHASE, { variables });
 
   useEffect(() => {
     if (loading || error || !data) return;
@@ -41,18 +39,46 @@ export const MoonPhase = () => {
 
     const moon = new THREE.Mesh(
       new THREE.SphereGeometry(1, 64, 64, 64),
-      new THREE.MeshBasicMaterial({
+      new THREE.MeshPhongMaterial({
+        color: 'white',
         map: new THREE.TextureLoader().load(moonTexture),
       })
     );
 
-    moon.rotateY(180);
-    moon.rotateX(data?.declination ?? 0);
+    moon.rotation.y = 179.6;
 
+    const light = new THREE.PointLight('#ffffff', 50);
+    light.position.copy(
+      new THREE.Vector3(
+        data.getMoonPhase?.x,
+        THREE.MathUtils.degToRad(data.getMoonPhase?.declination),
+        data.getMoonPhase?.z
+      )
+    );
     scene.add(moon);
+    scene.add(light);
+
+    function needResize(renderer: THREE.WebGLRenderer) {
+      const canvas = renderer.domElement;
+      const width = canvas.clientWidth;
+      const height = canvas.clientHeight;
+      const needResize = canvas.width !== width || canvas.height !== height;
+
+      if (needResize) {
+        renderer.setSize(width, height, false);
+      }
+
+      return needResize;
+    }
 
     function animate() {
       requestAnimationFrame(animate);
+
+      if (needResize(renderer)) {
+        camera.aspect =
+          renderer.domElement.clientWidth / renderer.domElement.clientHeight;
+        camera.updateProjectionMatrix();
+      }
 
       renderer.render(scene, camera);
     }

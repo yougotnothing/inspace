@@ -29,4 +29,10 @@ export class MoonPhase {
 
   @Field(type => Number)
   illumination: number;
+
+  @Field(type => Number)
+  x: number;
+
+  @Field(type => Number)
+  z: number;
 }

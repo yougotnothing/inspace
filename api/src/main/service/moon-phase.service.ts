@@ -1,5 +1,5 @@
 import { HttpException, Injectable } from '@nestjs/common';
-import { Hemisphere, Moon } from 'lunarphase-js';
+import { Hemisphere, LunarPhase, Moon } from 'lunarphase-js';
 import { MoonPhase, MoonPhaseInput } from 'model/moon-phase';
 import { NorthernHemisphereCountries } from 'utils/northern-hemisphere-countries';
 import { SouthernHemisphereCountries } from 'utils/southern-hemisphere-countries';
@@ -17,26 +17,53 @@ export class MoonPhaseService {
     return (deg * Math.PI) / 180;
   }
 
-  // Получение возраста Луны (в днях) на основе метода lunarAge
-  private lunarAge(date: Date): number {
-    const synodicMonth = 29.53058867; // Средняя продолжительность синодического месяца
-    const newMoonDate = new Date('2000-01-06T18:14:00Z'); // Дата известного новолуния
-    const timeDifference = date.getTime() - newMoonDate.getTime();
-    return (timeDifference / (1000 * 60 * 60 * 24)) % synodicMonth;
-  }
-
-  // Новый расчет освещенности Луны
   private calculateMoonIllumination(date: Date): number {
     const synodicMonth = 29.53058867;
     const age = Moon.lunarAge(date);
-
-    // Вычисляем освещенность на основе фазового угла
-    const phaseAngle = (age / synodicMonth) * 360; // В градусах
-
-    // Основная формула освещенности на основе фазового угла
+    const phaseAngle = (age / synodicMonth) * 360;
     const illumination = (1 - Math.cos(this.degToRad(phaseAngle))) / 2;
 
-    return +(illumination * 100).toFixed(2); // Освещенность в процентах
+    return +(illumination * 100).toFixed(2);
+  }
+
+  private calculateLightCoordinates(
+    date: Date,
+    phase: LunarPhase,
+    hemisphere: Hemisphere
+  ): {
+    x: number;
+    y: number;
+    z: number;
+  } {
+    const synodicMonth = 29.53058867;
+    const age = Moon.lunarAge(date);
+    const phaseAngle = (age / synodicMonth) * 360;
+
+    const invertedPhaseAngle = 180 - phaseAngle;
+    const adjustedPhaseAngle = invertedPhaseAngle + 8;
+    const radius = 5;
+    const y = 0;
+    let x = radius * Math.sin(this.degToRad(adjustedPhaseAngle));
+    const z = radius * Math.cos(this.degToRad(adjustedPhaseAngle));
+
+    switch (phase) {
+      case LunarPhase.WANING_GIBBOUS:
+      case LunarPhase.WAXING_CRESCENT:
+        if (hemisphere === 'Southern')
+          x = radius * Math.sin(this.degToRad(adjustedPhaseAngle));
+        else x = -(radius * Math.sin(this.degToRad(adjustedPhaseAngle)));
+      case LunarPhase.NEW:
+      case LunarPhase.FIRST_QUARTER:
+      case LunarPhase.WAXING_GIBBOUS:
+      case LunarPhase.FULL:
+      case LunarPhase.LAST_QUARTER:
+      case LunarPhase.WANING_CRESCENT:
+        if (hemisphere === 'Southern')
+          x = -(radius * Math.sin(this.degToRad(adjustedPhaseAngle)));
+        else x = radius * Math.sin(this.degToRad(adjustedPhaseAngle));
+    }
+
+    return { x, y, z };
   }
 
   private calculateMoonDeclination(daysSinceJ2000: number): number {
@@ -71,6 +98,16 @@ export class MoonPhaseService {
       hemisphere,
       declination: this.calculateMoonDeclination(this.daysSinceJ2000(date)),
       illumination: this.calculateMoonIllumination(date),
+      x: this.calculateLightCoordinates(
+        date,
+        Moon.lunarPhase(date, { hemisphere }),
+        hemisphere
+      ).x,
+      z: this.calculateLightCoordinates(
+        date,
+        Moon.lunarPhase(date, { hemisphere }),
+        hemisphere
+      ).z,
     };
   }
 }

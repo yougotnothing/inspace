@@ -61,6 +61,9 @@ services:
       - CHOKIDAR_USEPOLLING=${CHOKIDAR_USEPOLLING}
       - API_URL=http://nestjs-api:5174/
       - GRAPHQL_SERVER_URI=${GRAPHQL_SERVER_URI}
+      - GITHUB_URL=${GITHUB_URL}
+      - TELEGRAM_URL=${TELEGRAM_URL}
+      - INSTAGRAM_URL=${INSTAGRAM_URL}
     tty: true
 
 volumes:

@@ -47,6 +47,8 @@ type MoonPhase {
   hemisphere: String!
   illumination: Float!
   phase: String!
+  x: Float!
+  z: Float!
 }
 
 input MoonPhaseInput {
