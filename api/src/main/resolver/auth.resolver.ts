@@ -19,11 +19,11 @@ export class AuthResolver {
     return await this.authService.register(user);
   }
 
-  @Mutation(returns => String)
+  @Mutation(returns => Login)
   async login(
     @Args('loginDto') loginDto: LoginDtoInput,
     @Context('res') res: Response
-  ): Promise<Login | LoginError> {
+  ): Promise<Login> {
     return await this.authService.login(loginDto, res);
   }
 

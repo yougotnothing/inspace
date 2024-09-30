@@ -10,6 +10,7 @@ import { MoonPhaseModule } from './moon-phase.module';
 import { AuthModule } from './auth.module';
 import { UserModule } from './user.module';
 import { SessionModule } from './session.module';
+import { AirPollutionModule } from './air-pollution.module';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { SessionModule } from './session.module';
     AuthModule,
     UserModule,
     SessionModule,
+    AirPollutionModule,
   ],
   providers: [PrismaService, ActionResolver, ActionService],
 })

@@ -18,6 +18,27 @@ input ActionSettingsInput {
   type: String!
 }
 
+type AirPollution {
+  components: Components!
+  coords: [Float!]!
+}
+
+input AirPollutionInput {
+  lat: Float!
+  lon: Float!
+}
+
+type Components {
+  co: Float!
+  nh3: Float!
+  no: Float!
+  no2: Float!
+  o3: Float!
+  pm2_5: Float!
+  pm10: Float!
+  so2: Float!
+}
+
 """
 A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
 """
@@ -35,6 +56,13 @@ type Geolocation {
 input GeolocationInput {
   latitude: Float!
   longitude: Float!
+}
+
+type Login {
+  device: String!
+  message: String!
+  sessionId: String!
+  userId: String!
 }
 
 input LoginDtoInput {
@@ -59,7 +87,7 @@ input MoonPhaseInput {
 type Mutation {
   destroy: String!
   generate(generateDto: GenerateSessionInput!): Session!
-  login(loginDto: LoginDtoInput!): String!
+  login(loginDto: LoginDtoInput!): Login!
   logout: String!
   register(user: RegisterInput!): String!
 }
@@ -68,6 +96,7 @@ type Query {
   getActionByDescription(description: String!): Action!
   getActionById(id: String!): Action!
   getActionsBy(settings: ActionSettingsInput!): [Action!]!
+  getAirPollutionInfo(coords: AirPollutionInput!): AirPollution!
   getLocation(coordinates: GeolocationInput!): Geolocation!
   getMoonPhase(location: MoonPhaseInput!): MoonPhase!
   getUserById(id: String!): User!

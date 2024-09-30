@@ -15,6 +15,7 @@ export const Button = styled('button')<{ $marginTop?: 'auto' }>`
   margin-left: ${({ $marginTop }) => ($marginTop ? $marginTop : '0')};
   margin-right: ${({ $marginTop }) => ($marginTop ? $marginTop : '0')};
   margin-top: ${({ $marginTop }) => ($marginTop ? $marginTop : '0')};
+  user-select: none;
 
   &:hover {
     border-color: white;

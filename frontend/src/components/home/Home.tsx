@@ -1,11 +1,12 @@
-import { observer } from 'mobx-react-lite';
 import { Wrapper } from 'styles/Wrapper';
 import { Navbar } from 'templates/Navbar';
+import { Content } from './Home.styled';
 
-export const Home = observer(() => {
+export const Home = () => {
   return (
     <Wrapper>
-      <Navbar></Navbar>
+      <Navbar mappings={['/profile', '/moon-phase', '/events']} />
+      <Content></Content>
     </Wrapper>
   );
-});
+};

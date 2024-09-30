@@ -5,7 +5,7 @@ import { Request, Response } from 'express';
 import { User } from '@prisma/client';
 import { validateEmailRegexp } from 'utils/validate-email';
 import { SessionService } from './session.service';
-import { Login, LoginDtoInput, LoginError } from 'model/login';
+import { Login, LoginDtoInput } from 'model/login';
 import { RegisterInput } from 'model/register';
 
 @Injectable()
@@ -40,16 +40,14 @@ export class AuthService {
     return `user ${createUserDto.name} created success.`;
   }
 
-  async login(
-    loginDto: LoginDtoInput,
-    res: Response
-  ): Promise<Login | LoginError> {
+  async login(loginDto: LoginDtoInput, res: Response): Promise<Login> {
     const user = await this.validateUser(loginDto);
 
     if (!user) {
-      return {
-        message: `user ${loginDto.login} is not found.`,
-      };
+      throw new HttpException(
+        `user ${loginDto.login} is not found.`,
+        HttpStatus.NOT_FOUND
+      );
     }
 
     return {
@@ -107,23 +105,22 @@ export class AuthService {
   }
 
   async validateUser({ login, password }: LoginDtoInput): Promise<User> {
-    const user = await this.prismaService.user.findFirst({
-      where: !validateEmailRegexp.test(login)
-        ? { name: login }
-        : { email: login },
-    });
+    try {
+      const where = validateEmailRegexp.test(login)
+        ? { email: login }
+        : { name: login };
+      const user = await this.prismaService.user.findFirst({ where });
 
-    if (!user) {
-      throw new HttpException(
-        'user in not defined (not registered)',
-        HttpStatus.NO_CONTENT
-      );
+      if (!bcrypt.compare(user.password, password)) {
+        throw new HttpException(
+          "passwords don't match",
+          HttpStatus.FAILED_DEPENDENCY
+        );
+      }
+
+      return user;
+    } catch {
+      throw new HttpException('something went wrong.', HttpStatus.BAD_REQUEST);
     }
-
-    if (!(await bcrypt.compare(password, user.password))) {
-      throw new HttpException("Passwords don't match.", HttpStatus.CONFLICT);
-    }
-
-    return user;
   }
 }

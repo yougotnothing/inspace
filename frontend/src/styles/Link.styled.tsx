@@ -10,6 +10,7 @@ export const Link = styled('a')`
   color: #ffffff;
   transition: all 0.3s ease;
   cursor: pointer;
+  user-select: none;
 
   &:hover {
     color: #fff;

@@ -34,12 +34,12 @@ services:
     ports:
       - 5174:5174
     environment:
-      - POSTGRES_DB=${POSTGRES_DB}
-      - POSTGRES_USER=${POSTGRES_USER}
-      - POSTGRES_HOST=postgres
-      - POSTGRES_PORT=${POSTGRES_PORT}
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
-      - GEO_URL=${GEO_URL}
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: ${POSTGRES_PORT}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      GEO_URL: ${GEO_URL}
     depends_on:
       - geo
     tty: true
@@ -56,15 +56,17 @@ services:
     ports:
       - 5173:5173
     environment:
-      - VITE_HMR_PORT=${VITE_HMR_PORT}
-      - VITE_HMR_HOST=${VITE_HMR_HOST}
-      - CHOKIDAR_USEPOLLING=${CHOKIDAR_USEPOLLING}
-      - API_URL=http://nestjs-api:5174/
-      - GRAPHQL_SERVER_URI=${GRAPHQL_SERVER_URI}
-      - GITHUB_URL=${GITHUB_URL}
-      - TELEGRAM_URL=${TELEGRAM_URL}
-      - INSTAGRAM_URL=${INSTAGRAM_URL}
+      VITE_HMR_PORT: ${VITE_HMR_PORT}
+      VITE_HMR_HOST: ${VITE_HMR_HOST}
+      CHOKIDAR_USEPOLLING: ${CHOKIDAR_USEPOLLING}
+      API_URL: http://nestjs-api:5174/
+      GRAPHQL_SERVER_URI: ${GRAPHQL_SERVER_URI}
+      VITE_GITHUB_URL: ${VITE_GITHUB_URL}
+      VITE_TELEGRAM_URL: ${VITE_TELEGRAM_URL}
+      VITE_INSTAGRAM_URL: ${VITE_INSTAGRAM_URL}
     tty: true
+    depends_on:
+      - nestjs-api
 
 volumes:
   pg:

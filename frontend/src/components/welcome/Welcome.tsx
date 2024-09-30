@@ -132,13 +132,13 @@ export const Welcome = () => {
           <Header>☾ Inspace</Header>
           <Paragraph>Let's spot events together.</Paragraph>
           <Links>
-            <Link href={import.meta.env.GITHUB_URL} target="_blank">
+            <Link href={import.meta.env.VITE_GITHUB_URL} target="_blank">
               <GithubIcon size={32} />
             </Link>
-            <Link href={import.meta.env.TELEGRAM_URL} target="_blank">
+            <Link href={import.meta.env.VITE_TELEGRAM_URL} target="_blank">
               <TelegramIcon size={32} />
             </Link>
-            <Link href={import.meta.env.INSTAGRAM_URL} target="_blank">
+            <Link href={import.meta.env.VITE_INSTAGRAM_URL} target="_blank">
               <InstagramIcon size={32} />
             </Link>
           </Links>

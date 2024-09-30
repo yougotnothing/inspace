@@ -17,11 +17,9 @@ export const LoginWrapper = styled('div')`
   backdrop-filter: blur(20px);
   position: relative;
   overflow: hidden;
-  height: 40%;
-  width: 25%;
   border: 1px solid #868686;
   border-radius: 24px;
-  padding: 20px;
+  padding: 40px;
   margin: auto;
   z-index: 3;
   gap: 3rem;
@@ -33,6 +31,7 @@ export const Header = styled('h1')`
   font-weight: 300;
   font-size: 2rem;
   color: white;
+  user-select: none;
 `;
 
 export const Light = styled('div')<LightProps>`
@@ -70,8 +69,15 @@ export const Other = styled(Link)`
   font-size: 0.9rem;
   color: white;
   transition: color 0.3s ease;
+  user-select: none;
 
   &:hover {
     color: #afafaf;
   }
+`;
+
+export const PasswordInputWrapper = styled('div')`
+  display: flex;
+  position: relative;
+  align-items: center;
 `;

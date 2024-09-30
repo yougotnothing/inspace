@@ -11,7 +11,8 @@ import {
   InputWrapper,
   OtherWrapper,
   Other,
-} from './Login.styled';
+  PasswordInputWrapper,
+} from 'styles/Auth';
 import { Input } from 'styles/Input';
 import { Button } from 'styles/Button';
 import { useNavigate } from 'react-router-dom';
@@ -46,11 +47,12 @@ export const Login = () => {
       await login({
         variables: {
           loginDto: {
-            login: formik.values.login,
-            password: formik.values.password,
+            ...formik.values,
           },
         },
       });
+
+      console.log(data);
       navigate('/moon-phase');
     } catch (error: any) {
       console.log(error);
@@ -69,28 +71,32 @@ export const Login = () => {
         <Header>Welcome Back!</Header>
         <InputWrapper>
           <Input
+            $isInvalid={Boolean(formik.errors.login)}
             placeholder="login"
             type="text"
+            id="login"
             value={formik.values.login}
-            onChange={e => formik.setFieldValue('login', e.target.value)}
+            onChange={e => {
+              formik.setFieldValue('login', e.target.value);
+              console.log(formik.errors.login);
+            }}
             onBlur={formik.handleBlur}
           />
-          <div
-            style={{
-              position: 'relative',
-              display: 'flex',
-              alignItems: 'center',
-            }}
-          >
+          <PasswordInputWrapper>
             <Input
+              $isInvalid={Boolean(formik.errors.password)}
+              id="password"
               placeholder="password"
               type={type}
               value={formik.values.password}
-              onChange={e => formik.setFieldValue('password', e.target.value)}
+              onChange={e => {
+                formik.setFieldValue('password', e.target.value);
+                console.log(formik.errors.password);
+              }}
               onBlur={formik.handleBlur}
             />
             <EyeToggle type={type} setType={handleChangeType} />
-          </div>
+          </PasswordInputWrapper>
         </InputWrapper>
         <Button onClick={handleLogin}>Submit</Button>
         <OtherWrapper>
