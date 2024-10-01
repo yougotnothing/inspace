@@ -32,7 +32,8 @@
       "type/*": ["src/main/type/*.type"],
       "pipe/*": ["src/main/pipe/*.pipe"],
       "model/*": ["src/main/model/*.model"],
-      "resolver/*": ["src/main/resolver/*.resolver"]
+      "resolver/*": ["src/main/resolver/*.resolver"],
+      "guard/*": ["src/main/guard/*.guard"]
     }
   }
 }

@@ -12,6 +12,9 @@ import { AirPollutionService } from 'service/air-pollution';
         params: {
           appid: configService.get<string>('AIR_POLLUTION_API_KEY'),
         },
+        headers: {
+          'Content-Type': 'application/json',
+        },
       }),
       inject: [ConfigService],
     }),

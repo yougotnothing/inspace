@@ -1,5 +1,4 @@
 import {
-  ArgumentMetadata,
   HttpException,
   HttpStatus,
   Injectable,
@@ -9,23 +8,21 @@ import { AirPollutionInput } from 'model/air-pollution';
 
 @Injectable()
 export class AirPollutionValidationPipe implements PipeTransform {
-  transform(value: AirPollutionInput, metadata: ArgumentMetadata) {
-    if (metadata.type === 'param') {
-      if (typeof value.lat !== 'number') {
-        throw new HttpException(
-          `'lat' type must be number, not a ${typeof value.lat}`,
-          HttpStatus.BAD_REQUEST
-        );
-      }
-
-      if (typeof value.lon !== 'number') {
-        throw new HttpException(
-          `'lon' type must be number, not a ${typeof value.lon}`,
-          HttpStatus.BAD_REQUEST
-        );
-      }
-
-      return value;
+  transform(value: AirPollutionInput) {
+    if (Number.isNaN(value.lat)) {
+      throw new HttpException(
+        `'lat' type must be number, not a ${typeof value.lat}`,
+        HttpStatus.BAD_REQUEST
+      );
     }
+
+    if (Number.isNaN(value.lon)) {
+      throw new HttpException(
+        `'lon' type must be number, not a ${typeof value.lon}`,
+        HttpStatus.BAD_REQUEST
+      );
+    }
+
+    return value;
   }
 }

@@ -6,7 +6,6 @@ import {
   Injectable,
   PipeTransform,
 } from '@nestjs/common';
-import { CreateUserDto } from 'dto/create-user';
 import { RegisterInput } from 'model/register';
 import {
   hasDigitRegexp,

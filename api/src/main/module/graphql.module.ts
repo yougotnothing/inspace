@@ -3,14 +3,16 @@ import { GraphQLModule as GQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { join } from 'path';
 import { PrismaService } from 'service/prisma';
-import { ActionResolver } from 'resolver/action';
 import { ActionService } from 'service/action';
-import { GeolocationModule } from './geolocation.module';
-import { MoonPhaseModule } from './moon-phase.module';
-import { AuthModule } from './auth.module';
-import { UserModule } from './user.module';
-import { SessionModule } from './session.module';
-import { AirPollutionModule } from './air-pollution.module';
+import { ActionResolver } from 'resolver/action';
+import { GeolocationModule } from 'module/geolocation';
+import { MoonPhaseModule } from 'module/moon-phase';
+import { AuthModule } from 'module/auth';
+import { UserModule } from 'module/user';
+import { SessionModule } from 'module/session';
+import { AirPollutionModule } from 'module/air-pollution';
+import { LunarEclipseModule } from 'module/lunar-eclipse';
+import { SolarEclipseModule } from 'module/solar-eclipse';
 
 @Module({
   imports: [
@@ -27,6 +29,8 @@ import { AirPollutionModule } from './air-pollution.module';
     UserModule,
     SessionModule,
     AirPollutionModule,
+    LunarEclipseModule,
+    SolarEclipseModule,
   ],
   providers: [PrismaService, ActionResolver, ActionService],
 })

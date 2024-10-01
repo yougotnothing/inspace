@@ -40,6 +40,8 @@ services:
       POSTGRES_PORT: ${POSTGRES_PORT}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       GEO_URL: ${GEO_URL}
+      AIR_POLLUTION_API_KEY: ${AIR_POLLUTION_API_KEY}
+      AIR_POLLUTION_API_URL: ${AIR_POLLUTION_API_URL}
     depends_on:
       - geo
     tty: true

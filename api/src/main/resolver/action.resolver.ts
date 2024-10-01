@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { Args, Query, Resolver } from '@nestjs/graphql';
-import { $Enums } from '@prisma/client';
 import { Action } from 'model/action';
 import { ActionSettingsInput } from 'model/actions-settings';
 import { ActionService } from 'service/action';

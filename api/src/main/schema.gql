@@ -28,6 +28,18 @@ input AirPollutionInput {
   lon: Float!
 }
 
+type AstroTime {
+  date: DateTime!
+  tt: Float!
+  ut: Float!
+}
+
+type AstroTimeObject {
+  date: DateTime!
+  tt: Float!
+  ut: Float!
+}
+
 type Components {
   co: Float!
   nh3: Float!
@@ -43,6 +55,11 @@ type Components {
 A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
 """
 scalar DateTime
+
+type EclipseEvent {
+  altitude: Float!
+  time: AstroTimeObject!
+}
 
 input GenerateSessionInput {
   id: String!
@@ -70,6 +87,15 @@ input LoginDtoInput {
   password: String!
 }
 
+type LunarEclipseInfo {
+  kind: String!
+  obscuration: Float!
+  peak: AstroTime!
+  sd_partial: Float!
+  sd_penum: Float!
+  sd_total: Float!
+}
+
 type MoonPhase {
   declination: Float!
   hemisphere: String!
@@ -92,6 +118,21 @@ type Mutation {
   register(user: RegisterInput!): String!
 }
 
+type NextSolarEclipse {
+  distance: Float!
+  kind: String!
+  latitude: Float
+  longitude: Float
+  obscuration: Float
+  peak: AstroTimeObject!
+}
+
+input ObserverInput {
+  height: Float!
+  latitude: Float!
+  longitude: Float!
+}
+
 type Query {
   getActionByDescription(description: String!): Action!
   getActionById(id: String!): Action!
@@ -101,6 +142,11 @@ type Query {
   getMoonPhase(location: MoonPhaseInput!): MoonPhase!
   getUserById(id: String!): User!
   getUserByName(name: String!): User!
+  nextGlobalSolarEclipse(startTime: DateTime!): NextSolarEclipse!
+  nextLocalSolarEclipse(observer: ObserverInput!, startTime: DateTime!): SearchSolarEclipse!
+  nextLunarEclipse(date: DateTime!): LunarEclipseInfo!
+  searchLocalSolarEclipse(observer: ObserverInput!, startTime: DateTime!): SearchSolarEclipse!
+  searchLunarEclipse(date: DateTime!): LunarEclipseInfo!
 }
 
 input RegisterInput {
@@ -108,6 +154,16 @@ input RegisterInput {
   email: String!
   name: String!
   password: String!
+}
+
+type SearchSolarEclipse {
+  kind: String!
+  obscuration: Float!
+  partial_begin: EclipseEvent!
+  partial_end: EclipseEvent!
+  peak: EclipseEvent!
+  total_begin: EclipseEvent
+  total_end: EclipseEvent
 }
 
 """session"""
