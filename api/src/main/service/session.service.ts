@@ -32,6 +32,8 @@ export class SessionService {
     }
 
     try {
+      const date = new Date();
+      const expiresIn = new Date(date.setDate(date.getDate() + 7));
       const session = await this.prismaService.session.create({
         data: {
           sessionId: res.req.sessionID,
@@ -47,6 +49,7 @@ export class SessionService {
         secure: true,
         maxAge: 360000,
         path: '/',
+        expires: expiresIn,
       });
 
       return session;

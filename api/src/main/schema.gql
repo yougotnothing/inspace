@@ -19,8 +19,10 @@ input ActionSettingsInput {
 }
 
 type AirPollution {
+  aqi: String!
   components: Components!
   coords: [Float!]!
+  date: String!
 }
 
 input AirPollutionInput {
@@ -98,6 +100,7 @@ type LunarEclipseInfo {
 
 type MoonPhase {
   declination: Float!
+  emoji: String!
   hemisphere: String!
   illumination: Float!
   phase: String!

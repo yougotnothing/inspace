@@ -12,12 +12,10 @@ export class DateValidationPipe implements PipeTransform {
 
     let date = value.startTime ?? value.date;
 
-    // Если это строка, пытаемся преобразовать в Date
     if (typeof date === 'string') {
       date = new Date(date);
     }
 
-    // Проверяем, является ли это объектом Date и корректен ли он
     if (!(date instanceof Date) || isNaN(date.getTime())) {
       throw new BadRequestException(
         `Invalid date format for field: ${metadata.data}`

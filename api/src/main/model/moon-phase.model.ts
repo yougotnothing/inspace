@@ -35,4 +35,7 @@ export class MoonPhase {
 
   @Field(type => Number)
   z: number;
+
+  @Field(type => String)
+  emoji: string;
 }

@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { Field, InputType, ObjectType } from '@nestjs/graphql';
+import { AirQuality } from 'utils/air-quality';
 
 @InputType()
 export class AirPollutionInput {
@@ -44,4 +45,10 @@ export class AirPollution {
 
   @Field(type => Components)
   components: Components;
+
+  @Field(type => String)
+  aqi: keyof typeof AirQuality;
+
+  @Field(type => String)
+  date: string;
 }

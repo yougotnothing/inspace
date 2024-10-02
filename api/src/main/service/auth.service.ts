@@ -71,37 +71,11 @@ export class AuthService {
   }
 
   async logout(req: Request): Promise<string> {
-    const user = await this.prismaService.user.findFirst({
-      where: {
-        sessions: {
-          some: {
-            sessionId: req.session.id,
-          },
-        },
-      },
-      include: {
-        sessions: true,
-      },
-    });
-
-    if (!user) {
-      throw new HttpException(
-        'User not found by this session id',
-        HttpStatus.BAD_REQUEST
-      );
-    }
-
     req.session.destroy(err => {
       if (err) throw err;
     });
 
-    await this.prismaService.session.delete({
-      where: {
-        sessionId: req.sessionID,
-      },
-    });
-
-    return `user ${user.name} logged out success.`;
+    return await this.sessionService.destroy(req);
   }
 
   async validateUser({ login, password }: LoginDtoInput): Promise<User> {
@@ -120,7 +94,10 @@ export class AuthService {
 
       return user;
     } catch {
-      throw new HttpException('something went wrong.', HttpStatus.BAD_REQUEST);
+      throw new HttpException(
+        `user ${login} is not found`,
+        HttpStatus.BAD_REQUEST
+      );
     }
   }
 }

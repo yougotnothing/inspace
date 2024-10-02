@@ -13,11 +13,11 @@ export const LoginWrapper = styled('div')`
   display: flex;
   flex-direction: column;
   align-items: center;
-  background-color: #4747472f;
+  background-color: var(--wrapper-bg);
   backdrop-filter: blur(20px);
   position: relative;
   overflow: hidden;
-  border: 1px solid #868686;
+  border: 1px solid var(--border-color);
   border-radius: 24px;
   padding: 40px;
   margin: auto;

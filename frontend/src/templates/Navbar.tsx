@@ -13,6 +13,7 @@ const Nav = styled('nav')`
   background-color: #3636361c;
   border-bottom: 1px solid #4747472f;
   width: 100svw;
+  margin-bottom: 3rem;
 `;
 
 const Wrapper = styled('div')`

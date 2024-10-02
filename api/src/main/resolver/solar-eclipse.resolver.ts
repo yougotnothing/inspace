@@ -28,7 +28,7 @@ export class LocalSolarEclipseResolver {
   constructor(private readonly solarEclipseService: SolarEclipseService) {}
 
   @Query(returns => SearchSolarEclipse)
-  @UsePipes(DateValidationPipe)
+  // @UsePipes(DateValidationPipe)
   async searchLocalSolarEclipse(
     @Args('startTime') startTime: Date,
     @Args('observer') observer: ObserverInput
@@ -40,7 +40,7 @@ export class LocalSolarEclipseResolver {
   }
 
   @Query(returns => SearchSolarEclipse)
-  @UsePipes(DateValidationPipe)
+  // @UsePipes(DateValidationPipe)
   async nextLocalSolarEclipse(
     @Args('startTime') startTime: Date,
     @Args('observer') observer: ObserverInput

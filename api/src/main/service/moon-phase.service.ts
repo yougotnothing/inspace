@@ -94,6 +94,7 @@ export class MoonPhaseService {
     }
 
     return {
+      emoji: Moon.lunarPhaseEmoji(date, { hemisphere }),
       phase: Moon.lunarPhase(date, { hemisphere }),
       hemisphere,
       declination: this.calculateMoonDeclination(this.daysSinceJ2000(date)),

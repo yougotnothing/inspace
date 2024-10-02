@@ -2,6 +2,7 @@ import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { AirPollution, AirPollutionInput } from 'model/air-pollution';
+import { AirQuality } from 'utils/air-quality';
 
 @Injectable()
 export class AirPollutionService {
@@ -18,9 +19,11 @@ export class AirPollutionService {
         },
       });
 
-      console.log(response.data.list);
-
       return {
+        date: new Date(response.data.list[0].dt).toUTCString(),
+        aqi: AirQuality[response.data.list[0].main.aqi]
+          .toLowerCase()
+          .replace('_', ' ') as keyof typeof AirQuality,
         coords: [response.data.coord.lat, response.data.coord.lon],
         components: {
           ...response.data.list[0].components,

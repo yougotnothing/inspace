@@ -7,25 +7,35 @@ import {
   SearchGlobalSolarEclipse,
   SearchLocalSolarEclipse,
 } from 'astronomy-engine';
-import { NextSolarEclipse, SearchSolarEclipse } from 'model/solar-eclipse';
+import {
+  NextSolarEclipse,
+  ObserverInput,
+  SearchSolarEclipse,
+} from 'model/solar-eclipse';
 
 @Injectable()
 export class SolarEclipseService {
   async searchLocalSolarEclipse(
     startTime: FlexibleDateTime,
-    observer: Observer
+    { latitude, longitude, height }: ObserverInput
   ): Promise<SearchSolarEclipse> {
     return {
-      ...SearchLocalSolarEclipse(startTime, observer),
+      ...SearchLocalSolarEclipse(
+        startTime,
+        new Observer(latitude, longitude, height)
+      ),
     };
   }
 
   async nextLocalSolarEclipse(
     startTime: Date,
-    observer: Observer
+    { latitude, longitude, height }: ObserverInput
   ): Promise<SearchSolarEclipse> {
     return {
-      ...NextLocalSolarEclipse(startTime, observer),
+      ...NextLocalSolarEclipse(
+        startTime,
+        new Observer(latitude, longitude, height)
+      ),
     };
   }
 
