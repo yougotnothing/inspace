@@ -8,9 +8,12 @@ export const Wrapper = styled('div')`
   border-radius: 24px;
   border: 1px solid var(--border-color);
   background-color: var(--wrapper-bg);
+  backdrop-filter: blur(12px);
   gap: 2.5rem;
   opacity: 0;
   margin-top: 17px;
+  position: relative;
+  z-index: 9;
 `;
 
 export const LunarEmoji = styled('h1')`

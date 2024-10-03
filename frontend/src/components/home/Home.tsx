@@ -1,6 +1,6 @@
 import { Wrapper } from 'styles/Wrapper';
 import { Navbar } from 'templates/Navbar';
-import { Content, Events, EventsWrapper } from './Home.styled';
+import { Content, Events, EventsWrapper, Shadow } from './Home.styled';
 import {
   NEXT_GLOBAL_SOLAR_ECLIPSE,
   NEXT_LOCAL_SOLAR_ECLIPSE,
@@ -31,6 +31,7 @@ export const Home = () => {
 
   return (
     <Wrapper>
+      <Shadow className="shadow" />
       <Navbar mappings={['/profile', '/moon-phase', '/events']} />
       <Content>
         <Events>
@@ -67,7 +68,10 @@ export const Home = () => {
           </EventsWrapper>
         </Events>
         <Events>
-          <AirPollution />
+          <AirPollution
+            latitude={parseFloat(coords.latitude.toFixed(3))}
+            longitude={parseFloat(coords.longitude.toFixed(3))}
+          />
           <MoonPhase
             latitude={parseFloat(coords.latitude.toFixed(3))}
             longitude={parseFloat(coords.longitude.toFixed(3))}

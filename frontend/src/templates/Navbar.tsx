@@ -8,7 +8,7 @@ const Nav = styled('nav')`
   z-index: 12;
   align-items: center;
   justify-content: center;
-  backdrop-filter: blur(8px);
+  backdrop-filter: blur(20px);
   padding: 0.7rem;
   background-color: #3636361c;
   border-bottom: 1px solid #4747472f;

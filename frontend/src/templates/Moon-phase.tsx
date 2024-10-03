@@ -29,7 +29,11 @@ export const MoonPhase: FC<{ latitude: number; longitude: number }> = ({
     },
   });
   const [getMoonPhase, { data, loading }] = useLazyQuery(
-    GET_WIDGET_MOON_PHASE_DATA
+    GET_WIDGET_MOON_PHASE_DATA,
+    {
+      nextFetchPolicy: 'cache-only',
+      fetchPolicy: 'network-only',
+    }
   );
   const navigate = useNavigate();
 
@@ -57,6 +61,13 @@ export const MoonPhase: FC<{ latitude: number; longitude: number }> = ({
           duration: 0.3,
           delay: 0.5,
         });
+
+        gsap.to('.shadow', {
+          opacity: 1,
+          boxShadow: '0 0 270px 270px #ffffff1f',
+          duration: 0.7,
+          delay: 1.3,
+        });
       }
     },
     { dependencies: [loading, data] }
@@ -66,18 +77,20 @@ export const MoonPhase: FC<{ latitude: number; longitude: number }> = ({
     return <Loader loading={locationLoading || loading || !data} />;
 
   return (
-    <Wrapper ref={ref} className="wrapper">
-      <Row>
-        <LunarEmoji>{data.getMoonPhase.emoji}</LunarEmoji>
-        <Phase>{data.getMoonPhase.phase}</Phase>
-      </Row>
-      <Row>
-        <Paragraph>illumination: {data.getMoonPhase.illumination}%</Paragraph>
-        <Paragraph>
-          declination: {data.getMoonPhase.declination.toFixed(1)}°
-        </Paragraph>
-      </Row>
-      <Button onClick={() => navigate('/moon-phase')}>Browse more</Button>
-    </Wrapper>
+    <>
+      <Wrapper ref={ref} className="wrapper">
+        <Row>
+          <LunarEmoji>{data.getMoonPhase.emoji}</LunarEmoji>
+          <Phase>{data.getMoonPhase.phase}</Phase>
+        </Row>
+        <Row>
+          <Paragraph>illumination: {data.getMoonPhase.illumination}%</Paragraph>
+          <Paragraph>
+            declination: {data.getMoonPhase.declination.toFixed(1)}°
+          </Paragraph>
+        </Row>
+        <Button onClick={() => navigate('/moon-phase')}>browse more</Button>
+      </Wrapper>
+    </>
   );
 };

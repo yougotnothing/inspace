@@ -40,3 +40,13 @@ export const AirPollution = styled('div')`
   border: 1px solid var(--border-color);
   background-color: var(--wrapper-bg);
 `;
+
+export const Shadow = styled('div')`
+  background-color: #ffffff1f;
+  display: flex;
+  border-radius: 50%;
+  position: absolute;
+  top: 50%;
+  opacity: 0;
+  z-index: 9;
+`;

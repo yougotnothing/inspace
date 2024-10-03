@@ -1,6 +1,6 @@
 import { useQuery } from '@apollo/client';
 import { GET_AIR_POLLUTION_INFO } from 'apollo/queries/air-pollution.query';
-import { useEffect, useState } from 'react';
+import { FC, useLayoutEffect, useState } from 'react';
 import { Loader } from './Loader';
 import { HeaderWrapper, Wrapper } from 'styles/Air-pollution';
 import {
@@ -11,25 +11,36 @@ import {
 } from 'hugeicons-react';
 import { Paragraph } from 'styles/Paragraph';
 import { Button } from 'styles/Button';
+import { useGSAP } from '@gsap/react';
+import gsap from 'gsap';
 
-export const AirPollution = () => {
-  const [variables, setVariables] = useState<{ lat: number; lon: number }>({
-    lat: 0,
-    lon: 0,
-  });
+export const AirPollution: FC<{ latitude: number; longitude: number }> = ({
+  latitude,
+  longitude,
+}) => {
   const { data, loading, error } = useQuery(GET_AIR_POLLUTION_INFO, {
-    variables: { coords: { ...variables } },
+    variables: {
+      coords: {
+        lat: latitude,
+        lon: longitude,
+      },
+    },
   });
 
-  useEffect(() => {
-    navigator.geolocation.getCurrentPosition(p =>
-      setVariables({ lat: p.coords.latitude, lon: p.coords.longitude })
-    );
-    console.log(data);
-  }, []);
+  useGSAP(() => {
+    if (!loading && data) {
+      gsap.to('.pollution', {
+        opacity: 1,
+        marginTop: 0,
+        duration: 0.3,
+        delay: 0.5,
+      });
+    }
+  }, [loading, data]);
 
   if (error) return <h1>{error.message}</h1>;
   if (loading) return <Loader loading={loading} />;
+
   const CloudIcon = (() => {
     switch (data.getAirPollutionInfo.aqi) {
       case 'good':
@@ -45,7 +56,7 @@ export const AirPollution = () => {
   })();
 
   return (
-    <Wrapper className="wrapper">
+    <Wrapper className="pollution">
       <HeaderWrapper>
         {CloudIcon}
         <Paragraph>
@@ -55,7 +66,7 @@ export const AirPollution = () => {
       <Paragraph>
         <b>{data.getAirPollutionInfo.date.replace('GMT', '')}</b>
       </Paragraph>
-      <Button>Browse more</Button>
+      <Button>browse more</Button>
     </Wrapper>
   );
 };

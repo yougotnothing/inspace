@@ -78,7 +78,7 @@ export const Eclipse: FC<{
           {altitudeOrKind}
         </Event>
         <Event>
-          <Button style={{ margin: 'auto 0 0 auto' }}>Browse more</Button>
+          <Button style={{ margin: 'auto 0 0 auto' }}>browse more</Button>
         </Event>
       </DateAndAltitude>
     </Event>

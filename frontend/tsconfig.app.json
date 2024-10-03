@@ -17,7 +17,7 @@
       "hooks/*": ["./src/hooks/*"],
       "pages/*": ["./src/pages/*"],
       "types/*": ["./src/types/*.type"],
-      "@router": ["./src/router"],
+      "@router": ["./src/router/router"],
       "styles/*": ["./src/styles/*.styled"],
       "apollo/*": ["./src/apollo/*"],
       "query/*": ["./src/apollo/queries/*.query"],
