@@ -6,9 +6,18 @@ import { Paragraph } from 'styles/Paragraph';
 import { Button } from 'styles/Button';
 import { Loader } from './Loader';
 
+interface Query {
+  data: DocumentNode;
+  type: 'local solar' | 'global solar' | 'lunar';
+}
+
+interface Variables {
+  [key: string]: object;
+}
+
 export const Eclipse: FC<{
-  query: { data: DocumentNode; type: 'local solar' | 'global solar' | 'lunar' };
-  variable: any;
+  query: Query;
+  variable: Variables;
 }> = ({ query, variable }) => {
   const [body] = useState<typeof variable>(variable);
   const { data, loading, error } = useQuery(query.data, {

@@ -69,7 +69,8 @@ input GenerateSessionInput {
 }
 
 type Geolocation {
-  address: String!
+  countryName: String!
+  placeName: String!
 }
 
 input GeolocationInput {

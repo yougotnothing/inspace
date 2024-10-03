@@ -10,6 +10,8 @@ export const Wrapper = styled('div')`
   padding: 25px;
   width: 25rem;
   gap: 2.5rem;
+  opacity: 0;
+  margin-top: 17px;
 `;
 
 export const HeaderWrapper = styled('div')`

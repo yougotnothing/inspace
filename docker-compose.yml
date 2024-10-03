@@ -20,8 +20,8 @@ services:
     ports:
       - 8000:8000
     environment:
-      - USER_AGENT=${USER_AGENT}
-      - DEEPL_API_KEY=${DEEPL_API_KEY}
+      GEONAMES_API_URL: ${GEONAMES_API_URL}
+      GEONAMES_API_KEY: ${GEONAMES_API_KEY}
 
   nestjs-api:
     container_name: inspace-api

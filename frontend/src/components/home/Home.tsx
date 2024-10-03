@@ -20,13 +20,13 @@ export const Home = () => {
   }>({ latitude: 0, longitude: 0, height: 0 });
 
   useEffect(() => {
-    window.navigator.geolocation.getCurrentPosition(p =>
+    window.navigator.geolocation.getCurrentPosition(p => {
       setCoords({
         latitude: p.coords.latitude,
         longitude: p.coords.longitude,
         height: p.coords.altitude || 20,
-      })
-    );
+      });
+    });
   }, []);
 
   return (
@@ -34,7 +34,7 @@ export const Home = () => {
       <Navbar mappings={['/profile', '/moon-phase', '/events']} />
       <Content>
         <Events>
-          <EventsWrapper>
+          <EventsWrapper className="wrapper">
             <Eclipse
               query={{
                 data: NEXT_LOCAL_SOLAR_ECLIPSE,
@@ -68,7 +68,10 @@ export const Home = () => {
         </Events>
         <Events>
           <AirPollution />
-          {/* <MoonPhase latitude={coords.latitude} longitude={coords.longitude} /> */}
+          <MoonPhase
+            latitude={parseFloat(coords.latitude.toFixed(3))}
+            longitude={parseFloat(coords.longitude.toFixed(3))}
+          />
         </Events>
       </Content>
     </Wrapper>

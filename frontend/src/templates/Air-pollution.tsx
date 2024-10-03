@@ -10,6 +10,7 @@ import {
   SunCloud01Icon,
 } from 'hugeicons-react';
 import { Paragraph } from 'styles/Paragraph';
+import { Button } from 'styles/Button';
 
 export const AirPollution = () => {
   const [variables, setVariables] = useState<{ lat: number; lon: number }>({
@@ -44,7 +45,7 @@ export const AirPollution = () => {
   })();
 
   return (
-    <Wrapper>
+    <Wrapper className="wrapper">
       <HeaderWrapper>
         {CloudIcon}
         <Paragraph>
@@ -52,8 +53,9 @@ export const AirPollution = () => {
         </Paragraph>
       </HeaderWrapper>
       <Paragraph>
-        Date: <b>{data.getAirPollutionInfo.date}</b>
+        <b>{data.getAirPollutionInfo.date.replace('GMT', '')}</b>
       </Paragraph>
+      <Button>Browse more</Button>
     </Wrapper>
   );
 };

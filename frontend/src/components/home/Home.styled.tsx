@@ -26,6 +26,8 @@ export const EventsWrapper = styled('div')`
   padding: 25px;
   border-radius: 24px;
   gap: 2.5rem;
+  opacity: 0;
+  margin-top: 17px;
 `;
 
 export const AirPollution = styled('div')`

@@ -59,8 +59,8 @@ export const Navbar = ({ mappings }: { mappings: string[] }) => {
       <Wrapper>
         <Link style={{ fontSize: '1.5rem' }}>☾</Link>
         <Routes>
-          {mappings.map(mapping => (
-            <Route to={mapping}>
+          {mappings.map((mapping, index) => (
+            <Route to={mapping} key={index}>
               {mapping.replace('/', '').replace('-', ' ')}
             </Route>
           ))}

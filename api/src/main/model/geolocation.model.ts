@@ -14,5 +14,8 @@ export class GeolocationInput implements CoordsDto {
 @ObjectType()
 export class Geolocation {
   @Field(type => String)
-  address: string;
+  placeName: string;
+
+  @Field(type => String)
+  countryName: string;
 }

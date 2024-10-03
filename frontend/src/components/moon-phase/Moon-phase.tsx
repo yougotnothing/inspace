@@ -1,5 +1,5 @@
 import { useQuery } from '@apollo/client';
-import { GET_MOON_PHASE } from 'query/moon-phase';
+import { GET_FULL_MOON_PHASE_DATA } from 'query/moon-phase';
 import { useEffect, useMemo, useRef } from 'react';
 import * as THREE from 'three';
 import moonTexture from '../../assets/moon-texture.jpg';
@@ -15,7 +15,9 @@ export const MoonPhase = () => {
     []
   );
   const threeRef = useRef<HTMLDivElement>(null);
-  const { loading, error, data } = useQuery(GET_MOON_PHASE, { variables });
+  const { loading, error, data } = useQuery(GET_FULL_MOON_PHASE_DATA, {
+    variables,
+  });
 
   useEffect(() => {
     if (loading || error || !data) return;
@@ -47,6 +49,8 @@ export const MoonPhase = () => {
 
     moon.rotation.y = 179.6;
 
+    const darkLight = new THREE.PointLight('#222222', 50);
+    darkLight.position.set(0, 0, 5);
     const light = new THREE.PointLight('#ffffff', 50);
     light.position.copy(
       new THREE.Vector3(
@@ -56,7 +60,7 @@ export const MoonPhase = () => {
       )
     );
     scene.add(moon);
-    scene.add(light);
+    scene.add(light, darkLight);
 
     function needResize(renderer: THREE.WebGLRenderer) {
       const canvas = renderer.domElement;

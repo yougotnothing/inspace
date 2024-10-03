@@ -1,20 +1,32 @@
 from fastapi import FastAPI, HTTPException
-from geopy.geocoders import Nominatim
-
-from utils.variables import USER_AGENT
-from utils.translate_to import translate_address
+import requests
+from utils.variables import GEONAMES_URL, API_KEY
+from requests.exceptions import HTTPError
 
 app = FastAPI()
-geocoder = Nominatim(user_agent=USER_AGENT)
 
-@app.get('/reverse/')
+@app.get('/reverse')
 def get_reverse_geolocation(longitude: float, latitude: float):
-  geo = geocoder.reverse(str(latitude) + ',' + str(longitude))
-  translated_geo = translate_address(geo.address)
+  try:
+    response = requests.get(
+      f'{GEONAMES_URL}/findNearbyPlaceNameJSON',
+      params={
+        'lat': latitude,
+        'lng': longitude,
+        'username': API_KEY,
+        'lang': 'en'
+      }
+    ).json()
 
-  if geo.address:
+    print(response)
+
+    if len(response['geonames']) == 0:
+      raise HTTPException(404, 'no data')
+
     return {
-      'address': translated_geo
+      'placeName': response['geonames'][0]['name'],
+      'countryName': response['geonames'][0]['countryName']
     }
-  else:
-    raise HTTPException(422, 'invalid data (longitude or latitude)')
+  except HTTPError as http_err:
+    raise HTTPException(http_err.status_code, http_err.reason)
+  

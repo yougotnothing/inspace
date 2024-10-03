@@ -20,7 +20,7 @@ export class AirPollutionService {
       });
 
       return {
-        date: new Date(response.data.list[0].dt).toUTCString(),
+        date: new Date().toUTCString(),
         aqi: AirQuality[response.data.list[0].main.aqi]
           .toLowerCase()
           .replace('_', ' ') as keyof typeof AirQuality,
