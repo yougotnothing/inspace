@@ -1,5 +1,4 @@
-import { DocumentNode, useQuery } from '@apollo/client';
-import { FC, useState } from 'react';
+import { FC } from 'react';
 import { Header } from 'styles/Header';
 import { DateAndAltitude, Event } from 'styles/Eclipses';
 import { Paragraph } from 'styles/Paragraph';
@@ -7,43 +6,26 @@ import { Button } from 'styles/Button';
 import { Loader } from './Loader';
 
 interface Query {
-  data: DocumentNode;
+  data: any;
   type: 'local solar' | 'global solar' | 'lunar';
-}
-
-interface Variables {
-  [key: string]: object;
 }
 
 export const Eclipse: FC<{
   query: Query;
-  variable: Variables;
-}> = ({ query, variable }) => {
-  const [body] = useState<typeof variable>(variable);
-  const { data, loading, error } = useQuery(query.data, {
-    variables: body,
-  });
-
-  if (loading) {
-    return <Loader loading={loading} />;
-  }
-
-  if (error) {
-    return <p>Error: {error.message}</p>;
-  }
-
+  loading: boolean;
+}> = ({ query, loading }) => {
   const date = (() => {
     switch (query.type) {
       case 'local solar':
-        return new Date(data.nextLocalSolarEclipse.peak.time.date)
+        return new Date(query.data.nextLocalLunarEclipse?.peak.time.date)
           .toUTCString()
           .replace('GMT', '');
       case 'global solar':
-        return new Date(data.nextGlobalSolarEclipse.peak.date)
+        return new Date(query.data.nextGlobalSolarEclipse?.peak.date)
           .toUTCString()
           .replace('GMT', '');
       case 'lunar':
-        return new Date(data.nextLunarEclipse.peak.date)
+        return new Date(query.data.nextLunarEclipse?.peak.date)
           .toUTCString()
           .replace('GMT', '');
     }
@@ -53,24 +35,27 @@ export const Eclipse: FC<{
       case 'local solar':
         return (
           <Paragraph>
-            altitude: {data.nextLocalSolarEclipse.peak.altitude.toFixed(3)}°
+            altitude:{' '}
+            {query.data.nextLocalSolarEclipse?.peak.altitude.toFixed(3)}°
           </Paragraph>
         );
       case 'global solar':
         return (
           <Paragraph>
-            distance: {data.nextGlobalSolarEclipse.distance.toFixed(3)}km
+            distance: {query.data.nextGlobalSolarEclipse?.distance.toFixed(3)}km
           </Paragraph>
         );
       case 'lunar':
-        return <Paragraph>kind: {data.nextLunarEclipse.kind}</Paragraph>;
+        return <Paragraph>kind: {query.data.nextLunarEclipse?.kind}</Paragraph>;
     }
   })();
+
+  if (loading) return <Loader loading={loading} />;
 
   return (
     <Event>
       <Header>
-        {query.type === 'lunar' ? 'Next lunar' : query.type} eclipse
+        {query.type === 'lunar' ? 'next lunar' : query.type} eclipse
       </Header>
       <DateAndAltitude>
         <Event>

@@ -13,8 +13,9 @@ export const Content = styled('div')`
 
 export const Events = styled('div')`
   display: flex;
+  height: 80%;
   flex-direction: column;
-  gap: 2.5rem;
+  justify-content: space-between;
 `;
 
 export const EventsWrapper = styled('div')`

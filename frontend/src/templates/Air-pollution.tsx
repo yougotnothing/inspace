@@ -1,6 +1,4 @@
-import { useQuery } from '@apollo/client';
-import { GET_AIR_POLLUTION_INFO } from 'apollo/queries/air-pollution.query';
-import { FC, useLayoutEffect, useState } from 'react';
+import { FC } from 'react';
 import { Loader } from './Loader';
 import { HeaderWrapper, Wrapper } from 'styles/Air-pollution';
 import {
@@ -14,19 +12,10 @@ import { Button } from 'styles/Button';
 import { useGSAP } from '@gsap/react';
 import gsap from 'gsap';
 
-export const AirPollution: FC<{ latitude: number; longitude: number }> = ({
-  latitude,
-  longitude,
+export const AirPollution: FC<{ loading: boolean; data: any }> = ({
+  loading,
+  data,
 }) => {
-  const { data, loading, error } = useQuery(GET_AIR_POLLUTION_INFO, {
-    variables: {
-      coords: {
-        lat: latitude,
-        lon: longitude,
-      },
-    },
-  });
-
   useGSAP(() => {
     if (!loading && data) {
       gsap.to('.pollution', {
@@ -38,11 +27,8 @@ export const AirPollution: FC<{ latitude: number; longitude: number }> = ({
     }
   }, [loading, data]);
 
-  if (error) return <h1>{error.message}</h1>;
-  if (loading) return <Loader loading={loading} />;
-
   const CloudIcon = (() => {
-    switch (data.getAirPollutionInfo.aqi) {
+    switch (data.getAirPollutionInfo?.aqi) {
       case 'good':
         return <StarsIcon color="#fff" size={64} />;
       case 'fair':
@@ -55,16 +41,18 @@ export const AirPollution: FC<{ latitude: number; longitude: number }> = ({
     }
   })();
 
+  if (loading) return <Loader loading={loading} />;
+
   return (
     <Wrapper className="pollution">
       <HeaderWrapper>
         {CloudIcon}
         <Paragraph>
-          air quality: <b>{data.getAirPollutionInfo.aqi}</b>
+          air quality: <b>{data.getAirPollutionInfo?.aqi}</b>
         </Paragraph>
       </HeaderWrapper>
       <Paragraph>
-        <b>{data.getAirPollutionInfo.date.replace('GMT', '')}</b>
+        <b>{data.getAirPollutionInfo?.date.replace('GMT', '')}</b>
       </Paragraph>
       <Button>browse more</Button>
     </Wrapper>

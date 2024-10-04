@@ -1,15 +1,16 @@
 import { Wrapper } from 'styles/Wrapper';
 import { Navbar } from 'templates/Navbar';
 import { Content, Events, EventsWrapper, Shadow } from './Home.styled';
-import {
-  NEXT_GLOBAL_SOLAR_ECLIPSE,
-  NEXT_LOCAL_SOLAR_ECLIPSE,
-} from 'apollo/queries/solar-eclipse.query';
-import { useEffect, useState } from 'react';
-import { Eclipse } from 'templates/Eclipse';
-import { NEXT_LUNAR_ECLIPSE } from 'apollo/queries/lunar-eclipse.query';
+import { useLayoutEffect, useState } from 'react';
 import { AirPollution } from 'templates/Air-pollution';
 import { MoonPhase } from 'templates/Moon-phase';
+import { useQuery } from '@apollo/client';
+import { GET_ALL_EVENTS } from 'apollo/queries/all-events.query';
+import { useGSAP } from '@gsap/react';
+import gsap from 'gsap';
+import { GET_LOCATION } from 'apollo/queries/geolocation.query';
+import { Loader } from 'templates/Loader';
+import { Eclipse } from 'templates/Eclipse';
 
 export const Home = () => {
   const [date] = useState(new Date());
@@ -18,9 +19,51 @@ export const Home = () => {
     longitude: number;
     height: number;
   }>({ latitude: 0, longitude: 0, height: 0 });
+  const { data: countryData, loading: countryLoading } = useQuery(
+    GET_LOCATION,
+    {
+      variables: {
+        coordinates: {
+          latitude: coords.latitude,
+          longitude: coords.longitude,
+        },
+      },
+      refetchWritePolicy: 'overwrite',
+      fetchPolicy: 'cache-first',
+    }
+  );
+  const { data, loading } = useQuery(GET_ALL_EVENTS, {
+    variables: {
+      startTime: date,
+      observer: coords,
+      date,
+      location: {
+        country: countryData?.getLocation.countryName,
+        date,
+      },
+      coords: {
+        lat: coords.latitude,
+        lon: coords.longitude,
+      },
+    },
+    refetchWritePolicy: 'overwrite',
+    fetchPolicy: 'cache-first',
+  });
+  const typeofEvent = ['local solar', 'global solar', 'lunar'];
 
-  useEffect(() => {
-    window.navigator.geolocation.getCurrentPosition(p => {
+  useGSAP(() => {
+    if (!loading && data) {
+      gsap.to('.events', {
+        opacity: 1,
+        marginTop: 0,
+        duration: 0.7,
+        delay: 1,
+      });
+    }
+  }, [data, loading]);
+
+  useLayoutEffect(() => {
+    navigator.geolocation.getCurrentPosition(p => {
       setCoords({
         latitude: p.coords.latitude,
         longitude: p.coords.longitude,
@@ -29,55 +72,34 @@ export const Home = () => {
     });
   }, []);
 
+  if (countryLoading || loading)
+    return <Loader loading={countryLoading || loading} />;
+
   return (
     <Wrapper>
       <Shadow className="shadow" />
       <Navbar mappings={['/profile', '/moon-phase', '/events']} />
-      <Content>
-        <Events>
-          <EventsWrapper className="wrapper">
-            <Eclipse
-              query={{
-                data: NEXT_LOCAL_SOLAR_ECLIPSE,
-                type: 'local solar',
-              }}
-              variable={{
-                startTime: date,
-                observer: coords,
-              }}
-            />
-            <Eclipse
-              query={{
-                data: NEXT_GLOBAL_SOLAR_ECLIPSE,
-                type: 'global solar',
-              }}
-              variable={{
-                startTime: date,
-                observer: coords,
-              }}
-            />
-            <Eclipse
-              query={{
-                data: NEXT_LUNAR_ECLIPSE,
-                type: 'lunar',
-              }}
-              variable={{
-                date,
-              }}
-            />
-          </EventsWrapper>
-        </Events>
-        <Events>
-          <AirPollution
-            latitude={parseFloat(coords.latitude.toFixed(3))}
-            longitude={parseFloat(coords.longitude.toFixed(3))}
-          />
-          <MoonPhase
-            latitude={parseFloat(coords.latitude.toFixed(3))}
-            longitude={parseFloat(coords.longitude.toFixed(3))}
-          />
-        </Events>
-      </Content>
+      {data && (
+        <Content>
+          <Events>
+            {typeofEvent.map((event, index) => (
+              <EventsWrapper className="events" key={index}>
+                <Eclipse
+                  loading={loading}
+                  query={{
+                    data,
+                    type: event as 'local solar' | 'global solar' | 'lunar',
+                  }}
+                />
+              </EventsWrapper>
+            ))}
+          </Events>
+          <Events>
+            <AirPollution data={data} loading={loading} />
+            <MoonPhase data={data} loading={loading} />
+          </Events>
+        </Content>
+      )}
     </Wrapper>
   );
 };
