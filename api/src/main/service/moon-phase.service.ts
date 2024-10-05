@@ -43,15 +43,15 @@ export class MoonPhaseService {
     const adjustedPhaseAngle = invertedPhaseAngle + 8;
     const radius = 5;
     const y = 0;
-    let x = radius * Math.sin(this.degToRad(adjustedPhaseAngle));
+    let x = radius * Math.sin(this.degToRad(adjustedPhaseAngle) - 1.5);
     const z = radius * Math.cos(this.degToRad(adjustedPhaseAngle));
 
     switch (phase) {
       case LunarPhase.WANING_GIBBOUS:
       case LunarPhase.WAXING_CRESCENT:
         if (hemisphere === 'Southern')
-          x = radius * Math.sin(this.degToRad(adjustedPhaseAngle));
-        else x = -(radius * Math.sin(this.degToRad(adjustedPhaseAngle)));
+          x = radius * Math.sin(this.degToRad(adjustedPhaseAngle) + 1.5);
+        else x = -(radius * Math.sin(this.degToRad(adjustedPhaseAngle) - 1.5));
       case LunarPhase.NEW:
       case LunarPhase.FIRST_QUARTER:
       case LunarPhase.WAXING_GIBBOUS:
@@ -59,8 +59,8 @@ export class MoonPhaseService {
       case LunarPhase.LAST_QUARTER:
       case LunarPhase.WANING_CRESCENT:
         if (hemisphere === 'Southern')
-          x = -(radius * Math.sin(this.degToRad(adjustedPhaseAngle)));
-        else x = radius * Math.sin(this.degToRad(adjustedPhaseAngle));
+          x = -(radius * Math.sin(this.degToRad(adjustedPhaseAngle) + 1.5));
+        else x = radius * Math.sin(this.degToRad(adjustedPhaseAngle) - 1.5);
     }
 
     return { x, y, z };
@@ -93,22 +93,20 @@ export class MoonPhaseService {
       throw new HttpException('Unknown country', 434);
     }
 
+    const moonCoordinates = this.calculateLightCoordinates(
+      date,
+      Moon.lunarPhase(date, { hemisphere }),
+      hemisphere
+    );
+
     return {
       emoji: Moon.lunarPhaseEmoji(date, { hemisphere }),
       phase: Moon.lunarPhase(date, { hemisphere }),
       hemisphere,
       declination: this.calculateMoonDeclination(this.daysSinceJ2000(date)),
       illumination: this.calculateMoonIllumination(date),
-      x: this.calculateLightCoordinates(
-        date,
-        Moon.lunarPhase(date, { hemisphere }),
-        hemisphere
-      ).x,
-      z: this.calculateLightCoordinates(
-        date,
-        Moon.lunarPhase(date, { hemisphere }),
-        hemisphere
-      ).z,
+      x: moonCoordinates.x,
+      z: moonCoordinates.z,
     };
   }
 }

@@ -14,11 +14,11 @@ import { Eclipse } from 'templates/Eclipse';
 
 export const Home = () => {
   const [date] = useState(new Date());
-  const [coords, setCoords] = useState<{
-    latitude: number;
-    longitude: number;
-    height: number;
-  }>({ latitude: 0, longitude: 0, height: 0 });
+  const [coords, setCoords] = useState({
+    latitude: 0,
+    longitude: 0,
+    height: 0,
+  });
   const { data: countryData, loading: countryLoading } = useQuery(
     GET_LOCATION,
     {
@@ -49,7 +49,11 @@ export const Home = () => {
     refetchWritePolicy: 'overwrite',
     fetchPolicy: 'cache-first',
   });
-  const typeofEvent = ['local solar', 'global solar', 'lunar'];
+  const typeofEvent: Array<'local solar' | 'global solar' | 'lunar'> = [
+    'local solar',
+    'global solar',
+    'lunar',
+  ];
 
   useGSAP(() => {
     if (!loading && data) {
@@ -84,13 +88,7 @@ export const Home = () => {
           <Events>
             {typeofEvent.map((event, index) => (
               <EventsWrapper className="events" key={index}>
-                <Eclipse
-                  loading={loading}
-                  query={{
-                    data,
-                    type: event as 'local solar' | 'global solar' | 'lunar',
-                  }}
-                />
+                <Eclipse loading={loading} query={{ data, type: event }} />
               </EventsWrapper>
             ))}
           </Events>

@@ -51,7 +51,7 @@ export const MoonPhase = () => {
 
     const darkLight = new THREE.PointLight('#222222', 50);
     darkLight.position.set(0, 0, 5);
-    const light = new THREE.PointLight('#ffffff', 50);
+    const light = new THREE.PointLight('#ffffffba', 50);
     light.position.copy(
       new THREE.Vector3(
         data.getMoonPhase?.x,
@@ -103,5 +103,7 @@ export const MoonPhase = () => {
     return <h1>{error.message}</h1>;
   }
 
-  return <div ref={threeRef} style={{ width: '100vw', height: '100vh' }}></div>;
+  return (
+    <div ref={threeRef} style={{ width: '100svw', height: '100svh' }}></div>
+  );
 };
