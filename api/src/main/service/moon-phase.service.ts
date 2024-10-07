@@ -1,5 +1,5 @@
 import { HttpException, Injectable } from '@nestjs/common';
-import { Hemisphere, LunarPhase, Moon } from 'lunarphase-js';
+import { Hemisphere, Moon } from 'lunarphase-js';
 import { MoonPhase, MoonPhaseInput } from 'model/moon-phase';
 import { NorthernHemisphereCountries } from 'utils/northern-hemisphere-countries';
 import { SouthernHemisphereCountries } from 'utils/southern-hemisphere-countries';
@@ -27,40 +27,27 @@ export class MoonPhaseService {
   }
 
   private calculateLightCoordinates(
-    date: Date,
-    phase: LunarPhase,
-    hemisphere: Hemisphere
+    illumination: number,
+    hemisphere: Hemisphere,
+    date: Date
   ): {
     x: number;
     y: number;
     z: number;
   } {
-    const synodicMonth = 29.53058867;
     const age = Moon.lunarAge(date);
-    const phaseAngle = (age / synodicMonth) * 360;
 
-    const invertedPhaseAngle = 180 - phaseAngle;
-    const adjustedPhaseAngle = invertedPhaseAngle + 8;
-    const radius = 5;
-    const y = 0;
-    let x = radius * Math.sin(this.degToRad(adjustedPhaseAngle) - 1.5);
-    const z = radius * Math.cos(this.degToRad(adjustedPhaseAngle));
+    let x: number =
+      -(-age / 100 - Math.cos(this.degToRad(-illumination + -age))) * 5;
+    let y: number =
+      -(-age / 100 - Math.sin(this.degToRad(-illumination + -age))) * 5;
+    let z: number =
+      -(-age / 100 - Math.tan(this.degToRad(-illumination + -age))) * 5;
 
-    switch (phase) {
-      case LunarPhase.WANING_GIBBOUS:
-      case LunarPhase.WAXING_CRESCENT:
-        if (hemisphere === 'Southern')
-          x = radius * Math.sin(this.degToRad(adjustedPhaseAngle) + 1.5);
-        else x = -(radius * Math.sin(this.degToRad(adjustedPhaseAngle) - 1.5));
-      case LunarPhase.NEW:
-      case LunarPhase.FIRST_QUARTER:
-      case LunarPhase.WAXING_GIBBOUS:
-      case LunarPhase.FULL:
-      case LunarPhase.LAST_QUARTER:
-      case LunarPhase.WANING_CRESCENT:
-        if (hemisphere === 'Southern')
-          x = -(radius * Math.sin(this.degToRad(adjustedPhaseAngle) + 1.5));
-        else x = radius * Math.sin(this.degToRad(adjustedPhaseAngle) - 1.5);
+    if (hemisphere === 'Southern') {
+      x = (age / 100 - Math.cos(this.degToRad(illumination + age))) * 5;
+      y = (age / 100 - Math.sin(this.degToRad(illumination + age))) * 5;
+      z = (age / 100 - Math.tan(this.degToRad(illumination + age))) * 5;
     }
 
     return { x, y, z };
@@ -94,9 +81,9 @@ export class MoonPhaseService {
     }
 
     const moonCoordinates = this.calculateLightCoordinates(
-      date,
-      Moon.lunarPhase(date, { hemisphere }),
-      hemisphere
+      this.calculateMoonIllumination(date),
+      hemisphere,
+      date
     );
 
     return {
@@ -107,6 +94,7 @@ export class MoonPhaseService {
       illumination: this.calculateMoonIllumination(date),
       x: moonCoordinates.x,
       z: moonCoordinates.z,
+      y: moonCoordinates.z,
     };
   }
 }

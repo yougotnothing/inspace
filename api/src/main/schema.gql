@@ -106,6 +106,7 @@ type MoonPhase {
   illumination: Float!
   phase: String!
   x: Float!
+  y: Float!
   z: Float!
 }
 

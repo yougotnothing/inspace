@@ -47,17 +47,14 @@ export const MoonPhase = () => {
       })
     );
 
-    moon.rotation.y = 179.6;
+    moon.rotation.y =
+      179.6 + THREE.MathUtils.degToRad(data.getMoonPhase?.declination);
 
-    const darkLight = new THREE.PointLight('#222222', 50);
+    const darkLight = new THREE.PointLight('#3b3b3b', 50);
     darkLight.position.set(0, 0, 5);
-    const light = new THREE.PointLight('#ffffffba', 50);
+    const light = new THREE.PointLight('#ffffff', 50);
     light.position.copy(
-      new THREE.Vector3(
-        data.getMoonPhase?.x,
-        THREE.MathUtils.degToRad(data.getMoonPhase?.declination),
-        data.getMoonPhase?.z
-      )
+      new THREE.Vector3(data.getMoonPhase?.x, 0, data.getMoonPhase?.z)
     );
     scene.add(moon);
     scene.add(light, darkLight);
