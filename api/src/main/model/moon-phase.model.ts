@@ -11,9 +11,6 @@ export class MoonPhaseInput implements MoonPhaseDto {
 
   @Field(type => Date)
   date: Date;
-
-  // @Field(type => Number)
-  // longitude: number;
 }
 
 @ObjectType()

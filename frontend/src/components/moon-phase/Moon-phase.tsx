@@ -3,16 +3,22 @@ import { GET_FULL_MOON_PHASE_DATA } from 'query/moon-phase';
 import { useEffect, useMemo, useRef } from 'react';
 import * as THREE from 'three';
 import moonTexture from '../../assets/moon-texture.jpg';
+import { useSearchParams } from 'react-router-dom';
+import { HeaderWrapper, Moon } from './Moon-phase.styled';
+import { Wrapper } from 'styles/Wrapper';
+import { Navbar } from 'templates/Navbar';
 
 export const MoonPhase = () => {
+  const country = useSearchParams()[0].get('country') ?? 'Ukraine';
+
   const variables = useMemo(
     () => ({
       location: {
-        country: 'Poland',
+        country,
         date: new Date(),
       },
     }),
-    []
+    [country]
   );
   const threeRef = useRef<HTMLDivElement>(null);
   const { loading, error, data } = useQuery(GET_FULL_MOON_PHASE_DATA, {
@@ -33,7 +39,7 @@ export const MoonPhase = () => {
       antialias: true,
     });
 
-    camera.position.z = 3;
+    camera.position.z = 2.5;
 
     renderer.setClearColor(new THREE.Color('#000'));
     renderer.setSize(window.innerWidth, window.innerHeight);
@@ -47,14 +53,17 @@ export const MoonPhase = () => {
       })
     );
 
-    moon.rotation.y =
-      179.6 + THREE.MathUtils.degToRad(data.getMoonPhase?.declination);
+    moon.rotation.y = 179.6;
 
-    const darkLight = new THREE.PointLight('#3b3b3b', 50);
+    const darkLight = new THREE.PointLight('#222222', 50);
     darkLight.position.set(0, 0, 5);
     const light = new THREE.PointLight('#ffffff', 50);
     light.position.copy(
-      new THREE.Vector3(data.getMoonPhase?.x, 0, data.getMoonPhase?.z)
+      new THREE.Vector3(
+        data.getMoonPhase?.x,
+        data.getMoonPhase?.y,
+        data.getMoonPhase?.z
+      )
     );
     scene.add(moon);
     scene.add(light, darkLight);
@@ -92,15 +101,18 @@ export const MoonPhase = () => {
     };
   }, [loading, error, data]);
 
-  if (loading) {
-    return <h1>loading...</h1>;
-  }
-
-  if (error) {
-    return <h1>{error.message}</h1>;
-  }
+  if (loading) return <h1>loading...</h1>;
+  if (error) return <h1>{error.message}</h1>;
 
   return (
-    <div ref={threeRef} style={{ width: '100svw', height: '100svh' }}></div>
+    <Wrapper>
+      <Navbar mappings={['/home', '/profile', '/events']} />
+      <HeaderWrapper>
+        <Moon
+          $declination={data.getMoonPhase?.declination}
+          ref={threeRef}
+        ></Moon>
+      </HeaderWrapper>
+    </Wrapper>
   );
 };

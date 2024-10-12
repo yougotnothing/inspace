@@ -10,6 +10,7 @@ export const GET_FULL_MOON_PHASE_DATA = gql`
       declination
       x
       z
+      y
     }
   }
 `;

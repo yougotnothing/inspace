@@ -19,29 +19,23 @@ export class SolarEclipseService {
     startTime: FlexibleDateTime,
     { latitude, longitude, height }: ObserverInput
   ): Promise<SearchSolarEclipse> {
-    return {
-      ...SearchLocalSolarEclipse(
-        startTime,
-        new Observer(latitude, longitude, height)
-      ),
-    };
+    return SearchLocalSolarEclipse(
+      startTime,
+      new Observer(latitude, longitude, height)
+    );
   }
 
   async nextLocalSolarEclipse(
     startTime: Date,
     { latitude, longitude, height }: ObserverInput
   ): Promise<SearchSolarEclipse> {
-    return {
-      ...NextLocalSolarEclipse(
-        startTime,
-        new Observer(latitude, longitude, height)
-      ),
-    };
+    return NextLocalSolarEclipse(
+      startTime,
+      new Observer(latitude, longitude, height)
+    );
   }
 
   async nextGlobalSolarEclipse(startTime: Date): Promise<NextSolarEclipse> {
-    return {
-      ...NextGlobalSolarEclipse(SearchGlobalSolarEclipse(startTime).peak),
-    };
+    return NextGlobalSolarEclipse(SearchGlobalSolarEclipse(startTime).peak);
   }
 }

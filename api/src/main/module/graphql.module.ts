@@ -13,6 +13,7 @@ import { SessionModule } from 'module/session';
 import { AirPollutionModule } from 'module/air-pollution';
 import { LunarEclipseModule } from 'module/lunar-eclipse';
 import { SolarEclipseModule } from 'module/solar-eclipse';
+import { LunarApsisModule } from 'module/lunar-apsis';
 
 @Module({
   imports: [
@@ -31,6 +32,7 @@ import { SolarEclipseModule } from 'module/solar-eclipse';
     AirPollutionModule,
     LunarEclipseModule,
     SolarEclipseModule,
+    LunarApsisModule,
   ],
   providers: [PrismaService, ActionResolver, ActionService],
 })

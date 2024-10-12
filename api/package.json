@@ -34,6 +34,7 @@
     "axios": "^1.7.7",
     "bcrypt": "^5.1.1",
     "cookie-parser": "^1.4.6",
+    "dayjs": "^1.11.13",
     "express-session": "^1.18.0",
     "graphql": "^16.9.0",
     "lunarphase-js": "^2.0.3",

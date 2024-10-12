@@ -17,7 +17,7 @@ export const Eclipse: FC<{
   const date = (() => {
     switch (query.type) {
       case 'local solar':
-        return new Date(query.data.nextLocalLunarEclipse?.peak.time.date)
+        return new Date(query.data.nextLocalSolarEclipse?.peak.time.date)
           .toUTCString()
           .replace('GMT', '');
       case 'global solar':

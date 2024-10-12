@@ -61,7 +61,10 @@ export const Navbar = ({ mappings }: { mappings: string[] }) => {
         <Routes>
           {mappings.map((mapping, index) => (
             <Route to={mapping} key={index}>
-              {mapping.replace('/', '').replace('-', ' ')}
+              {mapping
+                .replace('/', '')
+                .replace('-', ' ')
+                .replace(/\?([^=&]+)=([^&]*)/, '')}
             </Route>
           ))}
         </Routes>

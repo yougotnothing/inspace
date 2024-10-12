@@ -1,18 +1,14 @@
 import { HttpException, Injectable } from '@nestjs/common';
 import { Hemisphere, Moon } from 'lunarphase-js';
 import { MoonPhase, MoonPhaseInput } from 'model/moon-phase';
+import { Coordinates } from 'type/coordinates';
 import { NorthernHemisphereCountries } from 'utils/northern-hemisphere-countries';
 import { SouthernHemisphereCountries } from 'utils/southern-hemisphere-countries';
+import { daysSinceJ2000 } from 'utils/days-since-J2000';
+import { MoonPhase as searchMoonPhase } from 'astronomy-engine';
 
 @Injectable()
 export class MoonPhaseService {
-  private daysSinceJ2000(date: Date): number {
-    return Math.floor(
-      (date.getTime() - new Date('2000-01-01T12:00:00Z').getTime()) /
-        (1000 * 60 * 60 * 24)
-    );
-  }
-
   private degToRad(deg: number): number {
     return (deg * Math.PI) / 180;
   }
@@ -26,31 +22,15 @@ export class MoonPhaseService {
     return +(illumination * 100).toFixed(2);
   }
 
-  private calculateLightCoordinates(
-    illumination: number,
-    hemisphere: Hemisphere,
-    date: Date
-  ): {
-    x: number;
-    y: number;
-    z: number;
-  } {
-    const age = Moon.lunarAge(date);
+  private calculateLightCoordinates(date: Date): Coordinates {
+    const angleInDegrees = searchMoonPhase(date);
+    const angleInRadians = ((angleInDegrees - 85) * Math.PI) / 180;
 
-    let x: number =
-      -(-age / 100 - Math.cos(this.degToRad(-illumination + -age))) * 5;
-    let y: number =
-      -(-age / 100 - Math.sin(this.degToRad(-illumination + -age))) * 5;
-    let z: number =
-      -(-age / 100 - Math.tan(this.degToRad(-illumination + -age))) * 5;
+    // Вычисляем точные координаты
+    const x = +(5 * Math.cos(angleInRadians));
+    const z = +(5 * Math.sin(angleInRadians));
 
-    if (hemisphere === 'Southern') {
-      x = (age / 100 - Math.cos(this.degToRad(illumination + age))) * 5;
-      y = (age / 100 - Math.sin(this.degToRad(illumination + age))) * 5;
-      z = (age / 100 - Math.tan(this.degToRad(illumination + age))) * 5;
-    }
-
-    return { x, y, z };
+    return { x, y: 0, z };
   }
 
   private calculateMoonDeclination(daysSinceJ2000: number): number {
@@ -80,21 +60,13 @@ export class MoonPhaseService {
       throw new HttpException('Unknown country', 434);
     }
 
-    const moonCoordinates = this.calculateLightCoordinates(
-      this.calculateMoonIllumination(date),
-      hemisphere,
-      date
-    );
-
     return {
-      emoji: Moon.lunarPhaseEmoji(date, { hemisphere }),
-      phase: Moon.lunarPhase(date, { hemisphere }),
       hemisphere,
-      declination: this.calculateMoonDeclination(this.daysSinceJ2000(date)),
+      phase: Moon.lunarPhase(date, { hemisphere }),
+      emoji: Moon.lunarPhaseEmoji(date, { hemisphere }),
+      declination: this.calculateMoonDeclination(daysSinceJ2000(date)),
       illumination: this.calculateMoonIllumination(date),
-      x: moonCoordinates.x,
-      z: moonCoordinates.z,
-      y: moonCoordinates.z,
+      ...this.calculateLightCoordinates(date),
     };
   }
 }

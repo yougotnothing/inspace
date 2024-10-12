@@ -90,6 +90,13 @@ input LoginDtoInput {
   password: String!
 }
 
+type LunarApsis {
+  dist_au: Float!
+  dist_km: Float!
+  kind: Float!
+  time: AstroTime!
+}
+
 type LunarEclipseInfo {
   kind: String!
   obscuration: Float!
@@ -145,6 +152,7 @@ type Query {
   getAirPollutionInfo(coords: AirPollutionInput!): AirPollution!
   getLocation(coordinates: GeolocationInput!): Geolocation!
   getMoonPhase(location: MoonPhaseInput!): MoonPhase!
+  getNextLunarApsis(date: DateTime!): LunarApsis!
   getUserById(id: String!): User!
   getUserByName(name: String!): User!
   nextGlobalSolarEclipse(startTime: DateTime!): NextSolarEclipse!
