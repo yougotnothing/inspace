@@ -26,7 +26,6 @@ export class MoonPhaseService {
     const angleInDegrees = searchMoonPhase(date);
     const angleInRadians = ((angleInDegrees - 85) * Math.PI) / 180;
 
-    // Вычисляем точные координаты
     const x = +(5 * Math.cos(angleInRadians));
     const z = +(5 * Math.sin(angleInRadians));
 

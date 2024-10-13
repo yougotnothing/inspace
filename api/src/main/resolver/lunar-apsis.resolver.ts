@@ -11,4 +11,9 @@ export class LunarApsisResolver {
   async getNextLunarApsis(@Args('date') date: Date): Promise<LunarApsis> {
     return await this.lunarApsisService.nextLunarApsis(date);
   }
+
+  @Query(returns => LunarApsis)
+  async searchLunarApsis(@Args('date') date: Date): Promise<LunarApsis> {
+    return await this.lunarApsisService.searchLunarApsis(date);
+  }
 }

@@ -6,6 +6,7 @@ export const Paragraph = styled('p')<{ $weight?: number }>`
   color: white;
   font-size: 1.3rem;
   margin: 0;
+  text-align: start;
   user-select: none;
   -mox-user-select: none;
   -webkit-user-select: none;

@@ -14,6 +14,6 @@ export class LunarApsis {
   @Field(type => AstroTime)
   time: AstroTime;
 
-  @Field(type => Number)
-  kind: ApsisKind;
+  @Field(type => String)
+  kind: keyof typeof ApsisKind;
 }

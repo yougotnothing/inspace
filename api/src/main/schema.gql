@@ -93,7 +93,7 @@ input LoginDtoInput {
 type LunarApsis {
   dist_au: Float!
   dist_km: Float!
-  kind: Float!
+  kind: String!
   time: AstroTime!
 }
 
@@ -159,6 +159,7 @@ type Query {
   nextLocalSolarEclipse(observer: ObserverInput!, startTime: DateTime!): SearchSolarEclipse!
   nextLunarEclipse(date: DateTime!): LunarEclipseInfo!
   searchLocalSolarEclipse(observer: ObserverInput!, startTime: DateTime!): SearchSolarEclipse!
+  searchLunarApsis(date: DateTime!): LunarApsis!
   searchLunarEclipse(date: DateTime!): LunarEclipseInfo!
 }
 

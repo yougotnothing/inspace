@@ -1,9 +1,8 @@
 import { gql } from '@apollo/client';
 
 export const GET_FULL_MOON_PHASE_DATA = gql`
-  query GetMoonPhase($location: MoonPhaseInput!) {
+  query GetMoonPhase($location: MoonPhaseInput!, $date: DateTime!) {
     getMoonPhase(location: $location) {
-      emoji
       phase
       hemisphere
       illumination
@@ -11,6 +10,15 @@ export const GET_FULL_MOON_PHASE_DATA = gql`
       x
       z
       y
+    }
+
+    searchLunarApsis(date: $date) {
+      dist_au
+      dist_km
+      kind
+      time {
+        date
+      }
     }
   }
 `;
