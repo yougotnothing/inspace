@@ -8,8 +8,9 @@ COPY prisma ./prisma/
 
 RUN apt-get update && \
     apt-get install -y make gcc g++ python3 && \
-    yarn global add prisma && \
-    npx prisma generate
+    yarn global add prisma@5.20.0
+
+RUN npx prisma generate
 
 COPY . .
 

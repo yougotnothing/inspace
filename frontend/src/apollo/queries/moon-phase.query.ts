@@ -1,7 +1,11 @@
 import { gql } from '@apollo/client';
 
 export const GET_FULL_MOON_PHASE_DATA = gql`
-  query GetMoonPhase($location: MoonPhaseInput!, $date: DateTime!) {
+  query GetMoonPhase(
+    $location: MoonPhaseInput!
+    $date: DateTime!
+    $country: String!
+  ) {
     getMoonPhase(location: $location) {
       phase
       hemisphere
@@ -12,10 +16,11 @@ export const GET_FULL_MOON_PHASE_DATA = gql`
       y
     }
 
-    searchLunarApsis(date: $date) {
+    searchLunarApsis(date: $date, country: $country) {
       dist_au
       dist_km
       kind
+      phase
       time {
         date
       }

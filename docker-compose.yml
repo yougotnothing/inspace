@@ -6,11 +6,24 @@ services:
     image: postgres:latest
     restart: always
     environment:
-      - POSTGRES_USER=${POSTGRES_USER}
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
-      - POSTGRES_DB=${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
     ports:
       - 5432:5432
+
+  minio:
+    container_name: minio
+    image: minio/minio
+    ports:
+      - 9000:9000
+      - 9001:9001
+    volumes:
+      - minio:/data
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
+    command: server /data --console-address :9001
 
   geo:
     container_name: geo-service-py
@@ -42,8 +55,13 @@ services:
       GEO_URL: ${GEO_URL}
       AIR_POLLUTION_API_KEY: ${AIR_POLLUTION_API_KEY}
       AIR_POLLUTION_API_URL: ${AIR_POLLUTION_API_URL}
+      MINIO_PORT: ${MINIO_PORT}
+      MINIO_END_POINT: ${MINIO_END_POINT}
+      MINIO_ACCESS_KEY: ${MINIO_ACCESS_KEY}
+      MINIO_SECRET_KEY: ${MINIO_SECRET_KEY}
     depends_on:
       - geo
+      - postgres
     tty: true
     stdin_open: true
 
@@ -68,6 +86,8 @@ services:
       VITE_INSTAGRAM_URL: ${VITE_INSTAGRAM_URL}
     tty: true
     depends_on:
+      - geo
+      - postgres
       - nestjs-api
 
 volumes:
@@ -75,3 +95,7 @@ volumes:
   node_modules:
   api:
   frontend:
+  redis:
+    driver: local
+  minio:
+    driver: local

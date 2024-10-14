@@ -94,6 +94,7 @@ type LunarApsis {
   dist_au: Float!
   dist_km: Float!
   kind: String!
+  phase: String!
   time: AstroTime!
 }
 
@@ -152,14 +153,14 @@ type Query {
   getAirPollutionInfo(coords: AirPollutionInput!): AirPollution!
   getLocation(coordinates: GeolocationInput!): Geolocation!
   getMoonPhase(location: MoonPhaseInput!): MoonPhase!
-  getNextLunarApsis(date: DateTime!): LunarApsis!
+  getNextLunarApsis(country: String!, date: DateTime!): LunarApsis!
   getUserById(id: String!): User!
   getUserByName(name: String!): User!
   nextGlobalSolarEclipse(startTime: DateTime!): NextSolarEclipse!
   nextLocalSolarEclipse(observer: ObserverInput!, startTime: DateTime!): SearchSolarEclipse!
   nextLunarEclipse(date: DateTime!): LunarEclipseInfo!
   searchLocalSolarEclipse(observer: ObserverInput!, startTime: DateTime!): SearchSolarEclipse!
-  searchLunarApsis(date: DateTime!): LunarApsis!
+  searchLunarApsis(country: String!, date: DateTime!): LunarApsis!
   searchLunarEclipse(date: DateTime!): LunarEclipseInfo!
 }
 

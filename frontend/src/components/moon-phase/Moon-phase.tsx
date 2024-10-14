@@ -29,6 +29,7 @@ export const MoonPhase = () => {
         date: new Date(),
       },
       date: new Date(),
+      country,
     }),
     [country]
   );
@@ -174,17 +175,18 @@ export const MoonPhase = () => {
                 <Header>About next lunar apsis:</Header>
                 <MoonPhaseInfoWrapper>
                   <Paragraph>kind: {data.searchLunarApsis?.kind}</Paragraph>
-                  <Paragraph>
-                    distance (km): {data.searchLunarApsis?.dist_km.toFixed(1)}km
-                  </Paragraph>
-                  <Paragraph>
-                    distance (au): {data.searchLunarApsis?.dist_au.toFixed(4)}au
-                  </Paragraph>
+                  <Paragraph>phase: {data.searchLunarApsis?.phase}</Paragraph>
                   <Paragraph>
                     date:{' '}
                     {new Date(
                       data.searchLunarApsis?.time.date as string
                     ).toUTCString()}
+                  </Paragraph>
+                  <Paragraph>
+                    distance (km): {data.searchLunarApsis?.dist_km.toFixed(1)}km
+                  </Paragraph>
+                  <Paragraph>
+                    distance (au): {data.searchLunarApsis?.dist_au.toFixed(4)}au
                   </Paragraph>
                 </MoonPhaseInfoWrapper>
               </Info>

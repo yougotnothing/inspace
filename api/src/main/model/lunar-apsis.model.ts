@@ -2,6 +2,7 @@
 import { Field, ObjectType } from '@nestjs/graphql';
 import { ApsisKind } from 'astronomy-engine';
 import { AstroTime } from './astro-time.model';
+import { LunarPhase } from 'lunarphase-js';
 
 @ObjectType()
 export class LunarApsis {
@@ -16,4 +17,7 @@ export class LunarApsis {
 
   @Field(type => String)
   kind: keyof typeof ApsisKind;
+
+  @Field(type => String)
+  phase: LunarPhase;
 }

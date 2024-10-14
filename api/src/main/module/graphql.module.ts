@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { GraphQLModule as GQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
+import { ApolloServerPluginCacheControl } from '@apollo/server/plugin/cacheControl';
 import { join } from 'path';
 import { PrismaService } from 'service/prisma';
 import { ActionService } from 'service/action';
@@ -19,6 +20,7 @@ import { LunarApsisModule } from 'module/lunar-apsis';
   imports: [
     GQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
+      plugins: [ApolloServerPluginCacheControl({ defaultMaxAge: 30 })],
       sortSchema: true,
       playground: true,
       context: ({ req, res }) => ({ req, res }),

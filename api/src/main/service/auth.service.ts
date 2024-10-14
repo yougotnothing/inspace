@@ -22,9 +22,8 @@ export class AuthService {
       where: { email: createUserDto.email },
     });
 
-    if (createUserDto.password !== createUserDto.confirmPassword) {
+    if (createUserDto.password !== createUserDto.confirmPassword)
       throw new HttpException("passwords don't match.", HttpStatus.CONFLICT);
-    }
 
     if (user)
       throw new HttpException('User already exists', HttpStatus.CONFLICT);
@@ -43,12 +42,11 @@ export class AuthService {
   async login(loginDto: LoginDtoInput, res: Response): Promise<Login> {
     const user = await this.validateUser(loginDto);
 
-    if (!user) {
+    if (!user)
       throw new HttpException(
         `user ${loginDto.login} is not found.`,
         HttpStatus.NOT_FOUND
       );
-    }
 
     return {
       ...(await this.sessionService.generate(
@@ -85,12 +83,11 @@ export class AuthService {
         : { name: login };
       const user = await this.prismaService.user.findFirst({ where });
 
-      if (!bcrypt.compare(user.password, password)) {
+      if (!bcrypt.compare(user.password, password))
         throw new HttpException(
           "passwords don't match",
           HttpStatus.FAILED_DEPENDENCY
         );
-      }
 
       return user;
     } catch {

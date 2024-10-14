@@ -4,7 +4,7 @@
 
 <br id="stack">
 
-[![My Skills](https://skillicons.dev/icons?i=nestjs,postgres,prisma,typescript,docker,webpack,yarn,python,fastapi,html,css,react,vite,styledcomponents,graphql,threejs)](https://skillicons.dev)
+[![My Skills](https://skillicons.dev/icons?i=nestjs,postgres,prisma,typescript,docker,webpack,yarn,python,fastapi,html,css,react,vite,styledcomponents,graphql,apollo,threejs)](https://skillicons.dev)
 
 ### **_<a href="#en_idea">en</a> <a href="ru_idea">ru</a>_**
 
@@ -30,57 +30,9 @@
 
 - [x] graphql integration
 - [x] three js main page starfield
-- [ ] space events api intergration
 - [ ] email intergration
-- [ ] minio integration
-- [ ] moon phase requests
-- [ ] three js moon render
+- [x] minio integration
+- [x] moon phase requests
+- [x] three js moon render
 - [x] session auth
-- [ ] redis integration
 - [ ] handlebars integration
-
-<br id="run_app">
-
-## Run app
-
-#### create a `.env` file in root directory
-
-```.env
-#for geo service python
-
-USER_AGENT=... #your user agent key (may be any string)
-
-DEEPL_API_KEY=... #your deepl api key
-
-
-
-#for postgres environment
-
-POSTGRES_DB=inspace-storage #your postgres database name (default is 'inspace-storage')
-
-POSTGRES_USER=... #your postgres username
-
-POSTGRES_HOST=localhost #your postgres host (default is 'localhost')
-
-POSTGRES_PORT=5432 #your postgres port (defualt is '5432')
-
-POSTGRES_PASSWORD=... #your postgres password
-
-
-
-#for hmr
-
-CHOKIDAR_USEPOLLING=true
-
-
-
-#for hmr on frontend
-
-VITE_HMR_PORT=5173
-
-VITE_HMR_HOST=localhost
-
-
-
-GEO_URL=... #your FastAPI app url (don't use an 'localhost' host in url, you must replace it with docker container name. Default is 'geo', it must looks like 'http://geo:8000')
-```
