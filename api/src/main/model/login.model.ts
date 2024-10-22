@@ -13,18 +13,18 @@ export class LoginDtoInput implements LoginDto {
 }
 
 @ObjectType()
-export class Login extends Session {
-  @Field(type => String)
-  sessionId: string;
+export class Login {
+  @Field(type => String, { nullable: true })
+  sessionId?: string;
 
-  @Field(type => String)
-  userId: string;
+  @Field(type => String, { nullable: true })
+  userId?: string;
 
   @Field(type => String)
   message: string;
 
-  @Field(type => String)
-  device: string;
+  @Field(type => String, { nullable: true })
+  device?: string;
 }
 
 @ObjectType()

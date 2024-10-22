@@ -48,7 +48,7 @@ export const Register = () => {
 
       console.log(response);
 
-      navigate('/home');
+      navigate('/login');
     } catch (error: any) {
       console.error(error);
     }

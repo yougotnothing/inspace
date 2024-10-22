@@ -1,27 +1,9 @@
-import {
-  CanActivate,
-  ExecutionContext,
-  HttpException,
-  HttpStatus,
-  Injectable,
-} from '@nestjs/common';
-import { Request } from 'express';
-import { Observable } from 'rxjs';
+import { ExecutionContext, Injectable } from '@nestjs/common';
+import { GqlExecutionContext } from '@nestjs/graphql';
+import { AuthGuard } from '@nestjs/passport';
 
 @Injectable()
-export class AuthGuard implements CanActivate {
-  canActivate(
-    context: ExecutionContext
-  ): boolean | Promise<boolean> | Observable<boolean> {
-    const request = context.switchToHttp().getRequest<Request>();
-
-    if (request.session.id) {
-      return true;
-    } else {
-      throw new HttpException(
-        'Session ID is not defined',
-        HttpStatus.UNAUTHORIZED
-      );
-    }
-  }
+export class GqlAuthGuard extends AuthGuard('keycloak') {
+  override getRequest = (context: ExecutionContext) =>
+    GqlExecutionContext.create(context).getContext().req;
 }

@@ -8,7 +8,7 @@ import { NestMinioModule } from 'nestjs-minio';
       imports: [ConfigModule],
       useFactory: (configService: ConfigService) => ({
         endPoint: configService.get<string>('MINIO_END_POINT'),
-        port: configService.get<number>('MINIO_PORT'),
+        port: parseInt(configService.get<string>('MINIO_PORT')),
         useSSL: false,
         accessKey: configService.get<string>('MINIO_ACCESS_KEY'),
         secretKey: configService.get<string>('MINIO_SECRET_KEY'),

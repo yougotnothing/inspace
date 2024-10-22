@@ -33,7 +33,7 @@ export const Login = () => {
       await loginSchema.validate(values);
     },
   });
-  const [login, { data, loading }] = useMutation(LOGIN);
+  const [login, { loading }] = useMutation(LOGIN);
   const [type, setType] = useState<'password' | 'text'>('password');
 
   const handleChangeType = () => {
@@ -44,7 +44,7 @@ export const Login = () => {
 
   const handleLogin = async () => {
     try {
-      await login({
+      const response = await login({
         variables: {
           loginDto: {
             ...formik.values,
@@ -52,8 +52,10 @@ export const Login = () => {
         },
       });
 
-      console.log(data);
-      navigate('/moon-phase');
+      if (response.data.login.userId)
+        localStorage.setItem('user_id', response.data.login.userId);
+
+      navigate('/home');
     } catch (error: any) {
       console.log(error);
     }

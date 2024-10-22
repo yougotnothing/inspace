@@ -11,6 +11,35 @@ services:
       POSTGRES_DB: ${POSTGRES_DB}
     ports:
       - 5432:5432
+      - 5433:5433
+
+  keycloak:
+    container_name: keycloak
+    image: quay.io/keycloak/keycloak:22.0.5
+    ports:
+      - 8080:8080
+    volumes:
+      - keycloak_data:/data
+    environment:
+      DB_VENDOR: postgres
+      DB_ADDR: postgres
+      DB_DATABASE: ${POSTGRES_DB}
+      DB_USER: ${POSTGRES_USER}
+      DB_PASSWORD: ${POSTGRES_PASSWORD}
+      KEYCLOAK_ADMIN: ${KC_BOOTSTRAP_ADMIN_USERNAME}
+      KEYCLOAK_ADMIN_PASSWORD: ${KC_BOOTSTRAP_ADMIN_PASSWORD}
+    restart: unless-stopped
+    command: start-dev
+    depends_on:
+      - postgres
+
+  redis:
+    container_name: redis
+    image: redis
+    ports:
+      - 6379:6379
+    volumes:
+      - redis:/data
 
   minio:
     container_name: minio
@@ -28,13 +57,25 @@ services:
   geo:
     container_name: geo-service-py
     build:
-      context: ./geo
+      context: ./python
       dockerfile: Dockerfile
     ports:
       - 8000:8000
     environment:
       GEONAMES_API_URL: ${GEONAMES_API_URL}
       GEONAMES_API_KEY: ${GEONAMES_API_KEY}
+      KC_SERVER_URL: ${KC_SERVER_URL}
+      KC_ADMIN_USERNAME: ${KC_BOOTSTRAP_ADMIN_USERNAME}
+      KC_ADMIN_PASSWORD: ${KC_BOOTSTRAP_ADMIN_PASSWORD}
+      KC_REALM: ${KC_REALM}
+      KC_CLIENT_ID: ${KC_CLIENT_ID}
+      KC_SECRET: ${KC_SECRET}
+      KC_AUTH_URL: ${KC_AUTH_SERVER_URL}
+      KC_OPENID_REDIRECT_URI: ${KC_OPENID_REDIRECT_URI}
+      KC_OPENID_SCOPE: ${KC_OPENID_SCOPE}
+      KC_OPENID_STATE: ${KC_OPENID_STATE}
+    depends_on:
+      - keycloak
 
   nestjs-api:
     container_name: inspace-api
@@ -59,9 +100,9 @@ services:
       MINIO_END_POINT: ${MINIO_END_POINT}
       MINIO_ACCESS_KEY: ${MINIO_ACCESS_KEY}
       MINIO_SECRET_KEY: ${MINIO_SECRET_KEY}
-    depends_on:
-      - geo
-      - postgres
+      SESSION_SECRET: ${SESSION_SECRET}
+      REDIS_HOST: ${REDIS_HOST}
+      REDIS_PORT: ${REDIS_PORT}
     tty: true
     stdin_open: true
 
@@ -86,11 +127,13 @@ services:
       VITE_INSTAGRAM_URL: ${VITE_INSTAGRAM_URL}
     tty: true
     depends_on:
-      - geo
       - postgres
       - nestjs-api
+      - redis
+      - minio
 
 volumes:
+  keycloak_data:
   pg:
   node_modules:
   api:

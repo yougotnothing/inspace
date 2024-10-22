@@ -1,18 +1,18 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { PrismaService } from 'service/prisma';
 import * as bcrypt from 'bcrypt';
-import { Request, Response } from 'express';
+import { Request } from 'express';
 import { User } from '@prisma/client';
 import { validateEmailRegexp } from 'utils/validate-email';
-import { SessionService } from './session.service';
-import { Login, LoginDtoInput } from 'model/login';
+import { LoginDtoInput } from 'model/login';
 import { RegisterInput } from 'model/register';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly prismaService: PrismaService,
-    private readonly sessionService: SessionService
+    private readonly configService: ConfigService
   ) {}
 
   async register(createUserDto: RegisterInput): Promise<string> {
@@ -39,22 +39,17 @@ export class AuthService {
     return `user ${createUserDto.name} created success.`;
   }
 
-  async login(loginDto: LoginDtoInput, res: Response): Promise<Login> {
+  async login(loginDto: LoginDtoInput): Promise<void> {
     const user = await this.validateUser(loginDto);
 
-    if (!user)
+    if (!user) {
       throw new HttpException(
         `user ${loginDto.login} is not found.`,
         HttpStatus.NOT_FOUND
       );
+    }
 
-    return {
-      ...(await this.sessionService.generate(
-        { name: user.name, id: user.id },
-        res
-      )),
-      message: `user ${user.name} logged in success.`,
-    };
+    return;
   }
 
   async refresh(req: Request): Promise<{ message: string; session: any }> {
@@ -68,33 +63,33 @@ export class AuthService {
     };
   }
 
-  async logout(req: Request): Promise<string> {
+  async logout(req: Request): Promise<void> {
     req.session.destroy(err => {
       if (err) throw err;
     });
-
-    return await this.sessionService.destroy(req);
   }
 
   async validateUser({ login, password }: LoginDtoInput): Promise<User> {
-    try {
-      const where = validateEmailRegexp.test(login)
-        ? { email: login }
-        : { name: login };
-      const user = await this.prismaService.user.findFirst({ where });
+    const where = validateEmailRegexp.test(login)
+      ? { email: login }
+      : { name: login };
+    const user = await this.prismaService.user.findFirst({ where });
 
-      if (!bcrypt.compare(user.password, password))
-        throw new HttpException(
-          "passwords don't match",
-          HttpStatus.FAILED_DEPENDENCY
-        );
-
-      return user;
-    } catch {
+    if (!user) {
       throw new HttpException(
         `user ${login} is not found`,
         HttpStatus.BAD_REQUEST
       );
     }
+
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+    if (!isPasswordValid) {
+      throw new HttpException(
+        "passwords don't match",
+        HttpStatus.FAILED_DEPENDENCY
+      );
+    }
+
+    return user;
   }
 }

@@ -16,7 +16,7 @@ export class User implements UserDto {
   @Field(type => String)
   avatar: string;
 
-  @Field(type => String)
+  @Field(type => Boolean)
   isHaveAvatar: boolean;
 
   @Field(type => Boolean)

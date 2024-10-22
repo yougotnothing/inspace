@@ -42,6 +42,11 @@ type AstroTimeObject {
   ut: Float!
 }
 
+type ChangeAvatar {
+  avatar: String!
+  message: String!
+}
+
 type Components {
   co: Float!
   nh3: Float!
@@ -63,11 +68,6 @@ type EclipseEvent {
   time: AstroTimeObject!
 }
 
-input GenerateSessionInput {
-  id: String!
-  name: String!
-}
-
 type Geolocation {
   countryName: String!
   placeName: String!
@@ -76,13 +76,6 @@ type Geolocation {
 input GeolocationInput {
   latitude: Float!
   longitude: Float!
-}
-
-type Login {
-  device: String!
-  message: String!
-  sessionId: String!
-  userId: String!
 }
 
 input LoginDtoInput {
@@ -124,9 +117,8 @@ input MoonPhaseInput {
 }
 
 type Mutation {
-  destroy: String!
-  generate(generateDto: GenerateSessionInput!): Session!
-  login(loginDto: LoginDtoInput!): Login!
+  changeAvatar(image: String!): ChangeAvatar!
+  login(loginDto: LoginDtoInput!): Tokens!
   logout: String!
   register(user: RegisterInput!): String!
 }
@@ -181,11 +173,12 @@ type SearchSolarEclipse {
   total_end: EclipseEvent
 }
 
-"""session"""
-type Session {
-  device: String!
-  sessionId: String!
-  userId: String!
+type Tokens {
+  access_token: String!
+  expires_in: Float!
+  refresh_expires_in: Float!
+  refresh_token: String!
+  session_state: String!
 }
 
 """user"""
@@ -193,7 +186,7 @@ type User {
   avatar: String!
   email: String!
   id: ID!
-  isHaveAvatar: String!
+  isHaveAvatar: Boolean!
   isVerified: Boolean!
   name: String!
   password: String!

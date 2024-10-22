@@ -10,11 +10,11 @@ import { GeolocationModule } from 'module/geolocation';
 import { MoonPhaseModule } from 'module/moon-phase';
 import { AuthModule } from 'module/auth';
 import { UserModule } from 'module/user';
-import { SessionModule } from 'module/session';
 import { AirPollutionModule } from 'module/air-pollution';
 import { LunarEclipseModule } from 'module/lunar-eclipse';
 import { SolarEclipseModule } from 'module/solar-eclipse';
 import { LunarApsisModule } from 'module/lunar-apsis';
+import { UserAvatarModule } from 'module/user-avatar';
 
 @Module({
   imports: [
@@ -30,11 +30,11 @@ import { LunarApsisModule } from 'module/lunar-apsis';
     MoonPhaseModule,
     AuthModule,
     UserModule,
-    SessionModule,
     AirPollutionModule,
     LunarEclipseModule,
     SolarEclipseModule,
     LunarApsisModule,
+    UserAvatarModule,
   ],
   providers: [PrismaService, ActionResolver, ActionService],
 })

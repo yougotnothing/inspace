@@ -1,6 +1,7 @@
 import { Home } from 'components/home/Home';
 import { Login } from 'components/login/Login';
 import { MoonPhase } from 'components/moon-phase/Moon-phase';
+import { Profile } from 'components/profile/Profile';
 import { Register } from 'components/register/Register';
 import { Welcome } from 'components/welcome/Welcome';
 import { createBrowserRouter } from 'react-router-dom';
@@ -25,5 +26,9 @@ export const router = createBrowserRouter([
   {
     path: 'home',
     element: <Home />,
+  },
+  {
+    path: 'profile',
+    element: <Profile />,
   },
 ]);
