@@ -1,9 +1,12 @@
 from fastapi import APIRouter, HTTPException
 import requests
-from utils.variables import GEONAMES_URL, API_KEY
 from requests.exceptions import HTTPError
+import os
 
 router = APIRouter()
+
+API_KEY = os.getenv('GEONAMES_API_KEY')
+GEONAMES_URL = os.getenv('GEONAMES_API_URL')
 
 @router.get('/reverse')
 def get_reverse_geolocation(longitude: float, latitude: float):

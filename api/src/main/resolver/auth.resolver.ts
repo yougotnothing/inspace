@@ -25,7 +25,7 @@ export class AuthResolver {
 
   @Public()
   @Mutation(returns => Tokens)
-  async login(@Args('loginDto') loginDto: LoginDtoInput): Promise<void> {
+  async login(@Args('loginDto') loginDto: LoginDtoInput): Promise<Tokens> {
     return await this.authService.login(loginDto);
   }
 
