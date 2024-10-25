@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { PrismaService } from 'service/prisma';
 import * as bcrypt from 'bcrypt';
 import { Request } from 'express';
@@ -8,10 +8,15 @@ import { LoginDtoInput } from 'model/login';
 import { RegisterInput } from 'model/register';
 import { HttpService } from '@nestjs/axios';
 import { Tokens } from 'model/tokens';
+import { Response } from 'express';
+import { CACHE_MANAGER } from '@nestjs/cache-manager';
+import { Cache } from 'cache-manager';
 
 @Injectable()
 export class AuthService {
   constructor(
+    @Inject(CACHE_MANAGER)
+    private readonly redisManager: Cache,
     private readonly prismaService: PrismaService,
     private readonly httpService: HttpService
   ) {}
@@ -54,39 +59,57 @@ export class AuthService {
     }
   }
 
-  async login(loginDto: LoginDtoInput): Promise<Tokens> {
+  async login(res: Response, loginDto: LoginDtoInput): Promise<Tokens> {
     try {
       const user = await this.validateUser(loginDto);
-
-      if (!user)
-        throw new HttpException(
-          `user ${loginDto.login} is not found.`,
-          HttpStatus.NOT_FOUND
-        );
-
       const response = await this.httpService.axiosRef.post(
         '/openid-connect/login',
         {
-          username: user.name,
+          login: user.name,
           password: user.password,
         }
       );
 
-      return response.data as Tokens;
+      res.cookie('refresh_token', response.data.refresh_token, {
+        httpOnly: true,
+        secure: false,
+        maxAge: response.data.expires_in * 1000,
+      });
+
+      await this.redisManager.set(
+        user.id,
+        response.data.access_token,
+        response.data.expires_in * 1000
+      );
+
+      return response.data;
     } catch (error) {
-      throw error.response.data;
+      throw new HttpException(error, 500);
     }
   }
 
-  async refresh(req: Request): Promise<{ message: string; session: any }> {
-    req.session.regenerate(err => {
-      if (err) throw err;
-    });
+  async refresh(
+    res: Response,
+    refreshToken: string
+  ): Promise<{ message: string; session: any }> {
+    try {
+      const response = await this.httpService.axiosRef.patch(
+        '/openid-connect/refresh',
+        {
+          refresh_token: refreshToken,
+        }
+      );
 
-    return {
-      message: 'session refreshed',
-      session: req.session,
-    };
+      res.cookie('refresh_token', response.data.refresh_token, {
+        httpOnly: true,
+        secure: false,
+        maxAge: response.data.expires_in * 1000,
+      });
+
+      return response.data;
+    } catch (error) {
+      throw new Error(error);
+    }
   }
 
   async logout(req: Request): Promise<void> {

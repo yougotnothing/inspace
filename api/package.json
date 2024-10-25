@@ -54,6 +54,7 @@
     "nest-keycloak-connect": "^1.10.1",
     "nestjs-minio": "^2.6.2",
     "passport": "^0.7.0",
+    "passport-local": "^1.0.0",
     "passport-oauth2": "^1.8.0",
     "passport-openidconnect": "^0.1.2",
     "redis": "^4.7.0",

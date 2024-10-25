@@ -4,7 +4,7 @@ import { Args, Query, Resolver } from '@nestjs/graphql';
 import { DateValidationPipe } from 'pipe/date-validation';
 import { LunarEclipseService } from 'service/lunar-eclipse';
 import { LunarEclipseInfo } from 'model/lunar-eclipse';
-import { GqlAuthGuard } from 'guard/auth';
+import { LocalAuthGuard } from 'guard/auth';
 
 @Resolver(of => LunarEclipseInfo)
 export class LunarEclipseResolver {

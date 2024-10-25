@@ -2,7 +2,7 @@
 import { UseGuards } from '@nestjs/common';
 import { Args, Context, Mutation, Resolver } from '@nestjs/graphql';
 import { Request } from 'express';
-import { GqlAuthGuard } from 'guard/auth';
+import { LocalAuthGuard } from 'guard/auth';
 import { ChangeAvatar } from 'model/change-avatar';
 import { UserAvatarService } from 'service/user-avatar';
 

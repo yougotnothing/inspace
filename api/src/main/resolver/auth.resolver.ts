@@ -1,7 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { Scope, UseGuards, UsePipes } from '@nestjs/common';
+import { CACHE_MANAGER } from '@nestjs/cache-manager';
+import { Inject, Scope, UseGuards, UsePipes } from '@nestjs/common';
 import { Args, Context, Mutation, Resolver } from '@nestjs/graphql';
-import { Request } from 'express';
+import { Request, Response } from 'express';
 import { LoginDtoInput, LoginError } from 'model/login';
 import { RegisterInput } from 'model/register';
 import { Tokens } from 'model/tokens';
@@ -25,8 +26,11 @@ export class AuthResolver {
 
   @Public()
   @Mutation(returns => Tokens)
-  async login(@Args('loginDto') loginDto: LoginDtoInput): Promise<Tokens> {
-    return await this.authService.login(loginDto);
+  async login(
+    @Context('res') res: Response,
+    @Args('loginDto') loginDto: LoginDtoInput
+  ): Promise<Tokens> {
+    return await this.authService.login(res, loginDto);
   }
 
   @Mutation(returns => String)

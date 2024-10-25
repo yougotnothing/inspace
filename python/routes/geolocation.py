@@ -3,7 +3,7 @@ import requests
 from requests.exceptions import HTTPError
 import os
 
-router = APIRouter()
+router = APIRouter(prefix="/geolocation")
 
 API_KEY = os.getenv('GEONAMES_API_KEY')
 GEONAMES_URL = os.getenv('GEONAMES_API_URL')

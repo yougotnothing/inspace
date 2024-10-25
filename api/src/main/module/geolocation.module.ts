@@ -8,7 +8,7 @@ import { GeolocationService } from 'service/geolocation';
   imports: [
     HttpModule.registerAsync({
       useFactory: (configService: ConfigService) => ({
-        baseURL: configService.get<string>('GEO_URL'),
+        baseURL: `${configService.get<string>('GEO_URL')}/geolocation`,
       }),
       inject: [ConfigService],
     }),

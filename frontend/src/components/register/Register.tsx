@@ -20,9 +20,9 @@ import { registerSchema } from 'utils/register.schema';
 import { useNavigate } from 'react-router-dom';
 
 export const Register = () => {
-  const [type, setType] = useState<Array<'password' | 'text'>>(
-    Array(2).fill('password')
-  );
+  const [passwordInputType, setPasswordInputType] = useState<
+    Array<'password' | 'text'>
+  >(Array(2).fill('password'));
   const [register, { error, loading }] = useMutation(REGISTER);
   const navigate = useNavigate();
   const formik = useFormik<InferType<typeof registerSchema>>({
@@ -63,7 +63,7 @@ export const Register = () => {
   }
 
   const handleChangeType = (index: number) => {
-    setType(prevState => {
+    setPasswordInputType(prevState => {
       const newState = [...prevState];
 
       newState[index] = newState[index] === 'password' ? 'text' : 'password';
@@ -104,7 +104,7 @@ export const Register = () => {
               $isInvalid={Boolean(formik.errors.password)}
               id="password"
               placeholder="password"
-              type={type[0]}
+              type={passwordInputType[0]}
               value={formik.values.password}
               onChange={e => {
                 formik.setFieldValue('password', e.target.value);
@@ -112,14 +112,17 @@ export const Register = () => {
               }}
               onBlur={formik.handleBlur}
             />
-            <EyeToggle type={type[0]} setType={() => handleChangeType(0)} />
+            <EyeToggle
+              type={passwordInputType[0]}
+              setType={() => handleChangeType(0)}
+            />
           </PasswordInputWrapper>
           <PasswordInputWrapper>
             <Input
               $isInvalid={Boolean(formik.errors.confirmPassword)}
               id="confirmPassword"
               placeholder="confirm password"
-              type={type[1]}
+              type={passwordInputType[1]}
               value={formik.values.confirmPassword}
               onChange={e => {
                 formik.setFieldValue('confirmPassword', e.target.value);
@@ -127,7 +130,10 @@ export const Register = () => {
               }}
               onBlur={formik.handleBlur}
             />
-            <EyeToggle type={type[1]} setType={() => handleChangeType(1)} />
+            <EyeToggle
+              type={passwordInputType[1]}
+              setType={() => handleChangeType(1)}
+            />
           </PasswordInputWrapper>
         </InputWrapper>
         <Button onClick={handleRegister}>Submit</Button>

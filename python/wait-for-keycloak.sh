@@ -1,6 +1,6 @@
 #!/bin/bash
 
-KEYCLOAK_URL="http://keycloak:8080/realms/master"
+KEYCLOAK_URL="http://keycloak:8080/health/ready"
 TIMEOUT=60
 
 function wait_for_keycloak() {

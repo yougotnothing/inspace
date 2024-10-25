@@ -20,5 +20,6 @@ import { ConfigService } from '@nestjs/config';
       inject: [ConfigService],
     }),
   ],
+  exports: [CacheModule],
 })
 export class RedisModule {}

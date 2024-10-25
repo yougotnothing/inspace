@@ -9,7 +9,7 @@ class OpenidConnectModel(BaseModel):
   refresh_token: str
   expires_in: int
   refresh_expires_in: int
-  session: str
+  session_state: str
 
 class OpenidConnectRegisterInputModel(BaseModel):
   username: str

@@ -52,8 +52,8 @@ export const Login = () => {
         },
       });
 
-      if (response.data.login.userId)
-        localStorage.setItem('user_id', response.data.login.userId);
+      if (response.data.login.access_token)
+        localStorage.setItem('access_token', response.data.login.access_token);
 
       navigate('/home');
     } catch (error: any) {
