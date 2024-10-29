@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Global, Module } from '@nestjs/common';
 import { PassportModule } from '@nestjs/passport';
 import { AuthResolver } from 'resolver/auth';
 import { AuthService } from 'service/auth';
@@ -8,6 +8,7 @@ import { HttpModule } from '@nestjs/axios';
 import { ConfigService } from '@nestjs/config';
 import { RedisModule } from './redis.module';
 
+@Global()
 @Module({
   imports: [
     PassportModule,
@@ -23,5 +24,6 @@ import { RedisModule } from './redis.module';
     }),
   ],
   providers: [PrismaService, AuthService, AuthResolver, UserService],
+  exports: [AuthService, HttpModule],
 })
 export class AuthModule {}

@@ -1,16 +1,17 @@
 import { Wrapper } from 'styles/Wrapper';
 import { Navbar } from 'templates/Navbar';
-import { Content, Events, EventsWrapper, Shadow } from './Home.styled';
 import { useLayoutEffect, useState } from 'react';
-import { AirPollution } from 'templates/Air-pollution';
-import { MoonPhase } from 'templates/Moon-phase';
 import { useQuery } from '@apollo/client';
-import { GET_ALL_EVENTS } from 'apollo/queries/all-events.query';
 import { useGSAP } from '@gsap/react';
 import gsap from 'gsap';
-import { GET_LOCATION } from 'apollo/queries/geolocation.query';
+import { Content, Events, EventsWrapper, Shadow } from './Home.styled';
+import { AirPollution } from 'templates/Air-pollution';
+import { MoonPhase } from 'templates/Moon-phase';
 import { Loader } from 'templates/Loader';
 import { Eclipse } from 'templates/Eclipse';
+import { useRefresh } from 'hooks/use-refresh';
+import { GET_ALL_EVENTS } from 'apollo/queries/all-events.query';
+import { GET_LOCATION } from 'apollo/queries/geolocation.query';
 
 export const Home = () => {
   const [date] = useState<Date>(new Date());
@@ -32,7 +33,7 @@ export const Home = () => {
       fetchPolicy: 'cache-first',
     }
   );
-  const { data, loading } = useQuery(GET_ALL_EVENTS, {
+  const { data, loading, error } = useQuery(GET_ALL_EVENTS, {
     variables: {
       startTime: date,
       observer: coords,
@@ -71,6 +72,8 @@ export const Home = () => {
       });
     });
   }, []);
+
+  useRefresh(error);
 
   if (countryLoading || loading)
     return <Loader loading={countryLoading || loading} />;

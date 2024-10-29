@@ -22,7 +22,11 @@ import { UserAvatarModule } from 'module/user-avatar';
       driver: ApolloDriver,
       plugins: [ApolloServerPluginCacheControl({ defaultMaxAge: 30 })],
       sortSchema: true,
-      playground: true,
+      playground: {
+        settings: {
+          'request.credentials': 'include',
+        },
+      },
       context: ({ req, res }) => ({ req, res }),
       autoSchemaFile: join(process.cwd(), 'src/main/schema.gql'),
     }),

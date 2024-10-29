@@ -1,6 +1,5 @@
 import { Link as A } from 'react-router-dom';
 import styled from 'styled-components';
-import { Link } from 'styles/Link';
 
 const Nav = styled('nav')`
   display: flex;
@@ -57,7 +56,9 @@ export const Navbar = ({ mappings }: { mappings: string[] }) => {
   return (
     <Nav>
       <Wrapper>
-        <Link style={{ fontSize: '1.5rem' }}>☾</Link>
+        <Route style={{ fontSize: '1.5rem' }} to="/home">
+          ☾
+        </Route>
         <Routes>
           {mappings.map((mapping, index) => (
             <Route to={mapping} key={index}>

@@ -24,7 +24,7 @@ export class MoonPhaseService {
 
   private calculateLightCoordinates(date: Date): Coordinates {
     const angleInDegrees = searchMoonPhase(date);
-    const angleInRadians = ((angleInDegrees - 100) * Math.PI) / 180;
+    const angleInRadians = ((angleInDegrees - 110) * Math.PI) / 180;
 
     const x = +(5 * Math.cos(angleInRadians));
     const z = +(5 * Math.sin(angleInRadians));

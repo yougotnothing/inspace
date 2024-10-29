@@ -3,6 +3,7 @@ import { Wrapper } from 'styles/Wrapper';
 import { Loader } from 'templates/Loader';
 import { Avatar, AvatarInput } from './Profile.styled';
 import { GET_USER_BY_ID } from 'apollo/queries/user.query';
+import { UserAccountIcon } from 'hugeicons-react';
 
 export const Profile = () => {
   const { data, loading, error } = useQuery(GET_USER_BY_ID, {
@@ -17,7 +18,7 @@ export const Profile = () => {
   return (
     <Wrapper>
       <AvatarInput type="file" />
-      <Avatar />
+      {data.getUserById.isHaveAvatar ? <Avatar /> : <UserAccountIcon />}
     </Wrapper>
   );
 };

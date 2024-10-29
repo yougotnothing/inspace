@@ -73,7 +73,8 @@ export class AuthService {
       res.cookie('refresh_token', response.data.refresh_token, {
         httpOnly: true,
         secure: false,
-        maxAge: response.data.expires_in * 1000,
+        path: '/',
+        expires: new Date(Date.now() + response.data.expires_in * 1000),
       });
 
       await this.redisManager.set(
@@ -88,22 +89,17 @@ export class AuthService {
     }
   }
 
-  async refresh(
-    res: Response,
-    refreshToken: string
-  ): Promise<{ message: string; session: any }> {
+  async refresh(res: Response, refresh_token: string): Promise<Tokens> {
     try {
       const response = await this.httpService.axiosRef.patch(
-        '/openid-connect/refresh',
-        {
-          refresh_token: refreshToken,
-        }
+        `/openid-connect/refresh?refresh_token=${refresh_token}`
       );
 
       res.cookie('refresh_token', response.data.refresh_token, {
         httpOnly: true,
         secure: false,
-        maxAge: response.data.expires_in * 1000,
+        path: '/',
+        expires: new Date(Date.now() + response.data.expires_in * 1000),
       });
 
       return response.data;

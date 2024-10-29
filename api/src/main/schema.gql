@@ -120,6 +120,7 @@ type Mutation {
   changeAvatar(image: String!): ChangeAvatar!
   login(loginDto: LoginDtoInput!): Tokens!
   logout: String!
+  refresh: Tokens!
   register(user: RegisterInput!): String!
 }
 

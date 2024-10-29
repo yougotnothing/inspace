@@ -1,27 +1,57 @@
+import { HttpService } from '@nestjs/axios';
 import {
+  CanActivate,
   ExecutionContext,
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
 import { GqlExecutionContext } from '@nestjs/graphql';
-import { AuthGuard } from '@nestjs/passport';
+import { AxiosResponse } from 'axios';
 import { Request } from 'express';
+import { Tokens } from 'model/tokens';
+import { GqlContext } from 'type/context';
 
 @Injectable()
-export class LocalAuthGuard extends AuthGuard('local') {
-  override getRequest = (context: ExecutionContext) =>
-    GqlExecutionContext.create(context).getContext().req as Request;
+export class LocalAuthGuard implements CanActivate {
+  constructor(private readonly httpService: HttpService) {}
 
-  override async canActivate(context: ExecutionContext): Promise<boolean> {
-    const token = await this.extractToken(this.getRequest(context));
-
-    if (!token.length) throw new UnauthorizedException();
-
-    return true;
+  executeContext(context: ExecutionContext): GqlContext {
+    return GqlExecutionContext.create(context).getContext<GqlContext>();
   }
 
-  private async extractToken(request: Request): Promise<string | undefined> {
+  async canActivate(context: ExecutionContext): Promise<boolean> {
+    const { req } = this.executeContext(context);
+
+    try {
+      const userInfo = await this.getUserInfo(this.executeToken(req));
+
+      if (userInfo.status === 200) return true;
+    } catch (error) {
+      throw new UnauthorizedException(error.response.data);
+    }
+  }
+
+  private async getUserInfo(
+    access_token: string
+  ): Promise<AxiosResponse<Tokens>> {
+    try {
+      const response = await this.httpService.axiosRef.get<Tokens>(
+        '/openid-connect/userinfo',
+        {
+          params: {
+            access_token,
+          },
+        }
+      );
+
+      return response;
+    } catch (error) {
+      return error;
+    }
+  }
+
+  private executeToken(request: Request) {
     const [type, token] = request.headers.authorization?.split(' ') ?? [];
-    return type === 'Bearer' ? token : '';
+    return type === 'Bearer' ? token : undefined;
   }
 }

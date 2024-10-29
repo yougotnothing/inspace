@@ -1,22 +1,20 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import * as cookieParser from 'cookie-parser';
-import * as passport from 'passport';
+import * as cors from 'cors';
 
 declare const module: any;
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  app.enableCors({
-    origin: '*', // Убедитесь, что домен совпадает с фронтендом
-    methods: 'GET,POST,PUT,PATCH,DELETE,HEAD',
-    allowedHeaders: '*',
-    credentials: true, // Включаем для отправки куки
-  });
-
   app.use(cookieParser());
-  app.use(passport.initialize());
+  app.use(
+    cors({
+      origin: 'http://localhost:5173',
+      credentials: true,
+    })
+  );
 
   await app.listen(5174).then(() => {
     console.log(`Server started at http://localhost:${5174}`);

@@ -18,6 +18,7 @@ import { useFormik } from 'formik';
 import { InferType } from 'yup';
 import { registerSchema } from 'utils/register.schema';
 import { useNavigate } from 'react-router-dom';
+import { Loader } from 'templates/Loader';
 
 export const Register = () => {
   const [passwordInputType, setPasswordInputType] = useState<
@@ -58,9 +59,7 @@ export const Register = () => {
     console.log('error');
   }
 
-  if (loading) {
-    return <h1>loading...</h1>;
-  }
+  if (loading) return <Loader loading={loading} />;
 
   const handleChangeType = (index: number) => {
     setPasswordInputType(prevState => {

@@ -18,6 +18,7 @@ import { Button } from 'styles/Button';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { EyeToggle } from 'templates/Eye-toggle';
+import { Loader } from 'templates/Loader';
 
 export const Login = () => {
   const navigate = useNavigate();
@@ -44,26 +45,22 @@ export const Login = () => {
 
   const handleLogin = async () => {
     try {
-      const response = await login({
+      await login({
         variables: {
           loginDto: {
             ...formik.values,
           },
         },
+      }).then(({ data }) => {
+        localStorage.setItem('access_token', data.login.access_token);
+        navigate('/home');
       });
-
-      if (response.data.login.access_token)
-        localStorage.setItem('access_token', response.data.login.access_token);
-
-      navigate('/home');
     } catch (error: any) {
       console.log(error);
     }
   };
 
-  if (loading) {
-    console.log('loading...');
-  }
+  if (loading) return <Loader loading={loading} />;
 
   return (
     <Wrapper>

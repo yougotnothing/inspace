@@ -73,19 +73,21 @@ def openid_connect_logout(refresh_token: str):
 
 @router.patch('/openid-connect/refresh')
 def openid_connect_refresh(refresh_token: str):
-	try:
-		credentials = keycloak_client.keycloak_openid.refresh_token(refresh_token=refresh_token)
+  print(refresh_token)
   
-		return {
-			'access_token': credentials['access_token'],
+  try:
+    credentials = keycloak_client.keycloak_openid.refresh_token(refresh_token=refresh_token)
+
+    return {
+      'access_token': credentials['access_token'],
 			'refresh_token': credentials['refresh_token'],
 			'expires_in': credentials['expires_in'],
 			'refresh_expires_in': credentials['refresh_expires_in'],
-			'session_state': credentials['session_state']
-		}
-	except HTTPException as e:
-		raise e
-   
+      'session_state': credentials['session_state']
+    }
+  except HTTPException:
+    raise HTTPException(status_code=401, detail='Unauthorized')
+
 @router.delete('/openid-connect/delete-user')
 def openid_connect_delete_user(username: str):
   try:
@@ -96,3 +98,7 @@ def openid_connect_delete_user(username: str):
 @router.get('/openid-connect/userinfo')
 def openid_connect_userinfo(access_token: str):
   return keycloak_client.keycloak_openid.userinfo(token=access_token)
+
+@router.post('/openid-connect/callback')
+def openid_connect_callback():
+  return keycloak_client.keycloak_openid.connection()

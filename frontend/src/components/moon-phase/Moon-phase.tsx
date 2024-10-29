@@ -19,6 +19,7 @@ import { Paragraph } from 'styles/Paragraph';
 import { Loader } from 'templates/Loader';
 import { useGSAP } from '@gsap/react';
 import gsap from 'gsap';
+import { useRefresh } from 'hooks/use-refresh';
 
 export const MoonPhase = () => {
   const country = useSearchParams()[0].get('country') ?? 'Ukraine';
@@ -37,6 +38,8 @@ export const MoonPhase = () => {
   const { loading, error, data } = useQuery(GET_FULL_MOON_PHASE_DATA, {
     variables,
   });
+
+  useRefresh(error);
 
   useEffect(() => {
     if (loading || error || !data) return;
@@ -151,7 +154,7 @@ export const MoonPhase = () => {
     <Wrapper>
       {data && (
         <>
-          <Navbar mappings={['/home', '/profile', '/events']} />
+          <Navbar mappings={['/profile', '/home', '/events']} />
           <HeaderWrapper>
             <Moon className="moon" ref={threeRef}></Moon>
             <HeaderInfo>
