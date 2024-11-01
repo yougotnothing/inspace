@@ -6,35 +6,32 @@ CREATE TYPE "Role" AS ENUM ('ADMIN', 'USER');
 
 -- CreateTable
 CREATE TABLE "User" (
-    "role" "Role" NOT NULL DEFAULT 'USER',
+    "password" TEXT NOT NULL,
     "id" UUID NOT NULL,
     "name" TEXT NOT NULL,
     "email" TEXT NOT NULL,
     "avatar" TEXT NOT NULL DEFAULT '',
     "isHaveAvatar" BOOLEAN NOT NULL DEFAULT false,
     "isVerified" BOOLEAN NOT NULL DEFAULT false,
-    "password" TEXT NOT NULL,
+    "spottedLunarEclipses" INTEGER NOT NULL DEFAULT 0,
+    "spottedSolarEclipses" INTEGER NOT NULL DEFAULT 0,
+    "spottedMeteorShowers" INTEGER NOT NULL DEFAULT 0,
+    "spottedSupermoons" INTEGER NOT NULL DEFAULT 0,
+    "spottedMicromoons" INTEGER NOT NULL DEFAULT 0,
+    "spottedPlanetaryAlignments" INTEGER NOT NULL DEFAULT 0,
+    "role" "Role" NOT NULL DEFAULT 'USER',
 
     CONSTRAINT "User_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
-CREATE TABLE "Session" (
-    "sessionId" TEXT NOT NULL,
-    "device" TEXT NOT NULL,
-    "userId" UUID NOT NULL,
-
-    CONSTRAINT "Session_pkey" PRIMARY KEY ("sessionId")
-);
-
--- CreateTable
 CREATE TABLE "Action" (
-    "id" UUID NOT NULL,
-    "type" "ActionType" NOT NULL,
     "description" TEXT NOT NULL,
+    "id" UUID NOT NULL,
     "date" DATE NOT NULL,
     "isSpotted" BOOLEAN NOT NULL DEFAULT false,
     "userId" UUID,
+    "type" "ActionType" NOT NULL,
 
     CONSTRAINT "Action_pkey" PRIMARY KEY ("id")
 );
@@ -44,18 +41,6 @@ CREATE UNIQUE INDEX "User_name_key" ON "User"("name");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
-
--- CreateIndex
-CREATE UNIQUE INDEX "Session_sessionId_key" ON "Session"("sessionId");
-
--- CreateIndex
-CREATE UNIQUE INDEX "Session_device_key" ON "Session"("device");
-
--- CreateIndex
-CREATE UNIQUE INDEX "Session_userId_key" ON "Session"("userId");
-
--- AddForeignKey
-ALTER TABLE "Session" ADD CONSTRAINT "Session_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Action" ADD CONSTRAINT "Action_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE SET NULL ON UPDATE CASCADE;

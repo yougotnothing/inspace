@@ -19,6 +19,7 @@ import { InferType } from 'yup';
 import { registerSchema } from 'utils/register.schema';
 import { useNavigate } from 'react-router-dom';
 import { Loader } from 'templates/Loader';
+import { selectAvatarColorTheme } from 'utils/select-avatar-color-theme.util';
 
 export const Register = () => {
   const [passwordInputType, setPasswordInputType] = useState<
@@ -49,6 +50,7 @@ export const Register = () => {
 
       console.log(response);
 
+      localStorage.setItem('default-avatar-color', selectAvatarColorTheme());
       navigate('/login');
     } catch (error: any) {
       console.error(error);

@@ -19,9 +19,9 @@
       "types/*": ["./src/types/*.type"],
       "@router": ["./src/router/router"],
       "styles/*": ["./src/styles/*.styled"],
-      "apollo/*": ["./src/apollo/*"],
       "query/*": ["./src/apollo/queries/*.query"],
-      "mutation/*": ["./src/apollo/mutations/*.mutation"]
+      "mutation/*": ["./src/apollo/mutations/*.mutation"],
+      "apollo/*": ["./src/apollo/*"]
     },
 
     /* Bundler mode */

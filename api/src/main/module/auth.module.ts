@@ -7,6 +7,7 @@ import { UserService } from 'service/user';
 import { HttpModule } from '@nestjs/axios';
 import { ConfigService } from '@nestjs/config';
 import { RedisModule } from './redis.module';
+import { AuthController } from 'controller/auth';
 
 @Global()
 @Module({
@@ -23,6 +24,7 @@ import { RedisModule } from './redis.module';
       inject: [ConfigService],
     }),
   ],
+  controllers: [AuthController],
   providers: [PrismaService, AuthService, AuthResolver, UserService],
   exports: [AuthService, HttpModule],
 })

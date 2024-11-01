@@ -1,17 +1,17 @@
 import { Wrapper } from 'styles/Wrapper';
 import { Navbar } from 'templates/Navbar';
-import { useLayoutEffect, useState } from 'react';
+import { useEffect, useLayoutEffect, useState } from 'react';
 import { useQuery } from '@apollo/client';
-import { useGSAP } from '@gsap/react';
-import gsap from 'gsap';
-import { Content, Events, EventsWrapper, Shadow } from './Home.styled';
+import { Events, EventsWrapper, Shadow } from './Home.styled';
+import { Content } from 'styles/Content';
 import { AirPollution } from 'templates/Air-pollution';
 import { MoonPhase } from 'templates/Moon-phase';
 import { Loader } from 'templates/Loader';
 import { Eclipse } from 'templates/Eclipse';
-import { useRefresh } from 'hooks/use-refresh';
 import { GET_ALL_EVENTS } from 'apollo/queries/all-events.query';
 import { GET_LOCATION } from 'apollo/queries/geolocation.query';
+import { useGSAPOnload } from 'hooks/use-gsap-onload';
+import { Events as EventsEnum } from 'utils/events.enum';
 
 export const Home = () => {
   const [date] = useState<Date>(new Date());
@@ -33,7 +33,7 @@ export const Home = () => {
       fetchPolicy: 'cache-first',
     }
   );
-  const { data, loading, error } = useQuery(GET_ALL_EVENTS, {
+  const { data, loading } = useQuery(GET_ALL_EVENTS, {
     variables: {
       startTime: date,
       observer: coords,
@@ -50,18 +50,22 @@ export const Home = () => {
     refetchWritePolicy: 'overwrite',
     fetchPolicy: 'cache-first',
   });
-  const typeofEvent: TypeofEvent[] = ['local solar', 'global solar', 'lunar'];
 
-  useGSAP(() => {
-    if (!loading && data) {
-      gsap.to('.events', {
-        opacity: 1,
-        marginTop: 0,
-        duration: 0.7,
-        delay: 1,
-      });
+  useGSAPOnload(
+    [data, loading],
+    {
+      className: '.events',
+      duration: 0.7,
+      delay: 1,
+    },
+    {
+      className: '.shadow',
+      duration: 0.5,
+      delay: 1.3,
+      boxShadow: '0 0 270px 270px #ffffff1f',
+      top: '50%',
     }
-  }, [data, loading]);
+  );
 
   useLayoutEffect(() => {
     navigator.geolocation.getCurrentPosition(p => {
@@ -73,7 +77,10 @@ export const Home = () => {
     });
   }, []);
 
-  useRefresh(error);
+  useEffect(() => {
+    if (countryData?.getLocation.countryName)
+      localStorage.setItem('user-country', countryData.getLocation.countryName);
+  }, [countryData?.getLocation.countryName]);
 
   if (countryLoading || loading)
     return <Loader loading={countryLoading || loading} />;
@@ -92,9 +99,15 @@ export const Home = () => {
           />
           <Content>
             <Events>
-              {typeofEvent.map((event, index) => (
+              {Object.values(EventsEnum).map((type, index) => (
                 <EventsWrapper className="events" key={index}>
-                  <Eclipse loading={loading} query={{ data, type: event }} />
+                  <Eclipse
+                    loading={loading}
+                    query={{
+                      data,
+                      type: type as 'local solar' | 'global solar' | 'lunar',
+                    }}
+                  />
                 </EventsWrapper>
               ))}
             </Events>
@@ -108,5 +121,3 @@ export const Home = () => {
     </Wrapper>
   );
 };
-
-type TypeofEvent = 'local solar' | 'global solar' | 'lunar';

@@ -19,8 +19,12 @@ import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { EyeToggle } from 'templates/Eye-toggle';
 import { Loader } from 'templates/Loader';
+import { Tokens } from 'types/tokens';
+import { selectAvatarColorTheme } from 'utils/select-avatar-color-theme.util';
 
 export const Login = () => {
+  const [type, setType] = useState<'password' | 'text'>('password');
+  const [login, { loading }] = useMutation<Tokens>(LOGIN);
   const navigate = useNavigate();
   const formik = useFormik<InferType<typeof loginSchema>>({
     initialValues: {
@@ -34,27 +38,27 @@ export const Login = () => {
       await loginSchema.validate(values);
     },
   });
-  const [login, { loading }] = useMutation(LOGIN);
-  const [type, setType] = useState<'password' | 'text'>('password');
 
-  const handleChangeType = () => {
-    setType(prevState => {
-      return prevState === 'password' ? 'text' : 'password';
-    });
-  };
+  const handleChangeType = () =>
+    setType(prevState => (prevState === 'password' ? 'text' : 'password'));
 
   const handleLogin = async () => {
     try {
-      await login({
+      const response = await login({
         variables: {
           loginDto: {
             ...formik.values,
           },
         },
-      }).then(({ data }) => {
-        localStorage.setItem('access_token', data.login.access_token);
-        navigate('/home');
       });
+
+      if (!localStorage.getItem('default-avatar-color'))
+        localStorage.setItem('default-avatar-color', selectAvatarColorTheme());
+
+      if (response.data?.login.access_token) {
+        localStorage.setItem('access_token', response.data.login.access_token);
+        navigate('/home');
+      }
     } catch (error: any) {
       console.log(error);
     }
@@ -75,10 +79,7 @@ export const Login = () => {
             type="text"
             id="login"
             value={formik.values.login}
-            onChange={e => {
-              formik.setFieldValue('login', e.target.value);
-              console.log(formik.errors.login);
-            }}
+            onChange={e => formik.setFieldValue('login', e.target.value)}
             onBlur={formik.handleBlur}
           />
           <PasswordInputWrapper>
@@ -88,10 +89,7 @@ export const Login = () => {
               placeholder="password"
               type={type}
               value={formik.values.password}
-              onChange={e => {
-                formik.setFieldValue('password', e.target.value);
-                console.log(formik.errors.password);
-              }}
+              onChange={e => formik.setFieldValue('password', e.target.value)}
               onBlur={formik.handleBlur}
             />
             <EyeToggle type={type} setType={handleChangeType} />

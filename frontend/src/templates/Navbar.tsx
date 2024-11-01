@@ -1,5 +1,5 @@
-import { Link as A } from 'react-router-dom';
 import styled from 'styled-components';
+import { Route } from 'styles/Route';
 
 const Nav = styled('nav')`
   display: flex;
@@ -31,25 +31,6 @@ const Routes = styled('div')`
   display: flex;
   align-items: center;
   gap: 1.2rem;
-`;
-
-const Route = styled(A)`
-  margin: 0;
-  padding: 0;
-  color: white;
-  font-family: 'Fira Mono', sans-serif;
-  font-weight: 300;
-  user-select: none;
-  font-size: 1rem;
-  transition: 0.3s ease;
-
-  &:hover {
-    color: #b6b6b6;
-  }
-
-  &:active {
-    color: #a1a1a1;
-  }
 `;
 
 export const Navbar = ({ mappings }: { mappings: string[] }) => {

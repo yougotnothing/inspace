@@ -147,6 +147,7 @@ type Query {
   getLocation(coordinates: GeolocationInput!): Geolocation!
   getMoonPhase(location: MoonPhaseInput!): MoonPhase!
   getNextLunarApsis(country: String!, date: DateTime!): LunarApsis!
+  getSelf: User!
   getUserById(id: String!): User!
   getUserByName(name: String!): User!
   nextGlobalSolarEclipse(startTime: DateTime!): NextSolarEclipse!

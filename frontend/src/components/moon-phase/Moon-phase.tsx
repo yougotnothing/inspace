@@ -17,9 +17,7 @@ import { Wrapper } from 'styles/Wrapper';
 import { Navbar } from 'templates/Navbar';
 import { Paragraph } from 'styles/Paragraph';
 import { Loader } from 'templates/Loader';
-import { useGSAP } from '@gsap/react';
-import gsap from 'gsap';
-import { useRefresh } from 'hooks/use-refresh';
+import { useGSAPOnload } from 'hooks/use-gsap-onload';
 
 export const MoonPhase = () => {
   const country = useSearchParams()[0].get('country') ?? 'Ukraine';
@@ -38,8 +36,6 @@ export const MoonPhase = () => {
   const { loading, error, data } = useQuery(GET_FULL_MOON_PHASE_DATA, {
     variables,
   });
-
-  useRefresh(error);
 
   useEffect(() => {
     if (loading || error || !data) return;
@@ -117,36 +113,19 @@ export const MoonPhase = () => {
     };
   }, [loading, error, data]);
 
-  useGSAP(() => {
-    if (!loading && data) {
-      gsap.to('.moon', {
-        opacity: 1,
-        top: 0,
-        delay: 0.5,
-        duration: 0.4,
-      });
-
-      gsap.to('.current-phase', {
-        opacity: 1,
-        top: 0,
-        delay: 1,
-        duration: 0.5,
-      });
-
-      gsap.to('.lunar-apsis', {
-        opacity: 1,
-        top: 0,
-        delay: 1.4,
-        duration: 0.5,
-      });
-
-      gsap.to('.light', {
-        opacity: 1,
-        delay: 2,
-        duration: 0.3,
-      });
+  useGSAPOnload(
+    [loading, data],
+    { className: '.moon', delay: 0.5, duration: 0.4 },
+    { className: '.current-phase', delay: 1, duration: 0.5 },
+    { className: '.lunar-apsis', delay: 1.4, duration: 0.5 },
+    {
+      className: '.light',
+      delay: 2,
+      duration: 0.3,
+      top: '50%',
+      boxShadow: '0 0 270px 270px var(--border-color)',
     }
-  }, [loading, data]);
+  );
 
   if (loading) return <Loader loading={loading} />;
 

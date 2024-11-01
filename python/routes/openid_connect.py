@@ -97,7 +97,9 @@ def openid_connect_delete_user(username: str):
   
 @router.get('/openid-connect/userinfo')
 def openid_connect_userinfo(access_token: str):
-  return keycloak_client.keycloak_openid.userinfo(token=access_token)
+  userinfo = keycloak_client.keycloak_openid.userinfo(token=access_token)
+  print(f'userinfo: {userinfo}')
+  return userinfo
 
 @router.post('/openid-connect/callback')
 def openid_connect_callback():

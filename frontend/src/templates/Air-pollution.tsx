@@ -9,23 +9,17 @@ import {
 } from 'hugeicons-react';
 import { Paragraph } from 'styles/Paragraph';
 import { Button } from 'styles/Button';
-import { useGSAP } from '@gsap/react';
-import gsap from 'gsap';
+import { useGSAPOnload } from 'hooks/use-gsap-onload';
 
 export const AirPollution: FC<{ loading: boolean; data: any }> = ({
   loading,
   data,
 }) => {
-  useGSAP(() => {
-    if (!loading && data) {
-      gsap.to('.pollution', {
-        opacity: 1,
-        marginTop: 0,
-        duration: 0.3,
-        delay: 0.5,
-      });
-    }
-  }, [loading, data]);
+  useGSAPOnload([loading, data], {
+    className: '.pollution',
+    duration: 0.3,
+    delay: 0.5,
+  });
 
   const CloudIcon = (() => {
     switch (data.getAirPollutionInfo?.aqi) {

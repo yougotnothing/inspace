@@ -8,6 +8,9 @@
   --white: #fff;
   --wrapper-bg: #3636361c;
   --border-color: #4747472f;
+  --warning: #ffdb395e;
+  --warning-border: #ffdb3983;
+  --warning-text: #ffd000;
 
   /* styles */
   line-height: 1.5;

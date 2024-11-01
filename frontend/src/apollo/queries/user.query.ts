@@ -25,3 +25,28 @@ export const GET_USER_BY_NAME = gql`
     }
   }
 `;
+
+export const GET_SELF = gql`
+  query GetSelf {
+    getSelf {
+      name
+      avatar
+      id
+      email
+      isHaveAvatar
+      isVerified
+      toSpotted {
+        description
+        date
+        type
+        isSpotted
+      }
+      spottedLunarEclipses
+      spottedSolarEclipses
+      spottedMeteorShowers
+      spottedSupermoons
+      spottedMicromoons
+      spottedPlanetaryAlignments
+    }
+  }
+`;

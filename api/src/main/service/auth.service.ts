@@ -99,7 +99,7 @@ export class AuthService {
         httpOnly: true,
         secure: false,
         path: '/',
-        expires: new Date(Date.now() + response.data.expires_in * 1000),
+        expires: new Date(Date.now() + response.data.refresh_expires_in * 1000),
       });
 
       return response.data;

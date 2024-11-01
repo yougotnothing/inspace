@@ -1,13 +1,8 @@
-import { ApolloClient, InMemoryCache } from '@apollo/client';
+import { ApolloClient, from, InMemoryCache } from '@apollo/client';
+import { authLink } from './links/auth.link';
+import { httpLink } from './links/http.link';
 
 export const client = new ApolloClient({
-  uri: 'http://localhost:5174/graphql',
+  link: from([authLink, httpLink]),
   cache: new InMemoryCache(),
-  credentials: 'include',
-  headers: {
-    authorization: localStorage.getItem('access_token')
-      ? `Bearer ${localStorage.getItem('access_token')}`
-      : '',
-    'X-User-Id': localStorage.getItem('user_id') ?? '',
-  },
 });
