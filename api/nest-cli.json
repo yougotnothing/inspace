@@ -8,6 +8,10 @@
       {
         "include": "**/*",
         "exclude": "src/main/**/*"
+      },
+      {
+        "include": "main/templates/*.pug",
+        "exclude": "dist/src"
       }
     ]
   }

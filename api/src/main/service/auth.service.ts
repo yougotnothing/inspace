@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { PrismaService } from 'service/prisma';
 import * as bcrypt from 'bcrypt';
 import { Request } from 'express';
@@ -9,14 +9,10 @@ import { RegisterInput } from 'model/register';
 import { HttpService } from '@nestjs/axios';
 import { Tokens } from 'model/tokens';
 import { Response } from 'express';
-import { CACHE_MANAGER } from '@nestjs/cache-manager';
-import { Cache } from 'cache-manager';
 
 @Injectable()
 export class AuthService {
   constructor(
-    @Inject(CACHE_MANAGER)
-    private readonly redisManager: Cache,
     private readonly prismaService: PrismaService,
     private readonly httpService: HttpService
   ) {}
@@ -76,12 +72,6 @@ export class AuthService {
         path: '/',
         expires: new Date(Date.now() + response.data.expires_in * 1000),
       });
-
-      await this.redisManager.set(
-        user.id,
-        response.data.access_token,
-        response.data.expires_in * 1000
-      );
 
       return response.data;
     } catch (error) {

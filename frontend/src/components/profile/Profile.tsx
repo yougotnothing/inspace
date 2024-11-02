@@ -124,12 +124,20 @@ export const Profile = () => {
               <Paragraph>spotted events: 0</Paragraph>
               <Route to="/events">view all</Route>
             </UserInfo>
-            <Paragraph>spotted planetary alignments: 0</Paragraph>
-            <Paragraph>spotted lunar eclipses: 0</Paragraph>
-            <Paragraph>spotted solar eclipses: 0</Paragraph>
-            <Paragraph>spotted meteor showers: 0</Paragraph>
-            <Paragraph>spotted supermoons: 0</Paragraph>
-            <Paragraph>spotted micromoons: 0</Paragraph>
+            <Paragraph>
+              planetary alignments: {data.getSelf.spottedPlanetaryAlignments}
+            </Paragraph>
+            <Paragraph>
+              lunar eclipses: {data.getSelf.spottedLunarEclipses}
+            </Paragraph>
+            <Paragraph>
+              solar eclipses: {data.getSelf.spottedSolarEclipses}
+            </Paragraph>
+            <Paragraph>
+              meteor showers: {data.getSelf.spottedMeteorShowers}
+            </Paragraph>
+            <Paragraph>supermoons: {data.getSelf.spottedSupermoons}</Paragraph>
+            <Paragraph>micromoons: {data.getSelf.spottedMicromoons}</Paragraph>
           </UserInfoWrapper>
         </MainWrapper>
         <ToSpottedWrapper className="to-spotted">

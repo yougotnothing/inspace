@@ -156,6 +156,7 @@ type Query {
   searchLocalSolarEclipse(observer: ObserverInput!, startTime: DateTime!): SearchSolarEclipse!
   searchLunarApsis(country: String!, date: DateTime!): LunarApsis!
   searchLunarEclipse(date: DateTime!): LunarEclipseInfo!
+  sendVerifyEmail(email: String!): VerifyEmail!
 }
 
 input RegisterInput {
@@ -183,7 +184,6 @@ type Tokens {
   session_state: String!
 }
 
-"""user"""
 type User {
   avatar: String!
   email: String!
@@ -193,4 +193,17 @@ type User {
   name: String!
   password: String!
   role: String!
+  spottedLunarEclipses: Float!
+  spottedMeteorShowers: Float!
+  spottedMicromoons: Float!
+  spottedPlanetaryAlignments: Float!
+  spottedSolarEclipses: Float!
+  spottedSupermoons: Float!
+  toSpotted: [Action!]!
+}
+
+type VerifyEmail {
+  message: String!
+  userEmail: String!
+  userId: String!
 }

@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useLayoutEffect, useRef } from 'react';
 import {
   Categories,
   Links,
@@ -123,6 +123,10 @@ export const Welcome = () => {
       starfieldRef.current?.removeChild(renderer.domElement);
       window.removeEventListener('mousemove', handleMouseMove);
     };
+  }, []);
+
+  useLayoutEffect(() => {
+    if (localStorage.getItem('access_token')) navigate('/home');
   }, []);
 
   return (

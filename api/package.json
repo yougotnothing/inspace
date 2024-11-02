@@ -23,6 +23,7 @@
   "dependencies": {
     "@apollo/server": "^4.11.0",
     "@keycloak/keycloak-admin-client": "^26.0.1",
+    "@nestjs-modules/mailer": "^2.0.2",
     "@nestjs/apollo": "^12.2.0",
     "@nestjs/axios": "^3.0.3",
     "@nestjs/cache-manager": "^2.2.2",
@@ -55,6 +56,7 @@
     "minio": "^8.0.1",
     "nest-keycloak-connect": "^1.10.1",
     "nestjs-minio": "^2.6.2",
+    "nodemailer": "^6.9.16",
     "passport": "^0.7.0",
     "passport-jwt": "^4.0.1",
     "passport-keycloak-bearer": "^2.4.1",

@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { Field, InputType, ObjectType } from '@nestjs/graphql';
 import { LoginDto } from 'dto/login';
-import { Session } from './session.model';
 
 @InputType()
 export class LoginDtoInput implements LoginDto {

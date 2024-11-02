@@ -3,6 +3,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ConfigModule } from '@nestjs/config';
 import { GraphQLModule } from 'module/graphql';
+import { RedisModule } from 'module/redis';
 
 @Module({
   imports: [
@@ -12,6 +13,7 @@ import { GraphQLModule } from 'module/graphql';
       expandVariables: true,
     }),
     GraphQLModule,
+    RedisModule,
   ],
   controllers: [AppController],
   providers: [AppService],
