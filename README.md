@@ -4,7 +4,7 @@
 
 <br id="stack">
 
-[![My Skills](https://skillicons.dev/icons?i=nestjs,postgres,prisma,typescript,docker,webpack,yarn,python,fastapi,html,css,react,vite,styledcomponents,graphql,apollo,threejs)](https://skillicons.dev)
+[![My Skills](https://skillicons.dev/icons?i=nestjs,postgres,prisma,typescript,docker,webpack,yarn,python,fastapi,html,css,react,vite,styledcomponents,graphql,apollo,threejs,pug)](https://skillicons.dev)
 
 ### **_<a href="#en_idea">en</a> <a href="ru_idea">ru</a>_**
 
