@@ -3,6 +3,7 @@ import { Login } from 'components/login/Login';
 import { MoonPhase } from 'components/moon-phase/Moon-phase';
 import { Profile } from 'components/profile/Profile';
 import { Register } from 'components/register/Register';
+import { VerifyEmail } from 'components/verify-email/Verify-email';
 import { Welcome } from 'components/welcome/Welcome';
 import { createBrowserRouter } from 'react-router-dom';
 
@@ -30,5 +31,9 @@ export const router = createBrowserRouter([
   {
     path: 'profile',
     element: <Profile />,
+  },
+  {
+    path: 'verify-email',
+    element: <VerifyEmail />,
   },
 ]);

@@ -106,6 +106,8 @@ services:
       EMAIL_PORT: ${EMAIL_PORT}
       EMAIL_USER: ${EMAIL_USER}
       EMAIL_PASS: ${EMAIL_PASS}
+      EMAIL_CONTACT_ADDRESS: ${EMAIL_CONTACT_ADDRESS}
+      FRONTEND_URL: ${FRONTEND_URL}
     tty: true
     stdin_open: true
 

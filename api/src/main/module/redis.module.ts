@@ -1,29 +1,10 @@
-import { Inject, Module, OnApplicationBootstrap } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
-import { ClientProxy, ClientsModule, Transport } from '@nestjs/microservices';
+import { Module } from '@nestjs/common';
+import { redisClientFactory } from 'factory/redis';
+import { RedisRepository } from 'repository/redis';
+import { RedisService } from 'service/redis';
 
 @Module({
-  imports: [
-    ClientsModule.registerAsync([
-      {
-        name: 'REDIS',
-        useFactory: (configService: ConfigService) => ({
-          transport: Transport.REDIS,
-          options: {
-            host: configService.get<string>('REDIS_HOST'),
-            port: +configService.get<number>('REDIS_PORT'),
-          },
-        }),
-        inject: [ConfigService],
-      },
-    ]),
-  ],
-  exports: [ClientsModule],
+  providers: [redisClientFactory, RedisService, RedisRepository],
+  exports: [RedisService, RedisRepository],
 })
-export class RedisModule implements OnApplicationBootstrap {
-  constructor(@Inject('REDIS') private readonly client: ClientProxy) {}
-
-  async onApplicationBootstrap() {
-    await this.client.connect();
-  }
-}
+export class RedisModule {}

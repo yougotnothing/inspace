@@ -122,6 +122,8 @@ type Mutation {
   logout: String!
   refresh: Tokens!
   register(user: RegisterInput!): String!
+  sendVerifyEmail(email: String!): VerifyEmail!
+  verifyEmail(userId: String!): VerifyEmail!
 }
 
 type NextSolarEclipse {
@@ -156,7 +158,6 @@ type Query {
   searchLocalSolarEclipse(observer: ObserverInput!, startTime: DateTime!): SearchSolarEclipse!
   searchLunarApsis(country: String!, date: DateTime!): LunarApsis!
   searchLunarEclipse(date: DateTime!): LunarEclipseInfo!
-  sendVerifyEmail(email: String!): VerifyEmail!
 }
 
 input RegisterInput {
@@ -206,4 +207,5 @@ type VerifyEmail {
   message: String!
   userEmail: String!
   userId: String!
+  userName: String!
 }

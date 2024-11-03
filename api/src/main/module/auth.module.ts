@@ -6,14 +6,12 @@ import { PrismaService } from 'service/prisma';
 import { UserService } from 'service/user';
 import { HttpModule } from '@nestjs/axios';
 import { ConfigService } from '@nestjs/config';
-import { RedisModule } from './redis.module';
 import { AuthController } from 'controller/auth';
 
 @Global()
 @Module({
   imports: [
     PassportModule,
-    RedisModule,
     HttpModule.registerAsync({
       useFactory: (configService: ConfigService) => ({
         baseURL: `${configService.get<string>('GEO_URL')}/auth`,

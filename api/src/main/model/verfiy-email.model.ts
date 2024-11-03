@@ -11,4 +11,7 @@ export class VerifyEmail {
 
   @Field(type => String)
   userId: string;
+
+  @Field(type => String)
+  userName: string;
 }

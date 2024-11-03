@@ -34,7 +34,9 @@
       "pipe/*": ["src/main/pipe/*.pipe"],
       "model/*": ["src/main/model/*.model"],
       "resolver/*": ["src/main/resolver/*.resolver"],
-      "guard/*": ["src/main/guard/*.guard"]
+      "guard/*": ["src/main/guard/*.guard"],
+      "factory/*": ["src/main/factory/*.factory"],
+      "repository/*": ["src/main/repository/*.repository"]
     }
   }
 }

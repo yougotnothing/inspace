@@ -4,9 +4,9 @@ import { ConfigService } from '@nestjs/config';
 import { join } from 'path';
 import { PugAdapter } from '@nestjs-modules/mailer/dist/adapters/pug.adapter';
 import { EmailService } from 'service/email';
-import { RedisModule } from './redis.module';
 import { EmailResolver } from 'resolver/email';
 import { PrismaService } from 'service/prisma';
+import { RedisModule } from './redis.module';
 
 @Module({
   imports: [

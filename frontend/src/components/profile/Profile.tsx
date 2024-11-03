@@ -19,6 +19,9 @@ import {
   Footer,
   DeleteAccountButton,
   LogoutButton,
+  SettingsWrapper,
+  Setting,
+  SettingSwitch,
 } from './Profile.styled';
 import { UserIcon, PencilEdit01Icon } from 'hugeicons-react';
 import { GET_SELF } from 'query/user';
@@ -29,14 +32,21 @@ import { useGSAPOnload } from 'hooks/use-gsap-onload';
 import { Paragraph } from 'styles/Paragraph';
 import { TransparentButton } from 'styles/Transparent-button';
 import { Route } from 'styles/Route';
-
+import { SEND_VERIFY_EMAIL } from 'mutation/email';
 export const Profile = () => {
   const [isEmailWarningVisible, setIsEmailWarningVisible] = useState(true);
   const [isFocused, setIsFocused] = useState(false);
+  const [isSettingEnabled, setIsSettingEnabled] = useState(true);
   const userNameInputRef = useRef<HTMLInputElement>(null);
   const { data, loading, error } = useQuery(GET_SELF);
-  const [uploadAvatar] = useMutation(UPLOAD_AVATAR);
-
+  const [uploadAvatar, { loading: isUploadingAvatar }] =
+    useMutation(UPLOAD_AVATAR);
+  const [sendVerifyEmail, { loading: isSendingVerifyEmail }] = useMutation(
+    SEND_VERIFY_EMAIL,
+    {
+      variables: { email: data?.getSelf?.email },
+    }
+  );
   const handleClickPencilEditButton = () => {
     setIsFocused(!isFocused);
 
@@ -59,10 +69,14 @@ export const Profile = () => {
     { className: '.footer', duration: 0.5, delay: 1.5 },
     { className: '.not-verified-email', duration: 0.3, delay: 0.9 },
     { className: '.to-spotted', duration: 0.7, delay: 1.4 },
-    { className: '.user-info', duration: 0.3, delay: 1.7 }
+    { className: '.user-info', duration: 0.3, delay: 1.7 },
+    { className: '.settings', duration: 0.3, delay: 1.7 }
   );
 
-  if (loading) return <Loader loading={loading} />;
+  if (loading || isUploadingAvatar || isSendingVerifyEmail)
+    return (
+      <Loader loading={loading || isUploadingAvatar || isSendingVerifyEmail} />
+    );
   if (error) console.error(error);
 
   return (
@@ -96,7 +110,7 @@ export const Profile = () => {
               </PencilEditButton>
             </UserNameWrapper>
           </UserProfile>
-          {!data.getSelf.isVerified && (
+          {!data.getSelf?.isVerified && (
             <NotWerifiedEmailWrapper
               className="not-verified-email"
               $isVisible={isEmailWarningVisible}
@@ -111,11 +125,15 @@ export const Profile = () => {
             <UserInfo>
               <Paragraph>email: {data.getSelf.email}</Paragraph>
               {!data.getSelf.isVerified && (
-                <Paragraph style={{ color: 'var(--warning-text)' }}>
-                  Email not verified
-                </Paragraph>
+                <>
+                  <Paragraph style={{ color: 'var(--warning-text)' }}>
+                    Email not verified
+                  </Paragraph>
+                  <TransparentButton onClick={() => sendVerifyEmail()}>
+                    verify email
+                  </TransparentButton>
+                </>
               )}
-              <TransparentButton>verify email</TransparentButton>
             </UserInfo>
             <Paragraph>
               current country: {localStorage.getItem('user-country')}
@@ -140,9 +158,20 @@ export const Profile = () => {
             <Paragraph>micromoons: {data.getSelf.spottedMicromoons}</Paragraph>
           </UserInfoWrapper>
         </MainWrapper>
-        <ToSpottedWrapper className="to-spotted">
-          <Paragraph>You haven't spotted anything yet.</Paragraph>
-        </ToSpottedWrapper>
+        <MainWrapper>
+          <ToSpottedWrapper className="to-spotted">
+            <Paragraph>You haven't spotted anything yet.</Paragraph>
+          </ToSpottedWrapper>
+          <SettingsWrapper className="settings">
+            <Setting>
+              <Paragraph>enable animations</Paragraph>
+              <SettingSwitch
+                $settingEnabled={isSettingEnabled}
+                onClick={() => setIsSettingEnabled(!isSettingEnabled)}
+              />
+            </Setting>
+          </SettingsWrapper>
+        </MainWrapper>
       </Content>
       <Footer className="footer">
         <LogoutButton>logout</LogoutButton>

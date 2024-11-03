@@ -22,7 +22,6 @@ export const UserProfile = styled('div')`
   padding: 1rem;
   border-radius: 1rem;
   top: 17px;
-  width: 100%;
   opacity: 0;
   position: relative;
   border: 1px solid var(--border-color);
@@ -110,7 +109,6 @@ export const MainWrapper = styled('div')`
   display: flex;
   flex-direction: column;
   gap: 3rem;
-  width: 41rem;
   height: 100%;
   align-items: flex-start;
 `;
@@ -159,11 +157,43 @@ export const LogoutButton = styled(Button)`
   }
 `;
 
+export const SettingsWrapper = styled(ToSpottedWrapper)`
+  align-items: flex-start;
+`;
+
+export const SettingSwitch = styled('button')<{ $settingEnabled: boolean }>`
+  background-color: ${({ $settingEnabled }) =>
+    $settingEnabled ? 'white' : 'transparent'};
+  border: 2px solid white;
+  border-radius: 3rem;
+  width: 3rem;
+  height: 1.5rem;
+  padding: 0.2rem;
+  transition: 0.3s ease;
+  position: relative;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+
+  &::before {
+    display: flex;
+    content: '';
+    position: absolute;
+    width: 1rem;
+    height: 1rem;
+    border-radius: 50%;
+    background-color: ${({ $settingEnabled }) =>
+      $settingEnabled ? 'black' : 'white'};
+    transition: 0.3s ease;
+    left: ${({ $settingEnabled }) => ($settingEnabled ? '1.7rem' : '0.2rem')};
+  }
+`;
+
 export const UserInfoWrapper = styled('div')`
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  width: 100%;
+  width: calc(100% - 2rem);
   padding: 1rem;
   border-radius: 1rem;
   border: 1px solid var(--border-color);
@@ -179,6 +209,8 @@ export const UserInfo = styled('div')`
   justify-content: space-between;
   width: 100%;
 `;
+
+export const Setting = styled(UserInfo)``;
 
 export const NotWerifiedEmailWrapper = styled('button')<{
   $isVisible: boolean;

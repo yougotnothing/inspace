@@ -98,7 +98,7 @@ html
       }
   body
     .header
-      a.header-link(href="http://localhost:5173") ☾ Inspace
+      a.header-link(href=`${frontendUrl}`) ☾ Inspace
     .main-wrapper
       h1 Verify your email
       .container
@@ -109,7 +109,7 @@ html
           a.link(href=`${url}`) Verify email
         .content-wrapper
           p If you did not request this, please ignore this email.
-          p This link will expire in 15 minutes.
+          p This link will expire in 24 hours.
     .footer
       .footer-content
         p If you have any questions, please contact us at: 

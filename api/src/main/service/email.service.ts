@@ -4,9 +4,8 @@ import { PrismaService } from './prisma.service';
 import * as crypto from 'crypto';
 import { ConfigService } from '@nestjs/config';
 import { VerifyEmail } from 'model/verfiy-email';
+import { RedisService } from './redis.service';
 
-import { ClientProxy } from '@nestjs/microservices';
-import { timeout } from 'rxjs';
 @Injectable()
 export class EmailService {
   private readonly FRONTEND_URL: string =
@@ -15,8 +14,8 @@ export class EmailService {
     this.configService.get<string>('EMAIL_CONTACT_ADDRESS');
 
   constructor(
-    @Inject('REDIS')
-    private readonly redis: ClientProxy,
+    @Inject(RedisService)
+    private readonly redisService: RedisService,
     private readonly mailerService: MailerService,
     private readonly prismaService: PrismaService,
     private readonly configService: ConfigService
@@ -30,20 +29,16 @@ export class EmailService {
         'Invalid email or user with this email not found'
       );
 
-    const token = crypto.randomUUID();
-    this.redis
-      .emit(`${user.id}:verify-email-token`, token)
-      .pipe(timeout(100000))
-      .subscribe();
-
+    await this.redisService.setVerifyEmail(user.id, crypto.randomUUID());
     await this.mailerService.sendMail({
       to: email,
       subject: 'Verify your email',
       template: 'verify-email',
       context: {
-        url: `${this.FRONTEND_URL}/verify-email?token=${token}`,
         name: user.name,
+        frontendUrl: this.FRONTEND_URL,
         contactEmail: this.EMAIL_CONTACT_ADDRESS,
+        url: `${this.FRONTEND_URL}/verify-email?u=${user.id}`,
       },
     });
 
@@ -51,6 +46,34 @@ export class EmailService {
       message: 'Email sent successfully',
       userEmail: email,
       userId: user.id,
+      userName: user.name,
+    };
+  }
+
+  async verifyEmail(userId: string): Promise<VerifyEmail> {
+    const user = await this.prismaService.user.findFirst({
+      where: { id: userId },
+    });
+
+    if (!user) throw new NotFoundException('User not found');
+
+    const verifyEmailToken = await this.redisService.getVerifyEmail(userId);
+
+    if (!verifyEmailToken)
+      throw new NotFoundException('Verify email token expired or not found');
+
+    await this.prismaService.user.update({
+      where: { id: userId },
+      data: { isVerified: true },
+    });
+
+    await this.redisService.deleteVerifyEmail(userId);
+
+    return {
+      message: 'Email verified successfully',
+      userEmail: user.email,
+      userName: user.name,
+      userId,
     };
   }
 }
