@@ -16,6 +16,7 @@ import { SolarEclipseModule } from 'module/solar-eclipse';
 import { LunarApsisModule } from 'module/lunar-apsis';
 import { UserAvatarModule } from 'module/user-avatar';
 import { EmailModule } from './email.module';
+import { NearestBodiesModule } from './nearest-bodies.module';
 
 @Module({
   imports: [
@@ -41,6 +42,7 @@ import { EmailModule } from './email.module';
     LunarApsisModule,
     UserAvatarModule,
     EmailModule,
+    NearestBodiesModule,
   ],
   providers: [PrismaService, ActionResolver, ActionService],
 })

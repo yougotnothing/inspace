@@ -84,11 +84,16 @@ input LoginDtoInput {
 }
 
 type LunarApsis {
-  dist_au: Float!
-  dist_km: Float!
+  distance: Float!
   kind: String!
   phase: String!
   time: AstroTime!
+}
+
+input LunarApsisInput {
+  country: String!
+  date: DateTime!
+  distance: String!
 }
 
 type LunarEclipseInfo {
@@ -117,13 +122,35 @@ input MoonPhaseInput {
 }
 
 type Mutation {
-  changeAvatar(image: String!): ChangeAvatar!
+  changeAvatar(id: String!, image: String!): ChangeAvatar!
   login(loginDto: LoginDtoInput!): Tokens!
   logout: String!
   refresh: Tokens!
   register(user: RegisterInput!): String!
   sendVerifyEmail(email: String!): VerifyEmail!
   verifyEmail(userId: String!): VerifyEmail!
+}
+
+type NearestBodies {
+  cd: String!
+  des: String!
+  diameter: String
+  diameter_sigma: String
+  dist: String!
+  dist_max: String!
+  dist_min: String!
+  fullname: String
+  h: String!
+  jd: String!
+  orbit_id: String!
+  t_sigma_f: String!
+  v_inf: String!
+  v_rel: String!
+}
+
+input NearestBodiesInput {
+  date: DateTime!
+  kind: String!
 }
 
 type NextSolarEclipse {
@@ -148,7 +175,8 @@ type Query {
   getAirPollutionInfo(coords: AirPollutionInput!): AirPollution!
   getLocation(coordinates: GeolocationInput!): Geolocation!
   getMoonPhase(location: MoonPhaseInput!): MoonPhase!
-  getNextLunarApsis(country: String!, date: DateTime!): LunarApsis!
+  getNearestAsteroids(data: NearestBodiesInput!): [NearestBodies!]!
+  getNextLunarApsis(data: LunarApsisInput!): LunarApsis!
   getSelf: User!
   getUserById(id: String!): User!
   getUserByName(name: String!): User!
@@ -156,7 +184,7 @@ type Query {
   nextLocalSolarEclipse(observer: ObserverInput!, startTime: DateTime!): SearchSolarEclipse!
   nextLunarEclipse(date: DateTime!): LunarEclipseInfo!
   searchLocalSolarEclipse(observer: ObserverInput!, startTime: DateTime!): SearchSolarEclipse!
-  searchLunarApsis(country: String!, date: DateTime!): LunarApsis!
+  searchLunarApsis(data: LunarApsisInput!): LunarApsis!
   searchLunarEclipse(date: DateTime!): LunarEclipseInfo!
 }
 
@@ -194,12 +222,14 @@ type User {
   name: String!
   password: String!
   role: String!
+  shownDistance: String!
   spottedLunarEclipses: Float!
   spottedMeteorShowers: Float!
   spottedMicromoons: Float!
   spottedPlanetaryAlignments: Float!
   spottedSolarEclipses: Float!
   spottedSupermoons: Float!
+  timezone: String!
   toSpotted: [Action!]!
 }
 

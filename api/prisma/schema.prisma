@@ -22,6 +22,8 @@ model User {
   spottedSupermoons          Int      @default(0)
   spottedMicromoons          Int      @default(0)
   spottedPlanetaryAlignments Int      @default(0)
+  timezone                   String   @default("Europe/Warsaw")
+  shownDistance              Distance @default(KM)
   role                       Role     @default(USER)
   toSpotted                  Action[]
 }
@@ -45,4 +47,9 @@ enum ActionType {
 enum Role {
   ADMIN
   USER
+}
+
+enum Distance {
+  AU
+  KM
 }

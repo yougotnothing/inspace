@@ -1,34 +1,28 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { UsePipes } from '@nestjs/common';
+import { UseGuards, UsePipes } from '@nestjs/common';
 import { Resolver, Query, Args } from '@nestjs/graphql';
+import { LocalAuthGuard } from 'guard/auth';
 import {
   NextSolarEclipse,
   ObserverInput,
   SearchSolarEclipse,
-  SolarEclipseInput,
 } from 'model/solar-eclipse';
 import { DateValidationPipe } from 'pipe/date-validation';
 import { SolarEclipseService } from 'service/solar-eclipse';
 
+@UseGuards(LocalAuthGuard)
 @Resolver(of => NextSolarEclipse)
-export class GlobalSolarEclipseResolver {
+export class SolarEclipseResolver {
   constructor(private readonly solarEclipseService: SolarEclipseService) {}
 
   @Query(returns => NextSolarEclipse)
-  // @UsePipes(DateValidationPipe)
   async nextGlobalSolarEclipse(
     @Args('startTime') startTime: Date
   ): Promise<NextSolarEclipse> {
     return await this.solarEclipseService.nextGlobalSolarEclipse(startTime);
   }
-}
-
-@Resolver(of => SearchSolarEclipse)
-export class LocalSolarEclipseResolver {
-  constructor(private readonly solarEclipseService: SolarEclipseService) {}
 
   @Query(returns => SearchSolarEclipse)
-  // @UsePipes(DateValidationPipe)
   async searchLocalSolarEclipse(
     @Args('startTime') startTime: Date,
     @Args('observer') observer: ObserverInput
@@ -40,7 +34,7 @@ export class LocalSolarEclipseResolver {
   }
 
   @Query(returns => SearchSolarEclipse)
-  // @UsePipes(DateValidationPipe)
+  @UsePipes(DateValidationPipe)
   async nextLocalSolarEclipse(
     @Args('startTime') startTime: Date,
     @Args('observer') observer: ObserverInput

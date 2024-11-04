@@ -6,6 +6,7 @@ import { LunarEclipseService } from 'service/lunar-eclipse';
 import { LunarEclipseInfo } from 'model/lunar-eclipse';
 import { LocalAuthGuard } from 'guard/auth';
 
+@UseGuards(LocalAuthGuard)
 @Resolver(of => LunarEclipseInfo)
 export class LunarEclipseResolver {
   constructor(private readonly lunarEclipseService: LunarEclipseService) {}
@@ -18,6 +19,7 @@ export class LunarEclipseResolver {
     return await this.lunarEclipseService.searchLunarEclipse(date);
   }
 
+  @UsePipes(DateValidationPipe)
   @Query(returns => LunarEclipseInfo)
   async nextLunarEclipse(@Args('date') date: Date): Promise<LunarEclipseInfo> {
     return await this.lunarEclipseService.nextLunarEclipse(date);

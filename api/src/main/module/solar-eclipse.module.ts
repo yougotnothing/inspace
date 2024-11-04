@@ -1,16 +1,9 @@
 import { Module } from '@nestjs/common';
-import {
-  GlobalSolarEclipseResolver,
-  LocalSolarEclipseResolver,
-} from 'resolver/solar-eclipse';
+import { SolarEclipseResolver } from 'resolver/solar-eclipse';
 import { SolarEclipseService } from 'service/solar-eclipse';
 
 @Module({
   imports: [],
-  providers: [
-    SolarEclipseService,
-    GlobalSolarEclipseResolver,
-    LocalSolarEclipseResolver,
-  ],
+  providers: [SolarEclipseService, SolarEclipseResolver],
 })
 export class SolarEclipseModule {}

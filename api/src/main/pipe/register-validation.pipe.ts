@@ -1,6 +1,6 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import {
   ArgumentMetadata,
+  BadRequestException,
   HttpException,
   HttpStatus,
   Injectable,
@@ -17,6 +17,9 @@ import {
 @Injectable()
 export class RegisterValidationPipe implements PipeTransform<RegisterInput> {
   transform(value: RegisterInput, metadata: ArgumentMetadata) {
+    if (metadata.data !== 'password' && metadata.data !== 'name')
+      throw new BadRequestException(`Invalid field: ${metadata.data}`);
+
     const password = value?.password;
     const name = value?.name;
 

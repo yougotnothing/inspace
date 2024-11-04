@@ -1,17 +1,12 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { Field, ObjectType } from '@nestjs/graphql';
+import { Field, InputType, ObjectType } from '@nestjs/graphql';
 import { ApsisKind } from 'astronomy-engine';
 import { AstroTime } from './astro-time.model';
 import { LunarPhase } from 'lunarphase-js';
+import { $Enums } from '@prisma/client';
 
 @ObjectType()
 export class LunarApsis {
-  @Field(type => Number)
-  dist_au: number;
-
-  @Field(type => Number)
-  dist_km: number;
-
   @Field(type => AstroTime)
   time: AstroTime;
 
@@ -20,4 +15,19 @@ export class LunarApsis {
 
   @Field(type => String)
   phase: LunarPhase;
+
+  @Field(type => Number)
+  distance: number;
+}
+
+@InputType()
+export class LunarApsisInput {
+  @Field(type => Date)
+  date: Date;
+
+  @Field(type => String)
+  country: string;
+
+  @Field(type => String)
+  distance: $Enums.Distance;
 }

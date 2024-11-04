@@ -8,20 +8,16 @@ import {
 @Injectable()
 export class DateValidationPipe implements PipeTransform {
   transform(value: any, metadata: ArgumentMetadata): Date {
-    console.log('Incoming value:', value.startTime);
+    if (metadata.data !== 'startTime' && metadata.data !== 'date') return value;
 
-    let date = value.startTime ?? value.date;
+    if (typeof value === 'string') value = new Date(value);
 
-    if (typeof date === 'string') {
-      date = new Date(date);
-    }
-
-    if (!(date instanceof Date) || isNaN(date.getTime())) {
+    if (!(value instanceof Date) || isNaN(value.getTime())) {
       throw new BadRequestException(
         `Invalid date format for field: ${metadata.data}`
       );
     }
 
-    return date;
+    return value;
   }
 }

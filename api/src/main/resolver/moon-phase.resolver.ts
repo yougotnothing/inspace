@@ -7,13 +7,13 @@ import { HttpInterceptor } from 'interceptor/http';
 import { MoonPhase, MoonPhaseInput } from 'model/moon-phase';
 import { MoonPhaseService } from 'service/moon-phase';
 
+@UseGuards(LocalAuthGuard)
 @Resolver(of => MoonPhase)
 export class MoonPhaseResolver {
   constructor(private readonly moonPhaseService: MoonPhaseService) {}
 
   @Query(returns => MoonPhase)
   @UseInterceptors(HttpInterceptor)
-  @UseGuards(LocalAuthGuard)
   async getMoonPhase(@Args('location') location: MoonPhaseInput) {
     return await this.moonPhaseService.getMoonPhase(location);
   }

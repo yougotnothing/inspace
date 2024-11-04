@@ -49,4 +49,10 @@ export class User implements UserDto {
 
   @Field(type => Number)
   spottedPlanetaryAlignments: number;
+
+  @Field(type => String)
+  timezone: string;
+
+  @Field(type => String)
+  shownDistance: $Enums.Distance;
 }
