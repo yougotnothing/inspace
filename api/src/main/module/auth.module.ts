@@ -7,10 +7,12 @@ import { UserService } from 'service/user';
 import { HttpModule } from '@nestjs/axios';
 import { ConfigService } from '@nestjs/config';
 import { AuthController } from 'controller/auth';
+import { RedisModule } from './redis.module';
 
 @Global()
 @Module({
   imports: [
+    RedisModule,
     PassportModule,
     HttpModule.registerAsync({
       useFactory: (configService: ConfigService) => ({

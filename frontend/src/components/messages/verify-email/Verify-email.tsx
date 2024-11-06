@@ -3,9 +3,13 @@ import { VERIFY_EMAIL } from 'mutation/email';
 import { useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Loader } from 'templates/Loader';
-import { Header, Message, MessageWrapper } from './Verify-email.styled';
+import {
+  Header,
+  Message,
+  MessageWrapper,
+  MessageContent,
+} from '../Messages.styled';
 import { Wrapper } from 'styles/Wrapper';
-import { Content } from 'styles/Content';
 import { Button } from 'styles/Button';
 
 export const VerifyEmail = () => {
@@ -25,7 +29,7 @@ export const VerifyEmail = () => {
 
   return (
     <Wrapper>
-      <Content>
+      <MessageContent>
         {data?.verifyEmail?.userName && (
           <>
             <Header>{data?.verifyEmail?.userName}</Header>
@@ -41,7 +45,7 @@ export const VerifyEmail = () => {
             <Button onClick={handleClose}>Close window</Button>
           </MessageWrapper>
         )}
-      </Content>
+      </MessageContent>
     </Wrapper>
   );
 };

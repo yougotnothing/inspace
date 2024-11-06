@@ -23,12 +23,14 @@ export const MoonPhase = () => {
   const country = useSearchParams()[0].get('country') ?? 'Ukraine';
   const variables = useMemo(
     () => ({
-      location: {
-        country,
+      location: { country, date: new Date() },
+      data: {
         date: new Date(),
+        country,
+        distance: (
+          localStorage.getItem('shown_distance') ?? 'KM'
+        ).toUpperCase(),
       },
-      date: new Date(),
-      country,
     }),
     [country]
   );
@@ -165,10 +167,8 @@ export const MoonPhase = () => {
                     ).toUTCString()}
                   </Paragraph>
                   <Paragraph>
-                    distance (km): {data.searchLunarApsis?.dist_km.toFixed(1)}km
-                  </Paragraph>
-                  <Paragraph>
-                    distance (au): {data.searchLunarApsis?.dist_au.toFixed(4)}au
+                    distance: {data.searchLunarApsis?.distance.toFixed(1)}
+                    {localStorage.getItem('shown_distance')}
                   </Paragraph>
                 </MoonPhaseInfoWrapper>
               </Info>

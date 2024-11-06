@@ -1,6 +1,5 @@
 import { HttpService } from '@nestjs/axios';
-import { Injectable } from '@nestjs/common';
-import dayjs from 'dayjs';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { NearestBodies, NearestBodiesInput } from 'model/nearest-bodies';
 
 @Injectable()
@@ -11,13 +10,59 @@ export class NearestBodiesService {
     try {
       const response = await this.httpService.axiosRef.get('/cad.api', {
         params: {
-          kind: data.kind,
-          date_min: data.date,
-          date_max: dayjs(data.date).add(7, 'day'),
+          kind: 'a',
+          fullname: true,
+          diameter: true,
+          limit: 20,
+          'limit-from': data.limit_from,
         },
       });
 
-      return this.convertResponse(response.data);
+      const bodies = this.convertResponse(response.data);
+
+      if (!bodies.length)
+        throw new NotFoundException('no near asteroids found');
+
+      bodies.forEach(body => {
+        if (data.distance_in === 'KM') {
+          console.log('distance in km');
+          body.dist = (parseFloat(body.dist) * 149597870.7).toString();
+          body.dist_max = (parseFloat(body.dist_max) * 149597870.7).toString();
+          body.dist_min = (parseFloat(body.dist_min) * 149597870.7).toString();
+        }
+      });
+
+      return bodies;
+    } catch (error) {
+      throw new Error(error);
+    }
+  }
+
+  async getNearestComets(data: NearestBodiesInput): Promise<NearestBodies[]> {
+    try {
+      const response = await this.httpService.axiosRef.get('/cad.api', {
+        params: {
+          kind: 'c',
+          fullname: true,
+          diameter: true,
+          limit: 20,
+          'limit-from': data.limit_from,
+        },
+      });
+
+      const bodies = this.convertResponse(response.data);
+
+      if (!bodies.length) throw new NotFoundException('no near comets found');
+
+      bodies.forEach(body => {
+        if (data.distance_in === 'KM') {
+          body.dist = (parseFloat(body.dist) * 149597870.7).toString();
+          body.dist_max = (parseFloat(body.dist_max) * 149597870.7).toString();
+          body.dist_min = (parseFloat(body.dist_min) * 149597870.7).toString();
+        }
+      });
+
+      return bodies;
     } catch (error) {
       throw new Error(error);
     }

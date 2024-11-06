@@ -108,6 +108,7 @@ services:
       EMAIL_PASS: ${EMAIL_PASS}
       EMAIL_CONTACT_ADDRESS: ${EMAIL_CONTACT_ADDRESS}
       FRONTEND_URL: ${FRONTEND_URL}
+      NASA_API_URL: ${NASA_API_URL}
     tty: true
     stdin_open: true
 

@@ -6,13 +6,16 @@ export const useGSAPOnload = (
   deps: unknown[] | useGSAPConfig,
   ...args: GSAPComponent[]
 ) => {
+  const isAnimationsEnabled =
+    localStorage.getItem('animations_enabled') ?? 'true';
+
   useGSAP(() => {
     args.map(arg => {
       gsap.to(arg.className, {
         opacity: 1,
         top: arg.top ?? 0,
-        delay: arg.delay,
-        duration: arg.duration,
+        delay: isAnimationsEnabled === 'true' ? arg.delay : 0,
+        duration: isAnimationsEnabled === 'true' ? arg.duration : 0,
         marginTop: arg.marginTop ?? 0,
         boxShadow: arg.boxShadow ?? 'none',
       });

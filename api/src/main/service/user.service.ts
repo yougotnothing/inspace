@@ -1,11 +1,21 @@
 import { HttpService } from '@nestjs/axios';
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  HttpException,
+  HttpStatus,
+  Inject,
+  Injectable,
+} from '@nestjs/common';
 import { User } from 'model/user';
 import { PrismaService } from 'service/prisma';
+import { RedisService } from './redis.service';
+import { Message } from 'model/message';
 
 @Injectable()
 export class UserService {
   constructor(
+    @Inject(RedisService)
+    private readonly redisService: RedisService,
     private readonly prismaService: PrismaService,
     private readonly httpService: HttpService
   ) {}
@@ -52,6 +62,30 @@ export class UserService {
       return user;
     } catch (error) {
       throw new HttpException(error.response.data, error.response.status);
+    }
+  }
+
+  async deleteUser(access_token: string): Promise<Message> {
+    try {
+      const { id, name } = await this.getSelf(access_token);
+      const token = await this.redisService.getDeleteUser(id);
+
+      if (!token) throw new BadRequestException('Delete user token expired');
+
+      await this.httpService.axiosRef.delete('/openid-connect/delete-user', {
+        params: { access_token },
+      });
+      await this.prismaService.user.delete({ where: { id } });
+      await this.prismaService.action.deleteMany({ where: { userId: id } });
+      await this.redisService.deleteDeleteUser(id);
+
+      return { message: `${name}, your account has been deleted` };
+    } catch (error) {
+      if (error.response) {
+        throw new HttpException(error.response.data, error.response.status);
+      } else {
+        throw new HttpException('Internal server error', 500);
+      }
     }
   }
 }

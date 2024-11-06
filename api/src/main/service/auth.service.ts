@@ -9,6 +9,7 @@ import { RegisterInput } from 'model/register';
 import { HttpService } from '@nestjs/axios';
 import { Tokens } from 'model/tokens';
 import { Response } from 'express';
+import { Message } from 'model/message';
 
 @Injectable()
 export class AuthService {
@@ -98,10 +99,18 @@ export class AuthService {
     }
   }
 
-  async logout(req: Request): Promise<void> {
-    req.session.destroy(err => {
-      if (err) throw err;
-    });
+  async logout(req: Request): Promise<Message> {
+    try {
+      await this.httpService.axiosRef.post('/openid-connect/logout', {
+        refresh_token: req.cookies['refresh_token'],
+      });
+
+      req.res.clearCookie('refresh_token');
+
+      return { message: 'user logout success.' };
+    } catch (error) {
+      throw new Error(error);
+    }
   }
 
   async validateUser({ login, password }: LoginDtoInput): Promise<User> {

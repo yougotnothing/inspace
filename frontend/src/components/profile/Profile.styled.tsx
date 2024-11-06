@@ -124,8 +124,7 @@ export const ToSpottedWrapper = styled('div')`
   border: 1px solid var(--border-color);
   background-color: var(--wrapper-bg);
   width: 25rem;
-  max-height: 65rem;
-  min-height: 5rem;
+  height: 100%;
   overflow-y: auto;
   position: relative;
   opacity: 0;
@@ -147,18 +146,25 @@ export const Footer = styled('div')`
 
 export const DeleteAccountButton = styled(Button)`
   &:hover {
-    background-color: ${Colors.RED};
+    background-color: rgba(244, 67, 54, 0.27);
+    border-color: ${Colors.RED};
+    color: ${Colors.RED};
   }
 `;
 
 export const LogoutButton = styled(Button)`
   &:hover {
-    background-color: ${Colors.BLUE};
+    background-color: rgba(33, 149, 243, 0.27);
+    border-color: ${Colors.BLUE};
+    color: ${Colors.BLUE};
   }
 `;
 
 export const SettingsWrapper = styled(ToSpottedWrapper)`
   align-items: flex-start;
+  justify-content: flex-start;
+  height: auto;
+  overflow-y: clip;
 `;
 
 export const SettingSwitch = styled('button')<{ $settingEnabled: boolean }>`
@@ -189,6 +195,28 @@ export const SettingSwitch = styled('button')<{ $settingEnabled: boolean }>`
   }
 `;
 
+export const ShownDistanceSwitch = styled('button')`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 3rem;
+  height: 1.5rem;
+  border-radius: 3.2rem;
+  border: 2px solid white;
+  background-color: transparent;
+  cursor: pointer;
+  color: white;
+  font-family: 'Fira Mono', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 400;
+  transition: 0.3s ease;
+
+  &:hover {
+    background-color: white;
+    color: black;
+  }
+`;
+
 export const UserInfoWrapper = styled('div')`
   display: flex;
   flex-direction: column;
@@ -212,7 +240,7 @@ export const UserInfo = styled('div')`
 
 export const Setting = styled(UserInfo)``;
 
-export const NotWerifiedEmailWrapper = styled('button')<{
+export const NotVerifiedEmailWrapper = styled('button')<{
   $isVisible: boolean;
 }>`
   display: ${({ $isVisible }) => ($isVisible ? 'flex' : 'none')};

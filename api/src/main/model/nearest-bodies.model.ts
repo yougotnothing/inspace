@@ -48,9 +48,9 @@ export class NearestBodies {
 
 @InputType()
 export class NearestBodiesInput {
-  @Field(type => Date)
-  date: Date;
-
   @Field(type => String)
-  kind: 'a' | 'an' | 'au' | 'c' | 'cn' | 'cu' | 'n' | 'u';
+  distance_in: 'KM' | 'AU';
+
+  @Field(type => Number)
+  limit_from: number;
 }

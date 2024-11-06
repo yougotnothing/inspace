@@ -16,3 +16,6 @@ class OpenidConnectRegisterInputModel(BaseModel):
   password: str
   email: str
   id: str
+
+class OpenidConnectDeleteUserInputModel(BaseModel):
+  access_token: str

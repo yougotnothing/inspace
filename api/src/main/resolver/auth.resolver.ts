@@ -1,8 +1,10 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { UsePipes } from '@nestjs/common';
+import { UseGuards, UsePipes } from '@nestjs/common';
 import { Args, Context, Mutation, Resolver } from '@nestjs/graphql';
 import { Request } from 'express';
+import { LocalAuthGuard } from 'guard/auth';
 import { LoginDtoInput } from 'model/login';
+import { Message } from 'model/message';
 import { RegisterInput } from 'model/register';
 import { Tokens } from 'model/tokens';
 import { User } from 'model/user';
@@ -12,19 +14,16 @@ import { RegisterValidationPipe } from 'pipe/register-validation';
 import { AuthService } from 'service/auth';
 import { GqlContext } from 'type/context';
 
-@Resource('user')
 @Resolver(of => User)
 export class AuthResolver {
   constructor(private readonly authService: AuthService) {}
 
-  @Public()
   @Mutation(returns => String)
   @UsePipes(RegisterValidationPipe, EmailValidationPipe)
   async register(@Args('user') user: RegisterInput): Promise<string> {
     return await this.authService.register(user);
   }
 
-  @Public()
   @Mutation(returns => Tokens)
   async login(
     @Context() context: GqlContext,
@@ -33,8 +32,9 @@ export class AuthResolver {
     return await this.authService.login(context.res, loginDto);
   }
 
-  @Mutation(returns => String)
-  async logout(@Context('req') req: Request): Promise<void> {
+  @Mutation(returns => Message)
+  @UseGuards(LocalAuthGuard)
+  async logout(@Context('req') req: Request): Promise<Message> {
     return await this.authService.logout(req);
   }
 

@@ -3,7 +3,7 @@ import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from './prisma.service';
 import * as crypto from 'crypto';
 import { ConfigService } from '@nestjs/config';
-import { VerifyEmail } from 'model/verfiy-email';
+import { EmailResponse as EmailResponse } from 'model/verfiy-email';
 import { RedisService } from './redis.service';
 
 @Injectable()
@@ -21,7 +21,7 @@ export class EmailService {
     private readonly configService: ConfigService
   ) {}
 
-  async sendVerifyEmail(email: string): Promise<VerifyEmail> {
+  async sendVerifyEmail(email: string): Promise<EmailResponse> {
     const user = await this.prismaService.user.findFirst({ where: { email } });
 
     if (!user)
@@ -50,7 +50,7 @@ export class EmailService {
     };
   }
 
-  async verifyEmail(userId: string): Promise<VerifyEmail> {
+  async verifyEmail(userId: string): Promise<EmailResponse> {
     const user = await this.prismaService.user.findFirst({
       where: { id: userId },
     });
@@ -74,6 +74,32 @@ export class EmailService {
       userEmail: user.email,
       userName: user.name,
       userId,
+    };
+  }
+
+  async sendDeleteUserEmail(email: string): Promise<EmailResponse> {
+    const user = await this.prismaService.user.findFirst({ where: { email } });
+    await this.redisService.setDeleteUser(user.id, crypto.randomUUID());
+
+    if (!user) throw new NotFoundException('User not found');
+
+    await this.mailerService.sendMail({
+      to: email,
+      subject: 'Delete user',
+      template: 'delete-user',
+      context: {
+        name: user.name,
+        frontendUrl: this.FRONTEND_URL,
+        contactEmail: this.EMAIL_CONTACT_ADDRESS,
+        url: `${this.FRONTEND_URL}/delete-user?u=${await this.redisService.getDeleteUser(user.id)}`,
+      },
+    });
+
+    return {
+      message: 'Email sent successfully',
+      userEmail: email,
+      userId: user.id,
+      userName: user.name,
     };
   }
 }

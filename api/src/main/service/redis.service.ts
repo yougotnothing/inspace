@@ -25,4 +25,21 @@ export class RedisService {
   async deleteVerifyEmail(userId: string) {
     await this.redisRepository.delete(RedisPrefix.VERIFY_EMAIL, userId);
   }
+
+  async setDeleteUser(userId: string, code: string) {
+    await this.redisRepository.setWithExpire(
+      RedisPrefix.DELETE_USER,
+      userId,
+      code,
+      60 * 24
+    );
+  }
+
+  async getDeleteUser(userId: string) {
+    return await this.redisRepository.get(RedisPrefix.DELETE_USER, userId);
+  }
+
+  async deleteDeleteUser(userId: string) {
+    await this.redisRepository.delete(RedisPrefix.DELETE_USER, userId);
+  }
 }

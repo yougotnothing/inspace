@@ -11,7 +11,16 @@ export class NearestBodiesResolver {
   constructor(private readonly nearestBodiesService: NearestBodiesService) {}
 
   @Query(returns => [NearestBodies])
-  async getNearestAsteroids(@Args('data') data: NearestBodiesInput) {
+  async getNearestAsteroids(
+    @Args('data') data: NearestBodiesInput
+  ): Promise<NearestBodies[]> {
     return this.nearestBodiesService.getNearestAsteroids(data);
+  }
+
+  @Query(returns => [NearestBodies])
+  async getNearestComets(
+    @Args('data') data: NearestBodiesInput
+  ): Promise<NearestBodies[]> {
+    return this.nearestBodiesService.getNearestComets(data);
   }
 }

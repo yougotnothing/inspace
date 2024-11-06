@@ -68,6 +68,13 @@ type EclipseEvent {
   time: AstroTimeObject!
 }
 
+type EmailResponse {
+  message: String!
+  userEmail: String!
+  userId: String!
+  userName: String!
+}
+
 type Geolocation {
   countryName: String!
   placeName: String!
@@ -105,6 +112,10 @@ type LunarEclipseInfo {
   sd_total: Float!
 }
 
+type Message {
+  message: String!
+}
+
 type MoonPhase {
   declination: Float!
   emoji: String!
@@ -124,11 +135,12 @@ input MoonPhaseInput {
 type Mutation {
   changeAvatar(id: String!, image: String!): ChangeAvatar!
   login(loginDto: LoginDtoInput!): Tokens!
-  logout: String!
+  logout: Message!
   refresh: Tokens!
   register(user: RegisterInput!): String!
-  sendVerifyEmail(email: String!): VerifyEmail!
-  verifyEmail(userId: String!): VerifyEmail!
+  sendDeleteUserEmail(email: String!): EmailResponse!
+  sendVerifyEmail(email: String!): EmailResponse!
+  verifyEmail(userId: String!): EmailResponse!
 }
 
 type NearestBodies {
@@ -149,8 +161,8 @@ type NearestBodies {
 }
 
 input NearestBodiesInput {
-  date: DateTime!
-  kind: String!
+  distance_in: String!
+  limit_from: Float!
 }
 
 type NextSolarEclipse {
@@ -169,6 +181,7 @@ input ObserverInput {
 }
 
 type Query {
+  deleteUser: Message!
   getActionByDescription(description: String!): Action!
   getActionById(id: String!): Action!
   getActionsBy(settings: ActionSettingsInput!): [Action!]!
@@ -176,6 +189,7 @@ type Query {
   getLocation(coordinates: GeolocationInput!): Geolocation!
   getMoonPhase(location: MoonPhaseInput!): MoonPhase!
   getNearestAsteroids(data: NearestBodiesInput!): [NearestBodies!]!
+  getNearestComets(data: NearestBodiesInput!): [NearestBodies!]!
   getNextLunarApsis(data: LunarApsisInput!): LunarApsis!
   getSelf: User!
   getUserById(id: String!): User!
@@ -231,11 +245,4 @@ type User {
   spottedSupermoons: Float!
   timezone: String!
   toSpotted: [Action!]!
-}
-
-type VerifyEmail {
-  message: String!
-  userEmail: String!
-  userId: String!
-  userName: String!
 }

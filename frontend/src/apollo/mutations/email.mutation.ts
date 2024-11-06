@@ -21,3 +21,11 @@ export const SEND_VERIFY_EMAIL = gql`
     }
   }
 `;
+
+export const SEND_DELETE_USER_EMAIL = gql`
+  mutation SendDeleteUserEmail($email: String!) {
+    sendDeleteUserEmail(email: $email) {
+      message
+    }
+  }
+`;

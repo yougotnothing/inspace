@@ -1,6 +1,7 @@
 import styled from 'styled-components';
+import { Content } from 'styles/Content';
 
-export const MessageWrapper = styled.div`
+export const MessageWrapper = styled('div')`
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -12,7 +13,7 @@ export const MessageWrapper = styled.div`
   border: 1px solid var(--border-color);
 `;
 
-export const Message = styled.p`
+export const Message = styled('p')`
   font-size: 2rem;
   font-weight: 600;
   text-align: center;
@@ -30,4 +31,10 @@ export const Header = styled('h1')`
   margin: 0;
   padding: 0;
   text-align: center;
+`;
+
+export const MessageContent = styled(Content)`
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
 `;
