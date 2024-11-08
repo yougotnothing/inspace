@@ -7,10 +7,12 @@ import { EmailService } from 'service/email';
 import { EmailResolver } from 'resolver/email';
 import { PrismaService } from 'service/prisma';
 import { RedisModule } from './redis.module';
+import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({
   imports: [
     RedisModule,
+    ScheduleModule.forRoot({ cronJobs: true }),
     MailerModule.forRootAsync({
       useFactory: (configService: ConfigService) => ({
         defaults: { from: 'The ☾ Inspace Team <noreply@inspace.app>' },

@@ -1,13 +1,16 @@
 import { MailerService } from '@nestjs-modules/mailer';
-import { Inject, Injectable, NotFoundException } from '@nestjs/common';
-import { PrismaService } from './prisma.service';
-import * as crypto from 'crypto';
+import { Inject, Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { SchedulerRegistry } from '@nestjs/schedule';
+import { CronJob } from '@nestjs/schedule/node_modules/cron/dist/job';
+import * as crypto from 'crypto';
 import { EmailResponse as EmailResponse } from 'model/verfiy-email';
-import { RedisService } from './redis.service';
+import { PrismaService } from 'service/prisma';
+import { RedisService } from 'service/redis';
 
 @Injectable()
 export class EmailService {
+  private readonly logger = new Logger(EmailService.name);
   private readonly FRONTEND_URL: string =
     this.configService.get<string>('FRONTEND_URL');
   private readonly EMAIL_CONTACT_ADDRESS: string =
@@ -18,7 +21,8 @@ export class EmailService {
     private readonly redisService: RedisService,
     private readonly mailerService: MailerService,
     private readonly prismaService: PrismaService,
-    private readonly configService: ConfigService
+    private readonly configService: ConfigService,
+    private schedulerRegistry: SchedulerRegistry
   ) {}
 
   async sendVerifyEmail(email: string): Promise<EmailResponse> {
@@ -98,6 +102,47 @@ export class EmailService {
     return {
       message: 'Email sent successfully',
       userEmail: email,
+      userId: user.id,
+      userName: user.name,
+    };
+  }
+
+  async sendEventEmail(email: string, eventId: string): Promise<EmailResponse> {
+    const user = await this.prismaService.user.findFirst({ where: { email } });
+
+    if (!user) throw new NotFoundException('user not found.');
+
+    const event = await this.prismaService.event.findFirst({
+      where: { id: eventId },
+    });
+
+    const eventType = event.type
+      .toLowerCase()
+      .split('_')
+      .map(word => word[0].toUpperCase + word.slice(1))
+      .join(' ');
+
+    const date = new Date(event.date.setHours(event.date.getHours() - 1));
+    const job = new CronJob(date, () => {
+      this.mailerService.sendMail({
+        to: user.email,
+        subject: `Hurry up, ${eventType} is comming!`,
+        template: 'event',
+        context: {
+          user: user.name,
+          message: `${eventType} starts ${event.date.toUTCString()} (in a hour), dont miss it!`,
+          frontendUrl: this.FRONTEND_URL,
+          email: this.EMAIL_CONTACT_ADDRESS,
+        },
+      });
+    });
+
+    this.schedulerRegistry.addCronJob(date.toISOString(), job);
+    job.start();
+
+    return {
+      message: 'success.',
+      userEmail: user.email,
       userId: user.id,
       userName: user.name,
     };

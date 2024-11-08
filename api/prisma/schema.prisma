@@ -25,23 +25,25 @@ model User {
   timezone                   String   @default("Europe/Warsaw")
   shownDistance              Distance @default(KM)
   role                       Role     @default(USER)
-  toSpotted                  Action[]
+  toSpotted                  Event[]
 }
 
-model Action {
+model Event {
   description String
-  id          String     @id @default(uuid()) @db.Uuid
-  date        DateTime   @db.Date
-  isSpotted   Boolean    @default(false)
-  userId      String?    @db.Uuid
-  type        ActionType
-  User        User?      @relation(fields: [userId], references: [id])
+  id          String    @id @default(uuid()) @db.Uuid
+  date        DateTime  @db.Date
+  isSpotted   Boolean   @default(false)
+  userId      String?   @db.Uuid
+  type        EventType
+  User        User?     @relation(fields: [userId], references: [id])
 }
 
-enum ActionType {
+enum EventType {
   SOLAR_ECLIPSE
   LUNAR_ECLIPSE
   METEOR_SHOWER
+  ASTEROID
+  COMET
 }
 
 enum Role {
