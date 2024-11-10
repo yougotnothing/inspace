@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
-import { ActionResolver } from 'resolver/action';
-import { ActionService } from 'service/action';
+import { EventResolver } from 'resolver/event';
+import { EventService } from 'service/event';
 import { PrismaService } from 'service/prisma';
 
 @Module({
   imports: [],
-  providers: [ActionService, ActionResolver, PrismaService],
+  providers: [EventService, EventResolver, PrismaService],
 })
 export class ActionModule {}

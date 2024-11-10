@@ -47,6 +47,8 @@ export const GET_SELF = gql`
       spottedSupermoons
       spottedMicromoons
       spottedPlanetaryAlignments
+      timezone
+      shownDistance
     }
   }
 `;

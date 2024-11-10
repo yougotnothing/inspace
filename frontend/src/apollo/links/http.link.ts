@@ -4,6 +4,6 @@ export const httpLink = new HttpLink({
   uri: 'http://localhost:5174/graphql',
   credentials: 'include',
   headers: {
-    'X-User-Id': localStorage.getItem('user_id') ?? '',
+    'X-Email-Verified': localStorage.getItem('email_verified') ?? 'false',
   },
 });

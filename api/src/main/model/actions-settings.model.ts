@@ -4,12 +4,12 @@ import { $Enums } from '@prisma/client';
 
 @InputType()
 export class ActionSettingsInput {
-  @Field(type => String)
+  @Field(type => String, { nullable: true })
   description?: string;
 
-  @Field(type => Date)
+  @Field(type => Date, { nullable: true })
   date?: Date;
 
-  @Field(type => String)
-  type?: $Enums.ActionType;
+  @Field(type => String, { nullable: true })
+  type?: $Enums.EventType;
 }

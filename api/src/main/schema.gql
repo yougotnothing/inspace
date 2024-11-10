@@ -2,20 +2,10 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-"""action"""
-type Action {
-  date: DateTime!
-  description: String!
-  id: String!
-  isSpotted: Boolean!
-  type: String!
-  userId: String!
-}
-
 input ActionSettingsInput {
-  date: DateTime!
-  description: String!
-  type: String!
+  date: DateTime
+  description: String
+  type: String
 }
 
 type AirPollution {
@@ -73,6 +63,22 @@ type EmailResponse {
   userEmail: String!
   userId: String!
   userName: String!
+}
+
+type Event {
+  date: DateTime!
+  description: String!
+  id: String!
+  isSpotted: Boolean!
+  type: String!
+  userId: String!
+}
+
+input EventInput {
+  date: DateTime!
+  description: String!
+  type: String!
+  userId: String!
 }
 
 type Geolocation {
@@ -134,11 +140,13 @@ input MoonPhaseInput {
 
 type Mutation {
   changeAvatar(id: String!, image: String!): ChangeAvatar!
+  createEvent(event: EventInput!): Event!
   login(loginDto: LoginDtoInput!): Tokens!
   logout: Message!
   refresh: Tokens!
   register(user: RegisterInput!): String!
   sendDeleteUserEmail(email: String!): EmailResponse!
+  sendEventEmail(email: String!, eventId: String!): EmailResponse!
   sendVerifyEmail(email: String!): EmailResponse!
   verifyEmail(userId: String!): EmailResponse!
 }
@@ -182,10 +190,10 @@ input ObserverInput {
 
 type Query {
   deleteUser: Message!
-  getActionByDescription(description: String!): Action!
-  getActionById(id: String!): Action!
-  getActionsBy(settings: ActionSettingsInput!): [Action!]!
   getAirPollutionInfo(coords: AirPollutionInput!): AirPollution!
+  getEventByDescription(description: String!): Event!
+  getEventById(id: String!): Event!
+  getEventsBy(settings: ActionSettingsInput!): [Event!]!
   getLocation(coordinates: GeolocationInput!): Geolocation!
   getMoonPhase(location: MoonPhaseInput!): MoonPhase!
   getNearestAsteroids(data: NearestBodiesInput!): [NearestBodies!]!
@@ -244,5 +252,5 @@ type User {
   spottedSolarEclipses: Float!
   spottedSupermoons: Float!
   timezone: String!
-  toSpotted: [Action!]!
+  toSpotted: [Event!]!
 }

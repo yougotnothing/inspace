@@ -11,7 +11,10 @@ export const DeleteUser = () => {
   const navigate = useNavigate();
 
   const handleReturn = () => navigate('/');
-  const handleCloseWindow = () => window.close();
+  const handleCloseWindow = () => {
+    localStorage.clear();
+    window.close();
+  };
 
   if (loading) return <Loader loading={loading} />;
 

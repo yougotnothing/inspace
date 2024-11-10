@@ -12,8 +12,10 @@ import { GET_ALL_EVENTS } from 'apollo/queries/all-events.query';
 import { GET_LOCATION } from 'apollo/queries/geolocation.query';
 import { useGSAPOnload } from 'hooks/use-gsap-onload';
 import { Events as EventsEnum } from 'utils/events.enum';
+import { useSelf } from 'hooks/use-self';
 
 export const Home = () => {
+  const _ = useSelf();
   const [date] = useState<Date>(new Date());
   const [coords, setCoords] = useState({
     latitude: 0,

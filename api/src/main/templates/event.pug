@@ -5,22 +5,22 @@ html(lang="en")
   head
     meta(charset="UTF-8")
     meta(name="viewport", content="width=device-width, initial-scale=1.0")
-    title Verify your email
+    title Event
     +styles()
   body
     .header
       a.header-link(href=frontendUrl) ☾ Inspace
-    .main-wrapper
-      h1 Verify your email
-      .container
-        .content-wrapper
-          h3 Hello #{name}
-          p Please verify your email by clicking the link below.
-        .content-wrapper
-          a.link(href=url) Verify email
-        .content-wrapper
-          p If you did not request this, please ignore this email.
-          p This link will expire in 24 hours.
+    .main-wrapper 
+      h1 Event comming soon
+      .container 
+        .container-wrapper
+          p Hello #{user}
+          p #{message}
+        .container-wrapper 
+          a.link(href=url) See more info
+        .container-wrapper
+          each part of description
+            p= part
     .footer
       .footer-content
         p If you have any questions, please contact us at: 

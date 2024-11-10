@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { Field, ID, ObjectType } from '@nestjs/graphql';
 import { $Enums, User as UserDto } from '@prisma/client';
-import { Action } from './action.model';
+import { Event } from './event.model';
 
 @ObjectType()
 export class User implements UserDto {
@@ -29,8 +29,8 @@ export class User implements UserDto {
   @Field(type => String)
   password: string;
 
-  @Field(type => [Action])
-  toSpotted?: Action[];
+  @Field(type => [Event])
+  toSpotted?: Event[];
 
   @Field(type => Number)
   spottedLunarEclipses: number;

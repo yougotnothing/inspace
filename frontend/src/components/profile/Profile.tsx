@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react';
-import { useMutation, useQuery } from '@apollo/client';
+import { useMutation } from '@apollo/client';
 import { Wrapper } from 'styles/Wrapper';
 import { Loader } from 'templates/Loader';
 import {
@@ -21,7 +21,6 @@ import {
   LogoutButton,
 } from './Profile.styled';
 import { UserIcon, PencilEdit01Icon } from 'hugeicons-react';
-import { GET_SELF } from 'query/user';
 import { UPLOAD_AVATAR } from 'mutation/user';
 import { Navbar } from 'templates/Navbar';
 import { Content } from 'styles/Content';
@@ -32,12 +31,14 @@ import { Route } from 'styles/Route';
 import { SEND_VERIFY_EMAIL } from 'mutation/email';
 import { Settings } from './components/Settings';
 import { DeleteUserModal } from 'components/modals/delete-user/Delete-user-modal';
+import { useSelf } from 'hooks/use-self';
+
 export const Profile = () => {
   const [isEmailWarningVisible, setIsEmailWarningVisible] = useState(true);
   const [isFocused, setIsFocused] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const userNameInputRef = useRef<HTMLInputElement>(null);
-  const { data, loading, error } = useQuery(GET_SELF);
+  const { data, loading, error } = useSelf();
   const [uploadAvatar, { loading: isUploadingAvatar }] =
     useMutation(UPLOAD_AVATAR);
   const [sendVerifyEmail, { loading: isSendingVerifyEmail }] = useMutation(

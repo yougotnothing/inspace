@@ -76,7 +76,7 @@ export class UserService {
         params: { access_token },
       });
       await this.prismaService.user.delete({ where: { id } });
-      await this.prismaService.action.deleteMany({ where: { userId: id } });
+      await this.prismaService.event.deleteMany({ where: { userId: id } });
       await this.redisService.deleteDeleteUser(id);
 
       return { message: `${name}, your account has been deleted` };

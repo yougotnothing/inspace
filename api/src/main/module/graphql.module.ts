@@ -4,8 +4,8 @@ import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { ApolloServerPluginCacheControl } from '@apollo/server/plugin/cacheControl';
 import { join } from 'path';
 import { PrismaService } from 'service/prisma';
-import { ActionService } from 'service/action';
-import { ActionResolver } from 'resolver/action';
+import { EventService } from 'service/event';
+import { EventResolver } from 'resolver/event';
 import { GeolocationModule } from 'module/geolocation';
 import { MoonPhaseModule } from 'module/moon-phase';
 import { AuthModule } from 'module/auth';
@@ -44,6 +44,6 @@ import { NearestBodiesModule } from './nearest-bodies.module';
     EmailModule,
     NearestBodiesModule,
   ],
-  providers: [PrismaService, ActionResolver, ActionService],
+  providers: [PrismaService, EventResolver, EventService],
 })
 export class GraphQLModule {}

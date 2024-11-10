@@ -4,6 +4,7 @@ import { ConfigService } from '@nestjs/config';
 import { SchedulerRegistry } from '@nestjs/schedule';
 import { CronJob } from '@nestjs/schedule/node_modules/cron/dist/job';
 import * as crypto from 'crypto';
+import dayjs from 'dayjs';
 import { EmailResponse as EmailResponse } from 'model/verfiy-email';
 import { PrismaService } from 'service/prisma';
 import { RedisService } from 'service/redis';
@@ -122,7 +123,7 @@ export class EmailService {
       .map(word => word[0].toUpperCase + word.slice(1))
       .join(' ');
 
-    const date = new Date(event.date.setHours(event.date.getHours() - 1));
+    const date = dayjs(event.date).subtract(1, 'hour').toDate();
     const job = new CronJob(date, () => {
       this.mailerService.sendMail({
         to: user.email,
@@ -130,14 +131,18 @@ export class EmailService {
         template: 'event',
         context: {
           user: user.name,
-          message: `${eventType} starts ${event.date.toUTCString()} (in a hour), dont miss it!`,
+          message: `${eventType} starts in a hour, dont miss it!`,
           frontendUrl: this.FRONTEND_URL,
           email: this.EMAIL_CONTACT_ADDRESS,
+          description: [
+            `${eventType}, ${event.date.toUTCString()}`,
+            event.description,
+          ],
         },
       });
     });
 
-    this.schedulerRegistry.addCronJob(date.toISOString(), job);
+    this.schedulerRegistry.addCronJob(`${event.type}-${date}`, job);
     job.start();
 
     return {

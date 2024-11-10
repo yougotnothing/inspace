@@ -1,7 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import * as cookieParser from 'cookie-parser';
-import * as cors from 'cors';
+import cookieParser from 'cookie-parser';
+import cors from 'cors';
 import { NestExpressApplication } from '@nestjs/platform-express';
 
 declare const module: any;
