@@ -1,8 +1,0 @@
-{
-  "dependencies": {
-    "pug": "^3.0.3"
-  },
-  "devDependencies": {
-    "@types/nodemailer": "^6.4.16"
-  }
-}
