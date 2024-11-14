@@ -14,7 +14,7 @@ export const TransparentButton = styled('button')`
   border: none;
 
   &:hover {
-    color: #fff;
+    color: #c7c7c7;
   }
 
   &:focus {

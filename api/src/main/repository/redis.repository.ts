@@ -27,6 +27,6 @@ export class RedisRepository implements OnModuleDestroy {
     value: string,
     expire: number
   ) {
-    return await this.client.set(`${prefix}:${key}`, value, 'EX', expire);
+    return this.client.set(`${prefix}:${key}`, value, 'EX', expire);
   }
 }

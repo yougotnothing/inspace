@@ -3,10 +3,9 @@ import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { Event, EventInput } from 'model/event';
 import { ActionSettingsInput } from 'model/actions-settings';
 import { EventService } from 'service/event';
-import { UseGuards, UsePipes } from '@nestjs/common';
+import { UseGuards } from '@nestjs/common';
 import { LocalAuthGuard } from 'guard/auth';
 import { EmailVerifiedGuard } from 'guard/email-verified';
-import { DateValidationPipe } from 'pipe/date-validation';
 
 @Resolver(of => Event)
 @UseGuards(LocalAuthGuard, EmailVerifiedGuard)

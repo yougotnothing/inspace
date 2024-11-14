@@ -66,6 +66,7 @@
     "passport-local": "^1.0.0",
     "passport-oauth2": "^1.8.0",
     "passport-openidconnect": "^0.1.2",
+    "prisma": "5.20.0",
     "redis": "^4.7.0",
     "reflect-metadata": "^0.2.0",
     "run-script-webpack-plugin": "^0.2.0",

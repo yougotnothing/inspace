@@ -7,6 +7,7 @@ import { VerifyEmail } from 'components/messages/verify-email/Verify-email';
 import { Welcome } from 'components/welcome/Welcome';
 import { createBrowserRouter } from 'react-router-dom';
 import { DeleteUser } from 'components/messages/delete-user/Delete-user';
+import { Events } from 'components/events/Events';
 
 export const router = createBrowserRouter([
   {
@@ -40,5 +41,9 @@ export const router = createBrowserRouter([
   {
     path: 'delete-user',
     element: <DeleteUser />,
+  },
+  {
+    path: 'events',
+    element: <Events />,
   },
 ]);

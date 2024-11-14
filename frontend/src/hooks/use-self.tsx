@@ -11,6 +11,7 @@ export const useSelf = () => {
         'email_verified',
         (data.getSelf?.isVerified satisfies boolean).toString()
       );
+      localStorage.setItem('shown_distance', data.getSelf?.shownDistance);
     }
   }, [data]);
 

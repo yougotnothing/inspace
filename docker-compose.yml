@@ -140,6 +140,7 @@ services:
 
 volumes:
   keycloak_data:
+    driver: local
   pg:
   node_modules:
   api:

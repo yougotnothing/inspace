@@ -25,7 +25,6 @@ export class NearestBodiesService {
 
       bodies.forEach(body => {
         if (data.distance_in === 'KM') {
-          console.log('distance in km');
           body.dist = (parseFloat(body.dist) * 149597870.7).toString();
           body.dist_max = (parseFloat(body.dist_max) * 149597870.7).toString();
           body.dist_min = (parseFloat(body.dist_min) * 149597870.7).toString();
@@ -71,11 +70,11 @@ export class NearestBodiesService {
   private convertResponse(data: any): NearestBodies[] {
     const result: NearestBodies[] = [];
 
-    for (let index = 0; index < data.data.length; index++) {
+    for (let i = 0; i < data.data.length; i++) {
       const obj = {} as NearestBodies;
 
-      (data.fields as string[]).forEach((field: string, index: number) => {
-        obj[field as keyof NearestBodies] = data.data[index][index];
+      (data.fields as string[]).forEach((field: string, j: number) => {
+        obj[field as keyof NearestBodies] = data.data[i][j];
       });
 
       result.push(obj);
