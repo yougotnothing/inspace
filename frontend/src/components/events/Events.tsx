@@ -23,15 +23,24 @@ import { Loader } from 'templates/Loader';
 import { NearestBodies } from 'types/nearest-bodies';
 import { useGSAPOnload } from 'hooks/use-gsap-onload';
 import { useNearestBodies } from 'hooks/use-nearest-bodies';
+import { EventModal } from 'components/modals/event/Event-modal';
 
 export const Events = () => {
   const distance_in = localStorage.getItem('shown_distance');
   const [bodies, setBodies] = useNearestBodies();
   const [limit_from, setLimit_from] = useState<number>(0);
   const [isFetching, setIsFetching] = useState<boolean>(false);
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [chosenEvent, setChosenEvent] = useState<NearestBodies>();
   const [bodiesType, setBodiesType] = useState<'comets' | 'asteroids'>(
     'asteroids'
   );
+
+  const handleChooseEvent = (event: NearestBodies) => {
+    setChosenEvent(event);
+    setIsModalOpen(true);
+  };
+
   const [getNearestAsteroids, { loading: asteroidsLoading }] = useLazyQuery(
     GET_NEAREST_ASTEROIDS
   );
@@ -69,13 +78,19 @@ export const Events = () => {
     }
   };
 
-  useGSAPOnload([bodies, asteroidsLoading, cometsLoading], {
-    className: '.shadow',
-    duration: 0.5,
-    delay: 1.3,
-    boxShadow: '0 0 270px 270px #ffffff1f',
-    top: '50%',
-  });
+  useGSAPOnload(
+    [bodies, asteroidsLoading, cometsLoading],
+    {
+      className: '.shadow',
+      duration: 0.5,
+      delay: 1.3,
+      boxShadow: '0 0 270px 270px #ffffff1f',
+      top: '50%',
+    },
+    { className: '.settings', duration: 0.8, delay: 0.4, top: '6rem' },
+    { className: '.body', duration: 0.4, delay: 0.6, top: 0 },
+    { className: '.bodies', duration: 0.9, delay: 0.8, top: 0, gap: '1rem' }
+  );
 
   useEffect(() => {
     console.log('bodies length: ', bodies.length);
@@ -106,6 +121,11 @@ export const Events = () => {
 
   return (
     <Wrapper>
+      <EventModal
+        isOpen={isModalOpen}
+        setIsOpen={setIsModalOpen}
+        event={chosenEvent}
+      />
       <Shadow className="shadow" />
       <Navbar
         mappings={[
@@ -116,7 +136,7 @@ export const Events = () => {
       />
       <Content>
         <EventsWrapper>
-          <SearchSettings>
+          <SearchSettings className="settings">
             <TransparentButton onClick={() => setBodiesType('comets')}>
               Get nearest comets
             </TransparentButton>
@@ -124,10 +144,10 @@ export const Events = () => {
               Get nearest asteroids
             </TransparentButton>
           </SearchSettings>
-          <Bodies>
+          <Bodies className="bodies">
             {bodies.length > 0 &&
               bodies.map((body, index) => (
-                <Body key={index}>
+                <Body className="body" key={index}>
                   <BodyColumn>
                     <Header>{body.des}</Header>
                     <Paragraph>{body.cd}</Paragraph>
@@ -151,7 +171,12 @@ export const Events = () => {
                     <Paragraph>
                       diameter: {body.diameter ?? 'unknown'}
                     </Paragraph>
-                    <Button style={{ marginTop: '2rem' }}>Look more</Button>
+                    <Button
+                      style={{ marginTop: '2rem' }}
+                      onClick={() => handleChooseEvent(body)}
+                    >
+                      Look more
+                    </Button>
                   </BodyColumn>
                 </Body>
               ))}

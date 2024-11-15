@@ -18,6 +18,7 @@ import { Navbar } from 'templates/Navbar';
 import { Paragraph } from 'styles/Paragraph';
 import { Loader } from 'templates/Loader';
 import { useGSAPOnload } from 'hooks/use-gsap-onload';
+import { useTitle } from 'hooks/use-title';
 
 export const MoonPhase = () => {
   const country = useSearchParams()[0].get('country') ?? 'Ukraine';
@@ -115,6 +116,7 @@ export const MoonPhase = () => {
     };
   }, [loading, error, data]);
 
+  useTitle(`phase — ${data?.getMoonPhase?.phase}${data?.getMoonPhase?.emoji}`);
   useGSAPOnload(
     [loading, data],
     { className: '.moon', delay: 0.5, duration: 0.4 },

@@ -18,6 +18,7 @@ export const useGSAPOnload = (
         duration: isAnimationsEnabled === 'true' ? arg.duration : 0,
         marginTop: arg.marginTop ?? 0,
         boxShadow: arg.boxShadow ?? 'none',
+        gap: arg.gap,
       });
     });
   }, deps);

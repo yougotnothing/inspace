@@ -21,6 +21,7 @@ import { EyeToggle } from 'templates/Eye-toggle';
 import { Loader } from 'templates/Loader';
 import { Tokens } from 'types/tokens';
 import { selectAvatarColorTheme } from 'utils/select-avatar-color-theme.util';
+import { useTitle } from 'hooks/use-title';
 
 export const Login = () => {
   const [type, setType] = useState<'password' | 'text'>('password');
@@ -63,6 +64,8 @@ export const Login = () => {
       console.log(error);
     }
   };
+
+  useTitle('Login');
 
   if (loading) return <Loader loading={loading} />;
 

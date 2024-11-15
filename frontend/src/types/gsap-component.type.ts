@@ -5,6 +5,7 @@ export interface GSAPComponent {
   top?: MeasurementUnits;
   marginTop?: MeasurementUnits;
   boxShadow?: string;
+  gap?: MeasurementUnits;
 }
 
 type MeasurementUnits =

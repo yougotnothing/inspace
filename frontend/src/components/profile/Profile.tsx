@@ -32,6 +32,7 @@ import { SEND_VERIFY_EMAIL } from 'mutation/email';
 import { Settings } from './components/Settings';
 import { DeleteUserModal } from 'components/modals/delete-user/Delete-user-modal';
 import { useSelf } from 'hooks/use-self';
+import { useTitle } from 'hooks/use-title';
 
 export const Profile = () => {
   const [isEmailWarningVisible, setIsEmailWarningVisible] = useState(true);
@@ -56,6 +57,7 @@ export const Profile = () => {
 
   const handleCloseEmailWarning = () => setIsEmailWarningVisible(false);
 
+  useTitle(`profile — ${data?.getSelf?.name}`);
   useGSAPOnload(
     [loading, data],
     { className: '.user-profile', duration: 0.7, delay: 0.6 },

@@ -1,4 +1,5 @@
 import { ViewIcon, ViewOffIcon } from 'hugeicons-react';
+import { FC } from 'react';
 import styled from 'styled-components';
 
 const Button = styled('button')`
@@ -13,13 +14,10 @@ const Button = styled('button')`
   height: 24px;
 `;
 
-export const EyeToggle = ({
-  type,
-  setType,
-}: {
+export const EyeToggle: FC<{
   type: 'password' | 'text';
   setType: () => void;
-}) => {
+}> = ({ type, setType }) => {
   return (
     <Button onClick={setType}>
       {type === 'password' ? (

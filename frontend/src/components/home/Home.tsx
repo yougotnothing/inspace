@@ -13,9 +13,9 @@ import { GET_LOCATION } from 'apollo/queries/geolocation.query';
 import { useGSAPOnload } from 'hooks/use-gsap-onload';
 import { Events as EventsEnum } from 'utils/events.enum';
 import { useSelf } from 'hooks/use-self';
+import { useTitle } from 'hooks/use-title';
 
 export const Home = () => {
-  const _ = useSelf();
   const [date] = useState<Date>(new Date());
   const [coords, setCoords] = useState({
     latitude: 0,
@@ -53,6 +53,8 @@ export const Home = () => {
     fetchPolicy: 'cache-first',
   });
 
+  useTitle('Home');
+  useSelf();
   useGSAPOnload(
     [data, loading],
     {
