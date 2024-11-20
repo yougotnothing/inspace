@@ -21,7 +21,8 @@
       "styles/*": ["./src/styles/*.styled"],
       "query/*": ["./src/apollo/queries/*.query"],
       "mutation/*": ["./src/apollo/mutations/*.mutation"],
-      "apollo/*": ["./src/apollo/*"]
+      "apollo/*": ["./src/apollo/*"],
+      "extensions/*": ["./src/extensions/*.extension"]
     },
 
     /* Bundler mode */

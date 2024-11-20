@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { Field, InputType, ObjectType } from '@nestjs/graphql';
-import { $Enums, Event as EventDto } from '@prisma/client';
+import { $Enums, Event as EventDto, Prisma } from '@prisma/client';
 
 @ObjectType()
 export class Event implements EventDto {
@@ -20,7 +20,10 @@ export class Event implements EventDto {
   isSpotted: boolean;
 
   @Field(type => String)
-  userId: string | null;
+  userId: string;
+
+  @Field(type => String)
+  data: Prisma.JsonValue;
 }
 
 @InputType()
@@ -36,4 +39,7 @@ export class EventInput {
 
   @Field(type => String)
   userId: string;
+
+  @Field(type => String)
+  data: Prisma.JsonValue;
 }

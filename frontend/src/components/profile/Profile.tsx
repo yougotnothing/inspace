@@ -19,6 +19,9 @@ import {
   Footer,
   DeleteAccountButton,
   LogoutButton,
+  SpottedItems,
+  SpottedColumn,
+  Spotted,
 } from './Profile.styled';
 import { UserIcon, PencilEdit01Icon } from 'hugeicons-react';
 import { UPLOAD_AVATAR } from 'mutation/user';
@@ -33,15 +36,20 @@ import { Settings } from './components/Settings';
 import { DeleteUserModal } from 'components/modals/delete-user/Delete-user-modal';
 import { useSelf } from 'hooks/use-self';
 import { useTitle } from 'hooks/use-title';
+import { LOGOUT } from 'mutation/auth';
+import { Button } from 'styles/Button';
+import { useSpottedKeys } from 'hooks/use-spotted-keys';
 
 export const Profile = () => {
   const [isEmailWarningVisible, setIsEmailWarningVisible] = useState(true);
   const [isFocused, setIsFocused] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const userNameInputRef = useRef<HTMLInputElement>(null);
-  const { data, loading, error } = useSelf();
+  const { data, loading, error } = useSelf('network-only');
   const [uploadAvatar, { loading: isUploadingAvatar }] =
     useMutation(UPLOAD_AVATAR);
+  const [logout] = useMutation(LOGOUT);
+  const [keys, transformKey] = useSpottedKeys(data);
   const [sendVerifyEmail, { loading: isSendingVerifyEmail }] = useMutation(
     SEND_VERIFY_EMAIL,
     {
@@ -83,116 +91,133 @@ export const Profile = () => {
 
   return (
     <>
-      <DeleteUserModal
-        isOpen={isModalOpen}
-        email={data.getSelf?.email}
-        setIsOpen={setIsModalOpen}
-      />
-      <Wrapper>
-        <Navbar
-          mappings={[
-            '/home',
-            `/moon-phase?country=${localStorage.getItem('user-country')}`,
-            '/events',
-          ]}
-        />
-        <Content>
-          <Shadow className="shadow" />
-          <AvatarInput type="file" id="avatar-input" accept="image/*" />
-          <MainWrapper>
-            <UserProfile className="user-profile">
-              <AvatarLabel
-                htmlFor="avatar-input"
-                onSubmit={e => uploadAvatar({ variables: { avatar: e } })}
-              >
-                {data.getSelf.isHaveAvatar ? (
-                  <Avatar />
-                ) : (
-                  <UserIcon size={'6rem'} />
-                )}
-              </AvatarLabel>
-              <UserNameWrapper>
-                <UserNameInput
-                  ref={userNameInputRef}
-                  value={data.getSelf.name}
-                />
-                <PencilEditButton onClick={handleClickPencilEditButton}>
-                  <PencilEdit01Icon size={'2rem'} />
-                </PencilEditButton>
-              </UserNameWrapper>
-            </UserProfile>
-            {!data.getSelf?.isVerified && (
-              <NotVerifiedEmailWrapper
-                className="not-verified-email"
-                $isVisible={isEmailWarningVisible}
-                onClick={handleCloseEmailWarning}
-              >
-                <Paragraph>
-                  Please verify your email to use <strong>all features.</strong>
-                </Paragraph>
-              </NotVerifiedEmailWrapper>
-            )}
-            <UserInfoWrapper className="user-info">
-              <UserInfo>
-                <Paragraph>email: {data.getSelf.email}</Paragraph>
+      {data && (
+        <>
+          <DeleteUserModal
+            isOpen={isModalOpen}
+            email={data.getSelf?.email}
+            setIsOpen={setIsModalOpen}
+          />
+          <Wrapper>
+            <Navbar
+              mappings={[
+                '/home',
+                `/moon-phase?country=${localStorage.getItem('user-country')}`,
+                '/events',
+              ]}
+            />
+            <Content style={{ gap: '3rem', justifyContent: 'initial' }}>
+              <Shadow className="shadow" />
+              <AvatarInput type="file" id="avatar-input" accept="image/*" />
+              <MainWrapper>
+                <UserProfile className="user-profile">
+                  <AvatarLabel
+                    htmlFor="avatar-input"
+                    onSubmit={e => uploadAvatar({ variables: { avatar: e } })}
+                  >
+                    {data.getSelf.isHaveAvatar ? (
+                      <Avatar />
+                    ) : (
+                      <UserIcon size={'6rem'} />
+                    )}
+                  </AvatarLabel>
+                  <UserNameWrapper>
+                    <UserNameInput
+                      ref={userNameInputRef}
+                      value={data.getSelf.name}
+                    />
+                    <PencilEditButton onClick={handleClickPencilEditButton}>
+                      <PencilEdit01Icon size={'2rem'} />
+                    </PencilEditButton>
+                  </UserNameWrapper>
+                </UserProfile>
                 {!data.getSelf.isVerified && (
-                  <>
-                    <Paragraph style={{ color: 'var(--warning-text)' }}>
-                      Email not verified
+                  <NotVerifiedEmailWrapper
+                    className="not-verified-email"
+                    $isVisible={isEmailWarningVisible}
+                    onClick={handleCloseEmailWarning}
+                  >
+                    <Paragraph>
+                      Please verify your email to use{' '}
+                      <strong>all features.</strong>
                     </Paragraph>
-                    <TransparentButton onClick={() => sendVerifyEmail()}>
-                      verify email
-                    </TransparentButton>
-                  </>
+                  </NotVerifiedEmailWrapper>
                 )}
-              </UserInfo>
-              <Paragraph>
-                current country: {localStorage.getItem('user-country')}
-              </Paragraph>
-              <UserInfo>
-                <Paragraph>spotted events: 0</Paragraph>
-                <Route to="/events">view all</Route>
-              </UserInfo>
-              <Paragraph>
-                planetary alignments: {data.getSelf.spottedPlanetaryAlignments}
-              </Paragraph>
-              <Paragraph>
-                lunar eclipses: {data.getSelf.spottedLunarEclipses}
-              </Paragraph>
-              <Paragraph>
-                solar eclipses: {data.getSelf.spottedSolarEclipses}
-              </Paragraph>
-              <Paragraph>
-                meteor showers: {data.getSelf.spottedMeteorShowers}
-              </Paragraph>
-              <Paragraph>
-                supermoons: {data.getSelf.spottedSupermoons}
-              </Paragraph>
-              <Paragraph>
-                micromoons: {data.getSelf.spottedMicromoons}
-              </Paragraph>
-            </UserInfoWrapper>
-          </MainWrapper>
-          <MainWrapper>
-            <ToSpottedWrapper className="to-spotted">
-              {!data.getSelf.toSpotted.length ? (
-                <Paragraph>You haven't spotted anything yet.</Paragraph>
-              ) : (
-                <Paragraph>
-                  You have spotted {data.getSelf.toSpotted.length} items.
-                </Paragraph>
-              )}
-            </ToSpottedWrapper>
-            <Settings />
-          </MainWrapper>
-        </Content>
-        <Footer className="footer">
-          <LogoutButton>logout</LogoutButton>
-          <DeleteAccountButton onClick={() => setIsModalOpen(true)}>
-            delete account
-          </DeleteAccountButton>
-        </Footer>
-      </Wrapper>
+                <UserInfoWrapper className="user-info">
+                  <UserInfo>
+                    <Paragraph>email: {data.getSelf.email}</Paragraph>
+                    {!data.getSelf.isVerified && (
+                      <>
+                        <Paragraph style={{ color: 'var(--warning-text)' }}>
+                          Email not verified
+                        </Paragraph>
+                        <TransparentButton onClick={() => sendVerifyEmail()}>
+                          verify email
+                        </TransparentButton>
+                      </>
+                    )}
+                  </UserInfo>
+                  <Paragraph>
+                    current country: {localStorage.getItem('user-country')}
+                  </Paragraph>
+                  <UserInfo>
+                    <Paragraph>
+                      spotted events: {data.getSelf.toSpotted.length}
+                    </Paragraph>
+                    <Route to="/events">view all</Route>
+                  </UserInfo>
+                  {keys.map((key, index) => (
+                    <Paragraph key={index}>
+                      {transformKey(key)}: {data.getSelf?.[key]}
+                    </Paragraph>
+                  ))}
+                </UserInfoWrapper>
+              </MainWrapper>
+              <MainWrapper>
+                <ToSpottedWrapper className="to-spotted">
+                  {!data.getSelf.toSpotted.length ? (
+                    <Paragraph>You haven't spotted anything yet.</Paragraph>
+                  ) : (
+                    <SpottedItems>
+                      {data.getSelf.toSpotted.map((item, index) => (
+                        <Spotted key={index}>
+                          <SpottedColumn>
+                            <Paragraph>
+                              {item.description.split(' ')[0]}{' '}
+                              {item.description.split(' ')[1]}
+                            </Paragraph>
+                            <Paragraph>
+                              type: {item.type.toLowerCase()}
+                            </Paragraph>
+                            <Paragraph>
+                              {new Date(item.date).toFormattedUTCString()}
+                            </Paragraph>
+                          </SpottedColumn>
+                          <SpottedColumn>
+                            <Paragraph>
+                              {item.isSpotted ? 'spotted' : "didn't spotted"}
+                            </Paragraph>
+                            <Button style={{ margin: 'auto 0 0 auto' }}>
+                              See more
+                            </Button>
+                          </SpottedColumn>
+                        </Spotted>
+                      ))}
+                    </SpottedItems>
+                  )}
+                </ToSpottedWrapper>
+                <Settings />
+              </MainWrapper>
+            </Content>
+            <Footer className="footer">
+              <LogoutButton onClick={() => logout()}>logout</LogoutButton>
+              <DeleteAccountButton onClick={() => setIsModalOpen(true)}>
+                delete account
+              </DeleteAccountButton>
+            </Footer>
+          </Wrapper>
+        </>
+      )}
     </>
   );
 };

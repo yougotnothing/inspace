@@ -66,6 +66,7 @@ type EmailResponse {
 }
 
 type Event {
+  data: String!
   date: DateTime!
   description: String!
   id: String!
@@ -75,6 +76,7 @@ type Event {
 }
 
 input EventInput {
+  data: String!
   date: DateTime!
   description: String!
   type: String!

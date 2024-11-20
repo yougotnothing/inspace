@@ -12,15 +12,18 @@ import { PrismaService } from 'service/prisma';
 export class EventService {
   constructor(private readonly prismaService: PrismaService) {}
 
-  async createEvent(data: EventInput): Promise<Event> {
+  async createEvent(input: EventInput): Promise<Event> {
     let event = await this.prismaService.event.findFirst({
-      where: { ...data },
+      where: {
+        description: input.description,
+        date: input.date,
+      },
     });
 
     if (event) throw new BadRequestException('event already exists');
 
     event = await this.prismaService.event.create({
-      data: { ...data },
+      data: { ...input },
     });
 
     return event;

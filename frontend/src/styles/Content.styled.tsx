@@ -8,5 +8,5 @@ export const Content = styled('div')`
   align-self: center;
   position: relative;
   padding: 7rem 0 3rem 0;
-  height: 100svh;
+  min-height: 100svh;
 `;

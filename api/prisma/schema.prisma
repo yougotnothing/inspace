@@ -35,6 +35,7 @@ model Event {
   isSpotted   Boolean   @default(false)
   userId      String?   @db.Uuid
   type        EventType
+  data        Json      @db.JsonB
   User        User?     @relation(fields: [userId], references: [id])
 }
 

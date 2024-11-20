@@ -157,7 +157,7 @@ export const Welcome = () => {
             <Paragraph $weight={500}>&#183; Air & Light pollution</Paragraph>
             <Paragraph $weight={500}>&#183; And other events</Paragraph>
           </Categories>
-          <Button $marginTop="auto" onClick={() => navigate('login')}>
+          <Button $marginTop="auto" onClick={() => navigate('/login')}>
             let's started
           </Button>
         </TextWrapper>

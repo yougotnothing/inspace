@@ -1,9 +1,10 @@
-import { useQuery } from '@apollo/client';
+import { useQuery, WatchQueryFetchPolicy } from '@apollo/client';
 import { GET_SELF } from 'query/user';
 import { useEffect } from 'react';
+import { Self } from 'types/get-self';
 
-export const useSelf = () => {
-  const { data, error, loading } = useQuery(GET_SELF);
+export const useSelf = (fetchPolicy?: WatchQueryFetchPolicy) => {
+  const { data, error, loading } = useQuery<Self>(GET_SELF, { fetchPolicy });
 
   useEffect(() => {
     if (data) {

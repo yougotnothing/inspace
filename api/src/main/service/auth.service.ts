@@ -67,12 +67,14 @@ export class AuthService {
         }
       );
 
-      res.cookie('refresh_token', response.data.refresh_token, {
-        httpOnly: true,
-        secure: false,
-        path: '/',
-        expires: new Date(Date.now() + response.data.expires_in * 1000),
-      });
+      res
+        .cookie('refresh_token', response.data.refresh_token, {
+          httpOnly: true,
+          secure: false,
+          path: '/',
+          expires: new Date(Date.now() + response.data.expires_in * 1000),
+        })
+        .setHeader('x-user-timezone', user.timezone);
 
       return response.data;
     } catch (error) {

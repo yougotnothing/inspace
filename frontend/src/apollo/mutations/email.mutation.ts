@@ -29,3 +29,11 @@ export const SEND_DELETE_USER_EMAIL = gql`
     }
   }
 `;
+
+export const SEND_EVENT_EMAIL = gql`
+  mutation SendEventEmail($email: String!, $eventId: String!) {
+    sendEventEmail(email: $email, eventId: $eventId) {
+      message
+    }
+  }
+`;

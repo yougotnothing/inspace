@@ -48,3 +48,6 @@ realm-export.json
 
 # Minio credentials
 minio-credentials.json
+
+# Google OAuth2 credentials
+google-oauth-credentials.json

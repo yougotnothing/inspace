@@ -54,7 +54,7 @@ export const Home = () => {
   });
 
   useTitle('Home');
-  useSelf();
+  useSelf('cache-first');
   useGSAPOnload(
     [data, loading],
     {

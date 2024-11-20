@@ -109,8 +109,8 @@ export const MainWrapper = styled('div')`
   display: flex;
   flex-direction: column;
   gap: 3rem;
-  height: 100%;
-  align-items: flex-start;
+  flex-grow: 1;
+  height: 45.883rem;
 `;
 
 export const ToSpottedWrapper = styled('div')`
@@ -118,17 +118,41 @@ export const ToSpottedWrapper = styled('div')`
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  height: 100%;
   gap: 0.5rem;
-  padding: 1rem;
+  padding: 0 1rem;
   border-radius: 1rem;
   border: 1px solid var(--border-color);
   background-color: var(--wrapper-bg);
-  width: 25rem;
-  height: 100%;
   overflow-y: auto;
   position: relative;
   opacity: 0;
   top: 17px;
+`;
+
+export const SpottedItems = styled('div')`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  width: 100%;
+  height: 100%;
+  overflow-y: scroll;
+`;
+
+export const Spotted = styled('div')`
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  padding: 1rem 0;
+  border-bottom: 1px solid var(--border-color);
+`;
+
+export const SpottedColumn = styled('div')`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.3rem;
 `;
 
 export const Footer = styled('div')`
@@ -164,6 +188,7 @@ export const SettingsWrapper = styled(ToSpottedWrapper)`
   align-items: flex-start;
   justify-content: flex-start;
   height: auto;
+  padding: 1rem;
   overflow-y: clip;
 `;
 

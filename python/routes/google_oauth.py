@@ -1,20 +1,19 @@
-import os
 from fastapi import APIRouter
-from keycloak import KeycloakOpenID
+from utils.google_client import flow
+from fastapi.responses import RedirectResponse
+from google.auth.transport import requests
+from google.oauth2 import id_token
 
 router = APIRouter()
 
-keycloak_openid = KeycloakOpenID(server_url=os.getenv('KC_SERVER_URL'),
-                                 client_id=os.getenv('KC_GOOGLE_OAUTH_CLIENT_ID'),
-                                 client_secret_key=os.getenv('KC_GOOGLE_OAUTH_CLIENT_SECRET'))
+@router.get('/oauth/auth')
+def oauth_connect():
+  auth_url, _ = flow.authorization_url()
 
-auth_url = keycloak_openid.auth_url(redirect_uri=os.getenv('KC_GOOGLE_REDIRECT_URI'),
-                                    scope=os.getenv('KC_OPENID_SCOPE'),
-                                    state='google')
+  return RedirectResponse(auth_url)
 
-@router.get('/oauth/google')
-def google_oauth():
-  try:
-    response = keycloak_openid.token()
-  except Exception as e:
-    raise e
+@router.get('/oauth/callback')
+def verify_auth_token(token: str):
+  req = requests.Request()
+
+
