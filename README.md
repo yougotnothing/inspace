@@ -1,4 +1,4 @@
-### <a href="#idea">Project idea</a> <a href="#stack">Tech stack</a> <a href="/api/README.md">Backend<a> <a href="#frontend">Frontend</a> <a href="#fastapi">Python backend</a>
+### <a href="#idea">Project idea</a> <a href="#stack">Tech stack</a> <a href="/api/README.md">Backend<a> <a href="/frontend/README.md">Frontend</a> <a href="/python/README.md">Python backend</a>
 
 ![GitHub last commit](https://img.shields.io/github/last-commit/yougotnothing/inspace)
 
