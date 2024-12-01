@@ -1,50 +1,47 @@
-# React + TypeScript + Vite
+# ☾ Inspace (frontend)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+[![stack](https://skillicons.dev/icons?i=typescript,docker,yarn,html,css,react,vite,styledcomponents,graphql,apollo,threejs)](https://skillicons.dev)
 
-Currently, two official plugins are available:
+### A web application for tracking space events
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Implemented features:
 
-## Expanding the ESLint configuration
+> ### **_`Event features`_**:
+>
+> > - [x] Tracking of solar eclipses
+> > - [x] Tracking of lunar eclipses
+> > - [ ] Tracking of meteor showers
+> > - [x] Tracking of nearest bodies (asteroids or comets)
+> > - [x] Tracking of moon phases
+> > - [x] Tracking of air pollution
+> > - [x] Create event
+> > - [ ] Tracking of planetary alignment
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+---
 
-- Configure the top-level `parserOptions` property like this:
+> ### **_`User features`_**:
+>
+> > - [x] User registration
+> > - [x] User authorization
+> > - [ ] User password recovery
+> > - [ ] User password change
+> > - [ ] User avatar change
+> > - [x] User account deletion
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+---
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+> ### **_`Email features`_**:
+>
+> > - [x] User email verification
+> > - [x] Delete accound
+> > - [ ] To spotted event mail
+> > - [ ] Solar eclipses mail
+> > - [ ] Lunar eclipses mail
+> > - [ ] Moon phase mail
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
+---
 
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
-```
+## Planned:
+
+> - [ ] Light pollution integration
+> - [ ] Planetary alignment threejs render
