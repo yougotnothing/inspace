@@ -1,8 +1,8 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Field, ID, ObjectType } from '@nestjs/graphql';
 import { $Enums, User as UserDto } from '@prisma/client';
-import { Event } from './event.model';
+import { Event } from 'model/event';
 
+/* eslint-disable @typescript-eslint/no-unused-vars */
 @ObjectType()
 export class User implements UserDto {
   @Field(type => ID)
@@ -55,4 +55,7 @@ export class User implements UserDto {
 
   @Field(type => String)
   shownDistance: $Enums.Distance;
+
+  @Field(type => Date)
+  createdAt: Date;
 }

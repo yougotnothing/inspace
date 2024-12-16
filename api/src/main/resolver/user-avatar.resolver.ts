@@ -1,10 +1,10 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { UseGuards } from '@nestjs/common';
 import { Args, Mutation, Resolver } from '@nestjs/graphql';
 import { LocalAuthGuard } from 'guard/auth';
 import { ChangeAvatar } from 'model/change-avatar';
 import { UserAvatarService } from 'service/user-avatar';
 
+/* eslint-disable @typescript-eslint/no-unused-vars */
 @UseGuards(LocalAuthGuard)
 @Resolver(of => ChangeAvatar)
 export class UserAvatarResolver {

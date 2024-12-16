@@ -5,6 +5,7 @@ import {
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
+import { Reflector } from '@nestjs/core';
 import { GqlExecutionContext } from '@nestjs/graphql';
 import { AxiosResponse } from 'axios';
 import { Request } from 'express';
@@ -13,13 +14,24 @@ import { GqlContext } from 'type/context';
 
 @Injectable()
 export class LocalAuthGuard implements CanActivate {
-  constructor(private readonly httpService: HttpService) {}
+  constructor(
+    private readonly httpService: HttpService,
+    private readonly reflector: Reflector
+  ) {}
 
   executeContext(context: ExecutionContext): GqlContext {
     return GqlExecutionContext.create(context).getContext<GqlContext>();
   }
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
+    if (
+      this.reflector.getAllAndOverride('public', [
+        context.getHandler(),
+        context.getClass(),
+      ])
+    )
+      return true;
+
     const { req } = this.executeContext(context);
 
     try {

@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { Event, EventInput } from 'model/event';
 import { ActionSettingsInput } from 'model/actions-settings';
@@ -7,6 +6,7 @@ import { UseGuards } from '@nestjs/common';
 import { LocalAuthGuard } from 'guard/auth';
 import { EmailVerifiedGuard } from 'guard/email-verified';
 
+/* eslint-disable @typescript-eslint/no-unused-vars */
 @Resolver(of => Event)
 @UseGuards(LocalAuthGuard, EmailVerifiedGuard)
 export class EventResolver {

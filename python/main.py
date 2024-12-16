@@ -1,8 +1,8 @@
 import uvicorn
-
 from fastapi import FastAPI
 from routes import geolocation, openid_connect, google_oauth
 from dotenv import load_dotenv
+
 
 load_dotenv()
 
@@ -13,4 +13,4 @@ api.include_router(geolocation.router)
 api.include_router(google_oauth.router)
 
 if __name__ == '__main__':
-  uvicorn.run(app=api)
+    uvicorn.run(app=api, reload=True)

@@ -37,3 +37,35 @@ export const LOGOUT = gql`
     }
   }
 `;
+
+export const GOOGLE_AUTH = gql`
+  mutation GoogleAuth($code: String!) {
+    googleAuth(code: $code) {
+      message
+    }
+  }
+`;
+
+export const GET_GOOGLE_CODE = gql`
+  mutation GetGoogleCode {
+    getGoogleCode {
+      code
+    }
+  }
+`;
+
+export const GITHUB_AUTH = gql`
+  mutation GithubAuth($code: String!) {
+    githubAuth(code: $code) {
+      message
+    }
+  }
+`;
+
+export const GET_GITHUB_CODE = gql`
+  mutation GetGithubCode {
+    getGithubCode {
+      code
+    }
+  }
+`;

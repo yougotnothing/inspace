@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { UseGuards, UsePipes } from '@nestjs/common';
 import { Args, Query, Resolver } from '@nestjs/graphql';
 import { DateValidationPipe } from 'pipe/date-validation';
@@ -6,6 +5,7 @@ import { LunarEclipseService } from 'service/lunar-eclipse';
 import { LunarEclipseInfo } from 'model/lunar-eclipse';
 import { LocalAuthGuard } from 'guard/auth';
 
+/* eslint-disable @typescript-eslint/no-unused-vars */
 @UseGuards(LocalAuthGuard)
 @Resolver(of => LunarEclipseInfo)
 export class LunarEclipseResolver {

@@ -1,21 +1,22 @@
 from pydantic import BaseModel
 
+
 class OpenidConnectLoginInputModel(BaseModel):
-  login: str
-  password: str
+    login: str
+    password: str
 
 class OpenidConnectModel(BaseModel):
-  access_token: str
-  refresh_token: str
-  expires_in: int
-  refresh_expires_in: int
-  session_state: str
+    access_token: str
+    refresh_token: str
+    expires_in: int
+    refresh_expires_in: int
+    session_state: str
 
 class OpenidConnectRegisterInputModel(BaseModel):
-  username: str
-  password: str
-  email: str
-  id: str
+    username: str
+    password: str
+    email: str
+    id: str
 
 class OpenidConnectDeleteUserInputModel(BaseModel):
-  access_token: str
+    access_token: str

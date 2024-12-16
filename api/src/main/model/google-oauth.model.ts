@@ -1,28 +1,11 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Field, ObjectType } from '@nestjs/graphql';
+import { NullableField } from '../decorator/nullable.decorator';
 
+/* eslint-disable @typescript-eslint/no-unused-vars */
 @ObjectType()
-class GoogleUser {
-  @Field(type => String)
-  iss: string;
-
-  @Field(type => String)
-  azp: string;
-
-  @Field(type => String)
-  aud: string;
-
-  @Field(type => String)
-  sub: string;
-
+export class GoogleOAuthUser {
   @Field(type => String)
   email: string;
-
-  @Field(type => Boolean)
-  email_verified: boolean;
-
-  @Field(type => String)
-  at_hash: string;
 
   @Field(type => String)
   name: string;
@@ -30,16 +13,34 @@ class GoogleUser {
   @Field(type => String)
   picture: string;
 
-  @Field(type => String)
+  @Field(type => Boolean)
+  email_verified: boolean;
+
+  @NullableField(type => String)
+  iss: string;
+
+  @NullableField(type => String)
+  azp: string;
+
+  @NullableField(type => String)
+  aud: string;
+
+  @NullableField(type => String)
+  sub: string;
+
+  @NullableField(type => String)
+  at_hash: string;
+
+  @NullableField(type => String)
   given_name: string;
 
-  @Field(type => String)
+  @NullableField(type => String)
   family_name: string;
 
-  @Field(type => Number)
+  @NullableField(type => Number)
   iat: number;
 
-  @Field(type => Number)
+  @NullableField(type => Number)
   exp: number;
 }
 
@@ -48,6 +49,18 @@ export class GoogleOAuth {
   @Field(type => Boolean)
   success: boolean;
 
-  @Field(type => GoogleUser)
-  user_info: GoogleUser;
+  @Field(type => Boolean)
+  registered: boolean;
+
+  @Field(type => GoogleOAuthUser)
+  user_info: GoogleOAuthUser;
+}
+
+@ObjectType()
+export class OAuthData {
+  @Field(type => GoogleOAuth)
+  data: GoogleOAuth;
+
+  @Field(type => Boolean)
+  registered: boolean;
 }

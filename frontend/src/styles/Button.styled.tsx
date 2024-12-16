@@ -10,6 +10,9 @@ export const Button = styled('button')<{ $marginTop?: 'auto' }>`
   cursor: pointer;
   padding: 0.4rem 1rem;
   border-radius: 1.2rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
   border: 2px solid transparent;
   transition: all 0.3s ease;
   margin-left: ${({ $marginTop }) => ($marginTop ? $marginTop : '0')};

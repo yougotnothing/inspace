@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { UseGuards, UsePipes } from '@nestjs/common';
 import { Resolver, Query, Args } from '@nestjs/graphql';
 import { LocalAuthGuard } from 'guard/auth';
@@ -10,6 +9,7 @@ import {
 import { DateValidationPipe } from 'pipe/date-validation';
 import { SolarEclipseService } from 'service/solar-eclipse';
 
+/* eslint-disable @typescript-eslint/no-unused-vars */
 @UseGuards(LocalAuthGuard)
 @Resolver(of => NextSolarEclipse)
 export class SolarEclipseResolver {

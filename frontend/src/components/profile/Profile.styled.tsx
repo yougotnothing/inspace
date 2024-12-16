@@ -8,9 +8,15 @@ export const AvatarInput = styled('input')`
 
 export const Avatar = styled('img')`
   position: relative;
-  width: 13rem;
-  height: 13rem;
+  height: 100%;
+  width: 100%;
   border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  position: relative;
+  align-items: center;
+  text-align: center;
+  text-justify: center;
   border: 1px solid var(--border-bg);
 `;
 
@@ -59,13 +65,16 @@ export const PencilEditButton = styled('button')`
   right: 0;
 `;
 
-export const AvatarLabel = styled('label')`
+export const AvatarLabel = styled('label')<{ $isHaveAvatar: boolean }>`
   cursor: pointer;
   width: 13rem;
   height: 13rem;
   border-radius: 50%;
   border: 1px solid var(--border-color);
-  background-color: ${localStorage.getItem('default-avatar-color')};
+  background-color: ${({ $isHaveAvatar }) =>
+    !$isHaveAvatar
+      ? localStorage.getItem('default-avatar-color')
+      : 'transparent'};
   display: flex;
   flex-direction: column;
   align-items: center;

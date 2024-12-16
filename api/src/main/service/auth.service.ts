@@ -10,6 +10,7 @@ import { HttpService } from '@nestjs/axios';
 import { Tokens } from 'model/tokens';
 import { Response } from 'express';
 import { Message } from 'model/message';
+import { GoogleOAuth } from 'model/google-oauth';
 
 @Injectable()
 export class AuthService {
@@ -37,6 +38,7 @@ export class AuthService {
           email: createUserDto.email,
           name: createUserDto.name,
           password: hashedPassword,
+          createdAt: new Date().toISOString(),
         },
       });
 
@@ -56,9 +58,12 @@ export class AuthService {
     }
   }
 
-  async login(res: Response, loginDto: LoginDtoInput): Promise<Tokens> {
+  private async googleLogin(res: Response, email: string): Promise<Tokens> {
     try {
-      const user = await this.validateUser(loginDto);
+      const user = await this.prismaService.user.findFirst({
+        where: { email },
+      });
+
       const response = await this.httpService.axiosRef.post(
         '/openid-connect/login',
         {
@@ -67,18 +72,29 @@ export class AuthService {
         }
       );
 
-      res
-        .cookie('refresh_token', response.data.refresh_token, {
-          httpOnly: true,
-          secure: false,
-          path: '/',
-          expires: new Date(Date.now() + response.data.expires_in * 1000),
-        })
-        .setHeader('x-user-timezone', user.timezone);
+      res.cookie('refresh_token', response.data.refresh_token, {
+        httpOnly: true,
+        secure: false,
+        path: '/',
+        expires: new Date(Date.now() + response.data.expires_in * 1000),
+      });
 
       return response.data;
     } catch (error) {
       throw new HttpException(error, 500);
+    }
+  }
+
+  async login(res: Response, loginDto: LoginDtoInput): Promise<Tokens> {
+    try {
+      const { email, password, timezone } = await this.validateUser(loginDto);
+      const tokens = await this.createTokens(res, { login: email, password });
+
+      res.setHeader('x-user-timezone', timezone);
+
+      return tokens;
+    } catch (error) {
+      throw new Error(error);
     }
   }
 
@@ -88,12 +104,11 @@ export class AuthService {
         `/openid-connect/refresh?refresh_token=${refresh_token}`
       );
 
-      res.cookie('refresh_token', response.data.refresh_token, {
-        httpOnly: true,
-        secure: false,
-        path: '/',
-        expires: new Date(Date.now() + response.data.refresh_expires_in * 1000),
-      });
+      this.setRefreshTokenCookie(
+        res,
+        response.data.refresh_token,
+        response.data.refresh_expires_in
+      );
 
       return response.data;
     } catch (error) {
@@ -115,7 +130,60 @@ export class AuthService {
     }
   }
 
-  async validateUser({ login, password }: LoginDtoInput): Promise<User> {
+  async getGoogleCode(): Promise<string> {
+    try {
+      return (await this.httpService.axiosRef.get('/oauth/auth')).data;
+    } catch (error) {
+      throw new Error(error);
+    }
+  }
+
+  async googleAuth(res: Response, token: string): Promise<Tokens> {
+    try {
+      const response = await this.httpService.axiosRef.get<GoogleOAuth>(
+        '/oauth/google',
+        { params: { token: encodeURI(token) } }
+      );
+      let user = await this.prismaService.user.findFirst({
+        where: { email: response.data.user_info.email },
+      });
+      const { picture, name, email } = response.data.user_info;
+      const date = user ? user.createdAt : new Date().toISOString();
+      const password = `${date}:${email}-${name}`;
+
+      if (!user) {
+        user = await this.prismaService.user.create({
+          data: {
+            name,
+            email,
+            avatar: picture,
+            isHaveAvatar: true,
+            isVerified: true,
+            password: await bcrypt.hash(password, 10),
+            createdAt: new Date().toISOString(),
+          },
+        });
+
+        await this.httpService.axiosRef.post('/openid-connect/register', {
+          username: user.name,
+          email: user.email,
+          id: user.id,
+          password,
+        });
+      }
+
+      return Promise.resolve(
+        await this.createTokens(res, { login: user.email, password })
+      );
+    } catch (error) {
+      throw new Error(error.message || 'Google Auth failed.');
+    }
+  }
+
+  private async validateUser({
+    login,
+    password,
+  }: LoginDtoInput): Promise<User> {
     const where = validateEmailRegexp.test(login)
       ? { email: login }
       : { name: login };
@@ -134,5 +202,39 @@ export class AuthService {
       );
 
     return user;
+  }
+  private async createTokens(
+    res: Response,
+    { login, password }: LoginDtoInput
+  ): Promise<Tokens> {
+    try {
+      const response = await this.httpService.axiosRef.post<Tokens>(
+        '/openid-connect/login',
+        { login, password }
+      );
+
+      this.setRefreshTokenCookie(
+        res,
+        response.data.refresh_token,
+        response.data.refresh_expires_in
+      );
+
+      return response.data;
+    } catch (error) {
+      throw new Error(error);
+    }
+  }
+
+  private setRefreshTokenCookie(
+    res: Response,
+    token: string,
+    expires_in: number
+  ): Response<any, Record<string, any>> {
+    return res.cookie('refresh_token', token, {
+      httpOnly: true,
+      secure: false,
+      path: '/',
+      expires: new Date(Date.now() + expires_in * 1000),
+    });
   }
 }

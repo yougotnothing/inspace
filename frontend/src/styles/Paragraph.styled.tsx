@@ -1,9 +1,9 @@
 import styled from 'styled-components';
 
-export const Paragraph = styled('p')<{ $weight?: number }>`
+export const Paragraph = styled('p')<{ $weight?: number; $color?: string }>`
   font-family: 'Fira Sans', sans-serif;
   font-weight: ${({ $weight }) => ($weight ? $weight : 300)};
-  color: white;
+  color: ${({ $color }) => ($color ? $color : 'white')};
   font-size: 1.3rem;
   margin: 0;
   text-align: start;

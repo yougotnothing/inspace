@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { UseGuards, UsePipes } from '@nestjs/common';
 import { Resolver, Args, Mutation } from '@nestjs/graphql';
 import { LocalAuthGuard } from 'guard/auth';
@@ -6,6 +5,7 @@ import { EmailResponse } from 'model/verfiy-email';
 import { EmailValidationPipe } from 'pipe/email-validation';
 import { EmailService } from 'service/email';
 
+/* eslint-disable @typescript-eslint/no-unused-vars */
 @Resolver(of => EmailResponse)
 export class EmailResolver {
   constructor(private readonly emailService: EmailService) {}

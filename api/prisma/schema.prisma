@@ -25,6 +25,7 @@ model User {
   timezone                   String   @default("Europe/Warsaw")
   shownDistance              Distance @default(KM)
   role                       Role     @default(USER)
+  createdAt                  DateTime
   toSpotted                  Event[]
 }
 

@@ -196,6 +196,7 @@ type Query {
   getEventByDescription(description: String!): Event!
   getEventById(id: String!): Event!
   getEventsBy(settings: ActionSettingsInput!): [Event!]!
+  getGoogleCode: String!
   getLocation(coordinates: GeolocationInput!): Geolocation!
   getMoonPhase(location: MoonPhaseInput!): MoonPhase!
   getNearestAsteroids(data: NearestBodiesInput!): [NearestBodies!]!
@@ -204,6 +205,7 @@ type Query {
   getSelf: User!
   getUserById(id: String!): User!
   getUserByName(name: String!): User!
+  googleAuth(token: String!): Tokens!
   nextGlobalSolarEclipse(startTime: DateTime!): NextSolarEclipse!
   nextLocalSolarEclipse(observer: ObserverInput!, startTime: DateTime!): SearchSolarEclipse!
   nextLunarEclipse(date: DateTime!): LunarEclipseInfo!
@@ -239,6 +241,7 @@ type Tokens {
 
 type User {
   avatar: String!
+  createdAt: DateTime!
   email: String!
   id: ID!
   isHaveAvatar: Boolean!

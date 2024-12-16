@@ -10,6 +10,7 @@ import {
   OtherWrapper,
   Other,
   PasswordInputWrapper,
+  EmailInputWrapper,
 } from 'styles/Auth';
 import { Button } from 'styles/Button';
 import { EyeToggle } from 'templates/Eye-toggle';
@@ -27,10 +28,13 @@ export const Register = () => {
   >(Array(2).fill('password'));
   const [register, { error, loading }] = useMutation(REGISTER);
   const navigate = useNavigate();
+  const [name, email] = atob(
+    sessionStorage.getItem('google_data') ?? ','
+  ).split(',');
   const formik = useFormik<InferType<typeof registerSchema>>({
     initialValues: {
-      name: '',
-      email: '',
+      name: name ?? '',
+      email: email ?? '',
       password: '',
       confirmPassword: '',
     },
@@ -40,16 +44,9 @@ export const Register = () => {
 
   const handleRegister = async () => {
     try {
-      const response = await register({
-        variables: {
-          user: {
-            ...formik.values,
-          },
-        },
-      });
+      await register({ variables: { user: { ...formik.values } } });
 
-      console.log(response);
-
+      if (email && name) sessionStorage.setItem('google_auth', 'true');
       localStorage.setItem('default-avatar-color', selectAvatarColorTheme());
       navigate('/login');
     } catch (error: any) {
@@ -57,10 +54,7 @@ export const Register = () => {
     }
   };
 
-  if (error) {
-    console.log('error');
-  }
-
+  if (error) console.log('error: ', error);
   if (loading) return <Loader loading={loading} />;
 
   const handleChangeType = (index: number) => {
@@ -92,14 +86,18 @@ export const Register = () => {
             }}
             onBlur={formik.handleBlur}
           />
-          <Input
-            $isInvalid={Boolean(formik.errors.email)}
-            type="text"
-            id="email"
-            placeholder="email"
-            onChange={e => formik.setFieldValue('email', e.target.value)}
-            onBlur={formik.handleBlur}
-          />
+          <EmailInputWrapper $message="to change email select another google account">
+            <Input
+              $isInvalid={Boolean(formik.errors.email)}
+              type="text"
+              id="email"
+              readOnly={Boolean(email.length)}
+              placeholder="email"
+              value={formik.values.email}
+              onChange={e => formik.setFieldValue('email', e.target.value)}
+              onBlur={formik.handleBlur}
+            />
+          </EmailInputWrapper>
           <PasswordInputWrapper>
             <Input
               $isInvalid={Boolean(formik.errors.password)}
@@ -107,10 +105,7 @@ export const Register = () => {
               placeholder="password"
               type={passwordInputType[0]}
               value={formik.values.password}
-              onChange={e => {
-                formik.setFieldValue('password', e.target.value);
-                console.log(formik.errors.password);
-              }}
+              onChange={e => formik.setFieldValue('password', e.target.value)}
               onBlur={formik.handleBlur}
             />
             <EyeToggle
@@ -125,10 +120,9 @@ export const Register = () => {
               placeholder="confirm password"
               type={passwordInputType[1]}
               value={formik.values.confirmPassword}
-              onChange={e => {
-                formik.setFieldValue('confirmPassword', e.target.value);
-                console.log(formik.errors.confirmPassword);
-              }}
+              onChange={e =>
+                formik.setFieldValue('confirmPassword', e.target.value)
+              }
               onBlur={formik.handleBlur}
             />
             <EyeToggle

@@ -112,11 +112,15 @@ export const Profile = () => {
               <MainWrapper>
                 <UserProfile className="user-profile">
                   <AvatarLabel
+                    $isHaveAvatar={data.getSelf.isHaveAvatar}
                     htmlFor="avatar-input"
                     onSubmit={e => uploadAvatar({ variables: { avatar: e } })}
                   >
                     {data.getSelf.isHaveAvatar ? (
-                      <Avatar />
+                      <Avatar
+                        src={data.getSelf.avatar.replace('s96-c', 's210-c')}
+                        alt={`${data.getSelf.name}-avatar`}
+                      />
                     ) : (
                       <UserIcon size={'6rem'} />
                     )}
@@ -166,8 +170,8 @@ export const Profile = () => {
                     </Paragraph>
                     <Route to="/events">view all</Route>
                   </UserInfo>
-                  {keys.map((key, index) => (
-                    <Paragraph key={index}>
+                  {keys.map(key => (
+                    <Paragraph key={key}>
                       {transformKey(key)}: {data.getSelf?.[key]}
                     </Paragraph>
                   ))}

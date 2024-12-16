@@ -16,7 +16,6 @@ export const LoginWrapper = styled('div')`
   background-color: var(--wrapper-bg);
   backdrop-filter: blur(20px);
   position: relative;
-  overflow: hidden;
   border: 1px solid var(--border-color);
   border-radius: 24px;
   padding: 40px;
@@ -61,6 +60,14 @@ export const OtherWrapper = styled('div')`
   gap: 1rem;
 `;
 
+export const OAuthWrapper = styled('div')`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  flex-grow: 1;
+`;
+
 export const Other = styled(Link)`
   margin: 0;
   padding: 0;
@@ -80,4 +87,44 @@ export const PasswordInputWrapper = styled('div')`
   display: flex;
   position: relative;
   align-items: center;
+`;
+
+export const EmailInputWrapper = styled('div')<{ $message?: string }>`
+  display: flex;
+  position: relative;
+  z-index: 99;
+  background-color: transparent;
+
+  &::after {
+    content: '${({ $message }) => $message}';
+    background-color: var(--warning);
+    color: var(--warning-text);
+    border: 1px solid var(--warning-border);
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    backdrop-filter: blur(20px);
+    left: -100%;
+    opacity: 0;
+    z-index: -10;
+    position: absolute;
+    transition: 0.3s ease;
+    cursor: help;
+  }
+
+  &:hover {
+    &::after {
+      opacity: 1;
+    }
+  }
+`;
+
+export const OAuthMessage = styled('div')`
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+  border-radius: 1rem;
+  flex-wrap: wrap;
+  width: calc(340px - 1rem);
+  background-color: var(--warning);
+  border: 1px solid var(--warning-border);
 `;

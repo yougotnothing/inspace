@@ -10,11 +10,13 @@ import {
 import { Paragraph } from 'styles/Paragraph';
 import { Button } from 'styles/Button';
 import { useGSAPOnload } from 'hooks/use-gsap-onload';
+import { useSelf } from 'hooks/use-self';
 
 export const AirPollution: FC<{ loading: boolean; data: any }> = ({
   loading,
   data,
 }) => {
+  const { data: user } = useSelf();
   useGSAPOnload([loading, data], {
     className: '.pollution',
     duration: 0.3,
@@ -46,7 +48,11 @@ export const AirPollution: FC<{ loading: boolean; data: any }> = ({
         </Paragraph>
       </HeaderWrapper>
       <Paragraph>
-        <b>{data.getAirPollutionInfo?.date.replace('GMT', '')}</b>
+        <b>
+          {new Date(data.getAirPollutionInfo?.date).toTimezone(
+            user?.getSelf.timezone
+          )}
+        </b>
       </Paragraph>
       <Button>browse more</Button>
     </Wrapper>

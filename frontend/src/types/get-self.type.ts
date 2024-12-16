@@ -18,7 +18,7 @@ export interface Self {
     spottedSupermoons: number;
     spottedMicromoons: number;
     spottedPlanetaryAlignments: number;
-    timezone: `${string}/${string}`;
+    timezone: string;
     shownDistance: string;
   };
 }

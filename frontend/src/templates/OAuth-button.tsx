@@ -1,5 +1,4 @@
 import { FC } from 'react';
-import { Button } from 'styles/Button';
 import { GoogleIcon, GithubIcon } from 'hugeicons-react';
 import { useLazyQuery } from '@apollo/client';
 import { MoonLoader } from 'react-spinners';
@@ -28,8 +27,8 @@ export const OAuthButton: FC<{ service: 'google' | 'github' }> = ({
     service === 'google' ? await getGoogleCode() : await getGithubCode();
 
   return (
-    <Button onClick={handleGetCode} disabled={isLoading}>
+    <a target="_self" href="http://localhost:8000/auth/oauth/auth">
       {isLoading ? <MoonLoader size="1.5rem" /> : Icon} continue with {service}
-    </Button>
+    </a>
   );
 };

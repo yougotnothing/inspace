@@ -18,4 +18,4 @@ function wait_for_keycloak() {
 
 wait_for_keycloak
 
-exec fastapi run main.py
+exec uvicorn main:api --host 0.0.0.0 --port 8000 --reload

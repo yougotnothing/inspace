@@ -9,13 +9,8 @@ export const GET_GOOGLE_CODE = gql`
 export const GOOGLE_AUTH = gql`
   query GoogleAuth($token: String!) {
     googleAuth(token: $token) {
-      success
-      user_info {
-        email
-        name
-        avatar
-        email_verified
-      }
+      access_token
+      refresh_token
     }
   }
 `;

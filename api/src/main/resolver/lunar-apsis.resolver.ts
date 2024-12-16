@@ -1,10 +1,10 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { UseGuards } from '@nestjs/common';
 import { Args, Query, Resolver } from '@nestjs/graphql';
 import { LocalAuthGuard } from 'guard/auth';
 import { LunarApsis, LunarApsisInput } from 'model/lunar-apsis';
 import { LunarApsisService } from 'service/lunar-apsis';
 
+/* eslint-disable @typescript-eslint/no-unused-vars */
 @UseGuards(LocalAuthGuard)
 @Resolver(of => LunarApsis)
 export class LunarApsisResolver {

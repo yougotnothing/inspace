@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Args, Context, Resolver } from '@nestjs/graphql';
 import { User } from 'model/user';
 import { Query } from '@nestjs/graphql';
@@ -8,6 +7,7 @@ import { UseGuards } from '@nestjs/common';
 import { LocalAuthGuard } from 'guard/auth';
 import { Message } from 'model/message';
 
+/* eslint-disable @typescript-eslint/no-unused-vars */
 @Resolver(of => User)
 export class UserResolver {
   constructor(private readonly userService: UserService) {}

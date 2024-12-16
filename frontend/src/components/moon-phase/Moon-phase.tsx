@@ -164,9 +164,7 @@ export const MoonPhase = () => {
                   <Paragraph>phase: {data.searchLunarApsis?.phase}</Paragraph>
                   <Paragraph>
                     date:{' '}
-                    {new Date(
-                      data.searchLunarApsis?.time.date as string
-                    ).toUTCString()}
+                    {new Date(data.searchLunarApsis?.time.date).toTimezone()}
                   </Paragraph>
                   <Paragraph>
                     distance: {data.searchLunarApsis?.distance.toFixed(1)}

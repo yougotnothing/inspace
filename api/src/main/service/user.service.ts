@@ -51,8 +51,10 @@ export class UserService {
         }
       );
 
+      console.log('response', response.data);
+
       const user = await this.prismaService.user.findFirst({
-        where: { name: response.data.preferred_username },
+        where: { email: response.data.email },
         include: { toSpotted: true },
       });
 
