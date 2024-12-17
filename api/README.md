@@ -2,7 +2,7 @@
 
 [![stack](https://skillicons.dev/icons?i=nestjs,postgres,prisma,typescript,docker,webpack,yarn,graphql,apollo,pug)](https://skillicons.dev)
 
-### <a href="/TYPEDEFS.md">Typedefs</a>
+### <a href="TYPEDEFS.md">Typedefs</a>
 
 <br>
 
