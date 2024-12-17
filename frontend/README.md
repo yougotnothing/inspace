@@ -33,7 +33,7 @@
 > ### **_`Email features`_**:
 >
 > > - [x] User email verification
-> > - [x] Delete accound
+> > - [x] Delete account
 > > - [ ] To spotted event mail
 > > - [ ] Solar eclipses mail
 > > - [ ] Lunar eclipses mail
