@@ -32,9 +32,16 @@
 
 - [x] graphql integration
 - [x] three js main page starfield
-- [ ] email intergration
+- [x] email intergration
 - [x] minio integration
 - [x] moon phase requests
 - [x] three js moon render
-- [x] session auth
-- [ ] handlebars integration
+- [x] JWT tokens authorization
+- [x] google oauth authorization
+- [ ] github oauth authorization
+- [x] pug integration
+- [x] moon phases
+- [x] lunar apsis
+- [x] solar | lunar eclipses
+- [x] nearest bodies (asteroids, comets, etc.)
+- [x] toSpotted (mark any event as spotted to get email notification about it)

@@ -1,6 +1,6 @@
 import os
 from starlette.exceptions import HTTPException
-from typing_extensions import cast
+from typing_extensions import Any, cast
 from fastapi import APIRouter
 from google.oauth2.credentials import Credentials
 from utils.google_client import flow
@@ -11,11 +11,11 @@ from utils.keycloak_client import KeycloakClient
 from models.google_user import *
 
 
-router = APIRouter(prefix='/auth/oauth')
+router = APIRouter(prefix='/auth/oauth/google')
 keycloak_client = KeycloakClient()
 
 
-@router.get('/auth')
+@router.get('/callback')
 def oauth_connect() -> RedirectResponse:
     auth_url, state = flow.authorization_url(
         access_type='offline',
@@ -26,8 +26,8 @@ def oauth_connect() -> RedirectResponse:
     return RedirectResponse(auth_url)
 
 
-@router.get('/google')
-def verify_auth_token(token: str):
+@router.get('/verify-token')
+def verify_auth_token(token: str) -> dict[str, Any]:
     try:
         flow.fetch_token(code=token)
 

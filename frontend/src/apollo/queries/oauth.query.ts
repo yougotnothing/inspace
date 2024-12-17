@@ -20,3 +20,12 @@ export const GET_GITHUB_CODE = gql`
     getGithubCode
   }
 `;
+
+export const GITHUB_AUTH = gql`
+  query GithubAuth($token: String!) {
+    githubAuth(token: $token) {
+      access_token
+      refresh_token
+    }
+  }
+`;

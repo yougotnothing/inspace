@@ -1,4 +1,6 @@
 import os
+from keycloak.openid_connection import ConnectionManager
+from typing_extensions import Any
 from fastapi import APIRouter, HTTPException
 from models.openid_connect import *
 from utils.keycloak_client import KeycloakClient
@@ -94,14 +96,12 @@ def openid_connect_delete_user(access_token: str) -> dict:
 
 
 @router.get('/openid-connect/userinfo')
-def openid_connect_userinfo(access_token: str):
+def openid_connect_userinfo(access_token: str) -> dict[Any, Any]:
     userinfo = keycloak_client.openid.userinfo(token=access_token)
-
-    print(userinfo)
 
     return userinfo
 
 
 @router.post('/openid-connect/callback')
-def openid_connect_callback():
+def openid_connect_callback() -> ConnectionManager:
     return keycloak_client.openid.connection()

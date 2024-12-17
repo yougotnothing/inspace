@@ -8,8 +8,7 @@ import { Welcome } from 'components/welcome/Welcome';
 import { createBrowserRouter } from 'react-router-dom';
 import { DeleteUser } from 'components/messages/delete-user/Delete-user';
 import { Events } from 'components/events/Events';
-import { GoogleOauth } from 'components/oauth/google/Google-oauth';
-import { GithubOauth } from 'components/oauth/github/Github-oauth';
+import { OAuth } from 'components/oauth/Oauth';
 
 export const router = createBrowserRouter([
   {
@@ -50,10 +49,10 @@ export const router = createBrowserRouter([
   },
   {
     path: '/oauth2/google',
-    element: <GoogleOauth />,
+    element: <OAuth query="googleAuth" />,
   },
   {
-    path: 'oauth2/github',
-    element: <GithubOauth />,
+    path: '/oauth2/github',
+    element: <OAuth query="githubAuth" />,
   },
 ]);

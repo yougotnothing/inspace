@@ -25,10 +25,10 @@ export class AuthResolver {
 
   @Mutation(returns => Tokens)
   async login(
-    @Context() context: GqlContext,
+    @Context() ctx: GqlContext,
     @Args('loginDto') loginDto: LoginDtoInput
   ): Promise<Tokens> {
-    return await this.authService.login(context.res, loginDto);
+    return await this.authService.login(ctx.res, loginDto);
   }
 
   @Mutation(returns => Message)
@@ -43,6 +43,19 @@ export class AuthResolver {
       ctx.res,
       ctx.req.cookies?.['refresh_token']
     );
+  }
+
+  @Query(returns => String)
+  async getGithubCode(): Promise<string> {
+    return await this.authService.getGithubCode();
+  }
+
+  @Query(returns => Tokens)
+  async githubAuth(
+    @Context() ctx: GqlContext,
+    @Args('token') token: string
+  ): Promise<Tokens> {
+    return await this.authService.githubAuth(ctx.res, token);
   }
 
   @Query(returns => String)

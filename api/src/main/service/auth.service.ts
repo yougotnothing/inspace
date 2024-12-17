@@ -132,7 +132,64 @@ export class AuthService {
 
   async getGoogleCode(): Promise<string> {
     try {
-      return (await this.httpService.axiosRef.get('/oauth/auth')).data;
+      return (await this.httpService.axiosRef.get('/oauth/google/callback'))
+        .data;
+    } catch (error) {
+      throw new Error(error);
+    }
+  }
+
+  async getGithubCode(): Promise<string> {
+    try {
+      return (await this.httpService.axiosRef.get('/oauth/github/callback'))
+        .data;
+    } catch (error) {
+      throw new Error(error);
+    }
+  }
+
+  async githubAuth(res: Response, token: string): Promise<Tokens> {
+    try {
+      const response = await this.httpService.axiosRef
+        .post(
+          '/oauth/github/authorize',
+          {},
+          { params: { code: encodeURI(token) } }
+        )
+        .then(async r => {
+          return await this.httpService.axiosRef.get('/oauth/github/user', {
+            params: { access_token: r.data.access_token },
+          });
+        });
+      const { name, email } = response.data;
+      let user = await this.prismaService.user.findFirst({
+        where: { email: response.data.email },
+      });
+      const date = user ? user.createdAt : new Date().toISOString();
+      const password = `${date}:${response.data.email}-${response.data.name}`;
+
+      if (!user) {
+        user = await this.prismaService.user.create({
+          data: {
+            name,
+            email,
+            isVerified: true,
+            password: await bcrypt.hash(password, 10),
+            createdAt: new Date().toISOString(),
+          },
+        });
+
+        await this.httpService.axiosRef.post('/openid-connect/register', {
+          username: user.name,
+          email: user.email,
+          id: user.id,
+          password,
+        });
+      }
+
+      return Promise.resolve(
+        await this.createTokens(res, { login: user.email, password })
+      );
     } catch (error) {
       throw new Error(error);
     }
