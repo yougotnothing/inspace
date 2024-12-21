@@ -48,4 +48,5 @@ class GithubUser(BaseModel):
 
 class GithubToken(BaseModel):
     access_token: str
-    type: str
+    token_type: str
+    scope: str | list[str]

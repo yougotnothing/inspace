@@ -3,6 +3,7 @@ import { GET_FULL_MOON_PHASE_DATA } from 'query/moon-phase';
 import { useEffect, useMemo, useRef } from 'react';
 import * as THREE from 'three';
 import moonTexture from '../../assets/moon-texture.jpg';
+import moonDisplacement from '../../assets/moon-displacement.jpg';
 import { useSearchParams } from 'react-router-dom';
 import {
   HeaderInfo,
@@ -43,6 +44,7 @@ export const MoonPhase = () => {
   useEffect(() => {
     if (loading || error || !data) return;
 
+    const textureLoader = new THREE.TextureLoader();
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(
       75,
@@ -54,17 +56,33 @@ export const MoonPhase = () => {
       antialias: true,
     });
 
-    camera.position.z = 2.5;
+    camera.position.z = 2.53;
 
     renderer.setClearColor(new THREE.Color('#000'));
     renderer.setSize(window.innerWidth, window.innerHeight);
     threeRef.current?.appendChild(renderer.domElement);
 
+    const moonTextureHighRes = textureLoader.load(moonTexture, texture => {
+      texture.anisotropy = renderer.capabilities.getMaxAnisotropy(); // Включаем анизотропию
+    });
+    const moonDisplacementHighRes = textureLoader.load(
+      moonDisplacement,
+      texture => {
+        texture.anisotropy = renderer.capabilities.getMaxAnisotropy();
+      }
+    );
+
     const moon = new THREE.Mesh(
       new THREE.SphereGeometry(1, 64, 64, 64),
       new THREE.MeshPhongMaterial({
         color: 'white',
-        map: new THREE.TextureLoader().load(moonTexture),
+        map: moonTextureHighRes,
+        displacementMap: moonDisplacementHighRes,
+        displacementScale: 0.05,
+        bumpMap: moonDisplacementHighRes,
+        bumpScale: 0.4,
+        reflectivity: 0.2,
+        shininess: 10,
       })
     );
 
@@ -72,7 +90,7 @@ export const MoonPhase = () => {
 
     const darkLight = new THREE.PointLight('#222222', 50);
     darkLight.position.set(0, 0, 5);
-    const light = new THREE.PointLight('#ffffff', 50);
+    const light = new THREE.PointLight('#d1d1d1', 50);
     light.position.copy(
       new THREE.Vector3(
         data.getMoonPhase?.x,

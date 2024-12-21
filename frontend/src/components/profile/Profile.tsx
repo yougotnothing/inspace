@@ -39,6 +39,7 @@ import { useTitle } from 'hooks/use-title';
 import { LOGOUT } from 'mutation/auth';
 import { Button } from 'styles/Button';
 import { useSpottedKeys } from 'hooks/use-spotted-keys';
+import { useNavigate } from 'react-router-dom';
 
 export const Profile = () => {
   const [isEmailWarningVisible, setIsEmailWarningVisible] = useState(true);
@@ -50,6 +51,7 @@ export const Profile = () => {
     useMutation(UPLOAD_AVATAR);
   const [logout] = useMutation(LOGOUT);
   const [keys, transformKey] = useSpottedKeys(data);
+  const navigate = useNavigate();
   const [sendVerifyEmail, { loading: isSendingVerifyEmail }] = useMutation(
     SEND_VERIFY_EMAIL,
     {
@@ -61,6 +63,18 @@ export const Profile = () => {
 
     if (!isFocused) userNameInputRef.current?.focus();
     else userNameInputRef.current?.blur();
+  };
+
+  const handleLogout = async () => {
+    try {
+      await logout();
+
+      localStorage.removeItem('access_token');
+
+      navigate('/login');
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const handleCloseEmailWarning = () => setIsEmailWarningVisible(false);
@@ -214,7 +228,7 @@ export const Profile = () => {
               </MainWrapper>
             </Content>
             <Footer className="footer">
-              <LogoutButton onClick={() => logout()}>logout</LogoutButton>
+              <LogoutButton onClick={handleLogout}>logout</LogoutButton>
               <DeleteAccountButton onClick={() => setIsModalOpen(true)}>
                 delete account
               </DeleteAccountButton>

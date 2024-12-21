@@ -118,9 +118,15 @@ export class AuthService {
 
   async logout(req: Request): Promise<Message> {
     try {
-      await this.httpService.axiosRef.post('/openid-connect/logout', {
-        refresh_token: req.cookies['refresh_token'],
-      });
+      await this.httpService.axiosRef.post(
+        '/openid-connect/logout',
+        {},
+        {
+          params: {
+            refresh_token: req.cookies['refresh_token'],
+          },
+        }
+      );
 
       req.res.clearCookie('refresh_token');
 
@@ -156,17 +162,17 @@ export class AuthService {
           {},
           { params: { code: encodeURI(token) } }
         )
-        .then(async r => {
-          return await this.httpService.axiosRef.get('/oauth/github/user', {
-            params: { access_token: r.data.access_token },
-          });
-        });
-      const { name, email } = response.data;
+        .then(
+          async r =>
+            await this.httpService.axiosRef.get('/oauth/github/user', {
+              params: { access_token: r.data.access_token },
+            })
+        );
+      const { name, email, avatar_url } = response.data;
       let user = await this.prismaService.user.findFirst({
         where: { email: response.data.email },
       });
-      const date = user ? user.createdAt : new Date().toISOString();
-      const password = `${date}:${response.data.email}-${response.data.name}`;
+      const date = new Date().toISOString();
 
       if (!user) {
         user = await this.prismaService.user.create({
@@ -174,8 +180,10 @@ export class AuthService {
             name,
             email,
             isVerified: true,
-            password: await bcrypt.hash(password, 10),
-            createdAt: new Date().toISOString(),
+            avatar: avatar_url,
+            isHaveAvatar: avatar_url.length ? true : false,
+            password: await bcrypt.hash(`${date}:${email}-${name}`, 10),
+            createdAt: date,
           },
         });
 
@@ -183,29 +191,36 @@ export class AuthService {
           username: user.name,
           email: user.email,
           id: user.id,
-          password,
+          password: `${user.createdAt}:${user.email}-${user.password}`,
         });
       }
 
       return Promise.resolve(
-        await this.createTokens(res, { login: user.email, password })
+        await this.createTokens(res, {
+          login: user.email,
+          password: `${user.createdAt}:${user.email}-${user.password}`,
+        })
       );
     } catch (error) {
-      throw new Error(error);
+      console.error(
+        'Error creating tokens: ',
+        error.response?.data || error.message
+      );
+      throw new Error('Failed to create tokens');
     }
   }
 
   async googleAuth(res: Response, token: string): Promise<Tokens> {
     try {
       const response = await this.httpService.axiosRef.get<GoogleOAuth>(
-        '/oauth/google',
+        '/oauth/google/verify-token',
         { params: { token: encodeURI(token) } }
       );
       let user = await this.prismaService.user.findFirst({
         where: { email: response.data.user_info.email },
       });
       const { picture, name, email } = response.data.user_info;
-      const date = user ? user.createdAt : new Date().toISOString();
+      const date = new Date().toISOString();
       const password = `${date}:${email}-${name}`;
 
       if (!user) {
@@ -225,12 +240,15 @@ export class AuthService {
           username: user.name,
           email: user.email,
           id: user.id,
-          password,
+          password: `${user.createdAt}:${user.email}-${user.name}`,
         });
       }
 
       return Promise.resolve(
-        await this.createTokens(res, { login: user.email, password })
+        await this.createTokens(res, {
+          login: user.email,
+          password: `${user.createdAt}:${user.email}-${user.name}`,
+        })
       );
     } catch (error) {
       throw new Error(error.message || 'Google Auth failed.');

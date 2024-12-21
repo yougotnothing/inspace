@@ -1,8 +1,26 @@
 import { FC } from 'react';
 import { GoogleIcon, GithubIcon } from 'hugeicons-react';
-import { useLazyQuery } from '@apollo/client';
-import { MoonLoader } from 'react-spinners';
-import { GET_GITHUB_CODE, GET_GOOGLE_CODE } from 'query/oauth';
+import styled from 'styled-components';
+
+const A = styled('a')`
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid white;
+  color: black;
+  padding: 0.5rem 1rem;
+  transition: 0.3s ease;
+  border-radius: 1.5rem;
+  overflow: hidden;
+  position: relative;
+  background: white;
+
+  &:hover {
+    background: transparent;
+    color: white;
+  }
+`;
 
 export const OAuthButton: FC<{ service: 'google' | 'github' }> = ({
   service,
@@ -13,22 +31,15 @@ export const OAuthButton: FC<{ service: 'google' | 'github' }> = ({
     ) : (
       <GithubIcon size="1.5rem" />
     );
-  const [
-    getGithubCode,
-    { data: githubData, loading: githubLoading, error: githubError },
-  ] = useLazyQuery(GET_GITHUB_CODE);
-  const [
-    getGoogleCode,
-    { data: googleData, loading: googleLoading, error: googleError },
-  ] = useLazyQuery(GET_GOOGLE_CODE);
-  const isLoading = githubLoading || googleLoading;
 
-  const handleGetCode = async () =>
-    service === 'google' ? await getGoogleCode() : await getGithubCode();
+  const handleGetCode = ((): string =>
+    service === 'google'
+      ? 'http://localhost:8000/auth/oauth/google/callback'
+      : 'http://localhost:8000/auth/oauth/github/callback')();
 
   return (
-    <a target="_self" href="http://localhost:8000/auth/oauth/auth">
-      {isLoading ? <MoonLoader size="1.5rem" /> : Icon} continue with {service}
-    </a>
+    <A target="_self" href={handleGetCode}>
+      {Icon} {service}
+    </A>
   );
 };

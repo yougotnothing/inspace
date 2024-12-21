@@ -21,6 +21,7 @@ import { registerSchema } from 'utils/register.schema';
 import { useNavigate } from 'react-router-dom';
 import { Loader } from 'templates/Loader';
 import { selectAvatarColorTheme } from 'utils/select-avatar-color-theme.util';
+import { OAuthButtons } from 'templates/OAuth-buttons';
 
 export const Register = () => {
   const [passwordInputType, setPasswordInputType] = useState<
@@ -28,13 +29,10 @@ export const Register = () => {
   >(Array(2).fill('password'));
   const [register, { error, loading }] = useMutation(REGISTER);
   const navigate = useNavigate();
-  const [name, email] = atob(
-    sessionStorage.getItem('google_data') ?? ','
-  ).split(',');
   const formik = useFormik<InferType<typeof registerSchema>>({
     initialValues: {
-      name: name ?? '',
-      email: email ?? '',
+      name: '',
+      email: '',
       password: '',
       confirmPassword: '',
     },
@@ -46,7 +44,6 @@ export const Register = () => {
     try {
       await register({ variables: { user: { ...formik.values } } });
 
-      if (email && name) sessionStorage.setItem('google_auth', 'true');
       localStorage.setItem('default-avatar-color', selectAvatarColorTheme());
       navigate('/login');
     } catch (error: any) {
@@ -91,7 +88,6 @@ export const Register = () => {
               $isInvalid={Boolean(formik.errors.email)}
               type="text"
               id="email"
-              readOnly={Boolean(email.length)}
               placeholder="email"
               value={formik.values.email}
               onChange={e => formik.setFieldValue('email', e.target.value)}
@@ -136,6 +132,7 @@ export const Register = () => {
           <Other to="/forgot-password">Forgot password?</Other>
           <Other to="/login">Already have account?</Other>
         </OtherWrapper>
+        <OAuthButtons />
       </LoginWrapper>
     </Wrapper>
   );

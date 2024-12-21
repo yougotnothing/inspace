@@ -60,14 +60,6 @@ export const OtherWrapper = styled('div')`
   gap: 1rem;
 `;
 
-export const OAuthWrapper = styled('div')`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1rem;
-  flex-grow: 1;
-`;
-
 export const Other = styled(Link)`
   margin: 0;
   padding: 0;

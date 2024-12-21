@@ -1,5 +1,4 @@
 import os
-from keycloak.openid_connection import ConnectionManager
 from typing_extensions import Any
 from fastapi import APIRouter, HTTPException
 from models.openid_connect import *
@@ -103,5 +102,5 @@ def openid_connect_userinfo(access_token: str) -> dict[Any, Any]:
 
 
 @router.post('/openid-connect/callback')
-def openid_connect_callback() -> ConnectionManager:
+def openid_connect_callback():
     return keycloak_client.openid.connection()
