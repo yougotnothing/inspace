@@ -196,6 +196,7 @@ type Query {
   getEventByDescription(description: String!): Event!
   getEventById(id: String!): Event!
   getEventsBy(settings: ActionSettingsInput!): [Event!]!
+  getGithubCode: String!
   getGoogleCode: String!
   getLocation(coordinates: GeolocationInput!): Geolocation!
   getMoonPhase(location: MoonPhaseInput!): MoonPhase!
@@ -205,6 +206,7 @@ type Query {
   getSelf: User!
   getUserById(id: String!): User!
   getUserByName(name: String!): User!
+  githubAuth(token: String!): Tokens!
   googleAuth(token: String!): Tokens!
   nextGlobalSolarEclipse(startTime: DateTime!): NextSolarEclipse!
   nextLocalSolarEclipse(observer: ObserverInput!, startTime: DateTime!): SearchSolarEclipse!

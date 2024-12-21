@@ -20,7 +20,11 @@ def oauth_connect() -> RedirectResponse:
 
 @router.post('/authorize')
 def authorize_code(code: str) -> GithubToken:
-    return github_client.verify_authorization_token(code)
+    data = github_client.verify_authorization_token(code)
+
+    print(data)
+
+    return data
 
 
 @router.get('/user')

@@ -3,7 +3,7 @@ from http.client import HTTPException
 import requests as request
 from starlette.responses import RedirectResponse
 
-from python.models.github_user import GithubUser
+from models.github_user import GithubUser
 
 
 class GithubClient:

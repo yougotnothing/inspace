@@ -12,7 +12,6 @@ import {
   OtherWrapper,
   Other,
   PasswordInputWrapper,
-  OAuthWrapper,
 } from 'styles/Auth';
 import { Input } from 'styles/Input';
 import { Button } from 'styles/Button';
@@ -23,8 +22,7 @@ import { Loader } from 'templates/Loader';
 import { Tokens } from 'types/tokens';
 import { selectAvatarColorTheme } from 'utils/select-avatar-color-theme.util';
 import { useTitle } from 'hooks/use-title';
-import { OAuthButton } from 'templates/OAuth-button';
-import { Paragraph } from 'styles/Paragraph';
+import { OAuthButtons } from 'templates/OAuth-buttons';
 
 export const Login = () => {
   const [type, setType] = useState<'password' | 'text'>('password');
@@ -106,10 +104,7 @@ export const Login = () => {
           <Other to="/forgot-password">Forgot password?</Other>
           <Other to="/register">Not registered yet?</Other>
         </OtherWrapper>
-        <OAuthWrapper>
-          <OAuthButton service="google" />
-          <OAuthButton service="github" />
-        </OAuthWrapper>
+        <OAuthButtons />
       </LoginWrapper>
     </Wrapper>
   );
