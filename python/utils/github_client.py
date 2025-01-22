@@ -3,8 +3,6 @@ from http.client import HTTPException
 import requests as request
 from starlette.responses import RedirectResponse
 
-from models.github_user import GithubUser
-
 
 class GithubClient:
     GITHUB_AUTHORIZE_URL = str(os.getenv('GITHUB_AUTHORIZE_URL'))

@@ -6,7 +6,7 @@ import { PugAdapter } from '@nestjs-modules/mailer/dist/adapters/pug.adapter';
 import { EmailService } from 'service/email';
 import { EmailResolver } from 'resolver/email';
 import { PrismaService } from 'service/prisma';
-import { RedisModule } from './redis.module';
+import { RedisModule } from 'module/redis';
 import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({

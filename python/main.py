@@ -3,7 +3,6 @@ from fastapi import FastAPI
 from routes import geolocation, openid_connect, google_oauth, github_oauth
 from dotenv import load_dotenv
 
-
 load_dotenv()
 
 api = FastAPI()

@@ -5,13 +5,14 @@ services:
       - pg:/var/lib/postgresql/data
     image: postgres:latest
     restart: always
+    networks:
+      - app-tier
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_DB: ${POSTGRES_DB}
     ports:
-      - 5432:5432
-      - 5433:5433
+      - 5433:5432
 
   keycloak:
     container_name: keycloak
@@ -26,12 +27,14 @@ services:
       DB_DATABASE: ${POSTGRES_DB}
       DB_USER: ${POSTGRES_USER}
       DB_PASSWORD: ${POSTGRES_PASSWORD}
-      KEYCLOAK_ADMIN: ${KC_BOOTSTRAP_ADMIN_USERNAME}
-      KEYCLOAK_ADMIN_PASSWORD: ${KC_BOOTSTRAP_ADMIN_PASSWORD}
+      KEYCLOAK_ADMIN: ${KC_ADMIN_USERNAME}
+      KEYCLOAK_ADMIN_PASSWORD: ${KC_ADMIN_PASSWORD}
     restart: unless-stopped
     command: start-dev
     depends_on:
       - postgres
+    networks:
+      - app-tier
 
   geo:
     container_name: geo-service-py
@@ -44,11 +47,11 @@ services:
       GEONAMES_API_URL: ${GEONAMES_API_URL}
       GEONAMES_API_KEY: ${GEONAMES_API_KEY}
       KC_SERVER_URL: ${KC_SERVER_URL}
-      KC_ADMIN_USERNAME: ${KC_BOOTSTRAP_ADMIN_USERNAME}
-      KC_ADMIN_PASSWORD: ${KC_BOOTSTRAP_ADMIN_PASSWORD}
+      KC_ADMIN_USERNAME: ${KC_ADMIN_USERNAME}
+      KC_ADMIN_PASSWORD: ${KC_ADMIN_PASSWORD}
       KC_REALM: ${KC_REALM}
       KC_CLIENT_ID: ${KC_CLIENT_ID}
-      KC_SECRET: ${KC_SECRET}
+      KC_CLIENT_SECRET: ${KC_CLIENT_SECRET}
       KC_AUTH_URL: ${KC_AUTH_SERVER_URL}
       KC_OPENID_REDIRECT_URI: ${KC_OPENID_REDIRECT_URI}
       KC_OPENID_SCOPE: ${KC_OPENID_SCOPE}
@@ -61,12 +64,16 @@ services:
       GITHUB_USER_URL: ${GITHUB_USER_URL}
     depends_on:
       - keycloak
+    networks:
+      - app-tier
 
   redis:
     container_name: redis
     image: redis
     ports:
       - 6379:6379
+    networks:
+      - app-tier
     volumes:
       - redis:/data
 
@@ -78,12 +85,15 @@ services:
       - 9001:9001
     volumes:
       - minio:/data
+    networks:
+      - app-tier
     environment:
       MINIO_ROOT_USER: ${MINIO_ROOT_USER}
       MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
     command: server /data --console-address :9001
 
   nestjs-api:
+    platform: linux/arm64
     container_name: inspace-api
     build:
       context: ./api
@@ -93,6 +103,8 @@ services:
       - /api/node_modules
     ports:
       - 5174:5174
+    networks:
+      - app-tier
     environment:
       POSTGRES_DB: ${POSTGRES_DB}
       POSTGRES_USER: ${POSTGRES_USER}
@@ -155,3 +167,7 @@ volumes:
     driver: local
   minio:
     driver: local
+
+networks:
+  app-tier:
+    driver: bridge

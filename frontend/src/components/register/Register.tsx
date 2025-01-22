@@ -10,7 +10,6 @@ import {
   OtherWrapper,
   Other,
   PasswordInputWrapper,
-  EmailInputWrapper,
 } from 'styles/Auth';
 import { Button } from 'styles/Button';
 import { EyeToggle } from 'templates/Eye-toggle';
@@ -83,17 +82,15 @@ export const Register = () => {
             }}
             onBlur={formik.handleBlur}
           />
-          <EmailInputWrapper $message="to change email select another google account">
-            <Input
-              $isInvalid={Boolean(formik.errors.email)}
-              type="text"
-              id="email"
-              placeholder="email"
-              value={formik.values.email}
-              onChange={e => formik.setFieldValue('email', e.target.value)}
-              onBlur={formik.handleBlur}
-            />
-          </EmailInputWrapper>
+          <Input
+            $isInvalid={Boolean(formik.errors.email)}
+            type="text"
+            id="email"
+            placeholder="email"
+            value={formik.values.email}
+            onChange={e => formik.setFieldValue('email', e.target.value)}
+            onBlur={formik.handleBlur}
+          />
           <PasswordInputWrapper>
             <Input
               $isInvalid={Boolean(formik.errors.password)}

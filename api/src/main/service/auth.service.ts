@@ -1,6 +1,6 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { PrismaService } from 'service/prisma';
-import * as bcrypt from 'bcrypt';
+import * as bcrypt from 'bcryptjs';
 import { Request } from 'express';
 import { User } from '@prisma/client';
 import { validateEmailRegexp } from 'utils/validate-email';
@@ -141,7 +141,7 @@ export class AuthService {
       return (await this.httpService.axiosRef.get('/oauth/google/callback'))
         .data;
     } catch (error) {
-      throw new Error(error);
+      throw new Error(error.response.data.message);
     }
   }
 
@@ -150,7 +150,7 @@ export class AuthService {
       return (await this.httpService.axiosRef.get('/oauth/github/callback'))
         .data;
     } catch (error) {
-      throw new Error(error);
+      throw new Error(error.response.data.message);
     }
   }
 
@@ -163,9 +163,9 @@ export class AuthService {
           { params: { code: encodeURI(token) } }
         )
         .then(
-          async r =>
+          async ({ data }) =>
             await this.httpService.axiosRef.get('/oauth/github/user', {
-              params: { access_token: r.data.access_token },
+              params: { access_token: data.access_token },
             })
         );
       const { name, email, avatar_url } = response.data;
@@ -251,7 +251,7 @@ export class AuthService {
         })
       );
     } catch (error) {
-      throw new Error(error.message || 'Google Auth failed.');
+      throw new Error(error);
     }
   }
 

@@ -1,11 +1,8 @@
-import os
-from fastapi import Request
 from fastapi.routing import APIRouter
 from starlette.responses import RedirectResponse
 from models.github_user import GithubToken, GithubUser
 from utils.github_client import GithubClient
 from utils.keycloak_client import KeycloakClient
-from requests import request
 
 
 router = APIRouter(prefix='/auth/oauth/github')

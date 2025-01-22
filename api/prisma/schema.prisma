@@ -1,6 +1,7 @@
 generator client {
-  provider = "prisma-client-js"
-  log      = ["query", "info", "warn", "error"]
+  provider      = "prisma-client-js"
+  log           = ["query", "info", "warn", "error"]
+  binaryTargets = ["native", "linux-musl-arm64-openssl-3.0.x"]
 }
 
 datasource db {
@@ -36,7 +37,7 @@ model Event {
   isSpotted   Boolean   @default(false)
   userId      String?   @db.Uuid
   type        EventType
-  data        Json      @db.JsonB
+  data        Json
   User        User?     @relation(fields: [userId], references: [id])
 }
 

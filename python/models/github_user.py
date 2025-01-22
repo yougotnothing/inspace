@@ -1,6 +1,7 @@
+from __future__ import annotations
+
 from typing_extensions import Any
 from pydantic import BaseModel
-
 
 class GithubUser(BaseModel):
     login: str

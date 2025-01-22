@@ -14,9 +14,7 @@ export class AirPollutionService {
   async getAirPollutionInfo(coords: AirPollutionInput): Promise<AirPollution> {
     try {
       const response = await this.httpService.axiosRef.get('/air_pollution', {
-        params: {
-          ...coords,
-        },
+        params: { ...coords },
       });
 
       return {

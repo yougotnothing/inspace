@@ -1,7 +1,7 @@
 import os
 from typing_extensions import Any
 from fastapi import APIRouter, HTTPException
-from models.openid_connect import *
+from models.openid_connect import OpenidConnectModel, OpenidConnectLoginInputModel, OpenidConnectRegisterInputModel
 from utils.keycloak_client import KeycloakClient
 
 

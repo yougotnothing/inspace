@@ -11,5 +11,6 @@ export const Wrapper = styled('div')`
   height: 100svh;
   background-color: black;
   position: relative;
+  overflow-x: hidden;
   z-index: 1;
 `;

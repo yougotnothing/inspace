@@ -1,19 +1,13 @@
-FROM node:22-slim
-
+FROM node:22-alpine3.18 AS builder
 WORKDIR /api
-
 COPY package.json .
 COPY yarn.lock .
 COPY prisma ./prisma/
 
-RUN apt-get update && \
-    apt-get install -y make gcc g++ python3
-
-RUN npx prisma generate
+RUN apk add --no-cache openssl
+RUN yarn install
+RUN yarn prisma generate
 
 COPY . .
-
 EXPOSE 5174
-
-CMD yarn add bcrypt && \ 
-    yarn start:hmr
+CMD yarn start:hmr
