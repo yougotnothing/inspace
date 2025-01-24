@@ -12,7 +12,7 @@ datasource db {
 model User {
   password                   String
   id                         String   @id @default(uuid()) @db.Uuid
-  name                       String   @unique
+  name                       String
   email                      String   @unique
   avatar                     String   @default("")
   isHaveAvatar               Boolean  @default(false)
@@ -26,7 +26,7 @@ model User {
   timezone                   String   @default("Europe/Warsaw")
   shownDistance              Distance @default(KM)
   role                       Role     @default(USER)
-  createdAt                  DateTime
+  createdAt                  DateTime @default(now())
   toSpotted                  Event[]
 }
 

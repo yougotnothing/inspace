@@ -191,14 +191,14 @@ export class AuthService {
           username: user.name,
           email: user.email,
           id: user.id,
-          password: `${user.createdAt}:${user.email}-${user.password}`,
+          password: `${user.createdAt}:${user.email}-${user.name}`,
         });
       }
 
       return Promise.resolve(
         await this.createTokens(res, {
           login: user.email,
-          password: `${user.createdAt}:${user.email}-${user.password}`,
+          password: `${user.createdAt}:${user.email}-${user.name}`,
         })
       );
     } catch (error) {
@@ -216,23 +216,22 @@ export class AuthService {
         '/oauth/google/verify-token',
         { params: { token: encodeURI(token) } }
       );
+      const { name, email, picture } = response.data.user_info;
       let user = await this.prismaService.user.findFirst({
-        where: { email: response.data.user_info.email },
+        where: { email },
       });
-      const { picture, name, email } = response.data.user_info;
       const date = new Date().toISOString();
-      const password = `${date}:${email}-${name}`;
 
       if (!user) {
         user = await this.prismaService.user.create({
           data: {
             name,
             email,
-            avatar: picture,
-            isHaveAvatar: true,
             isVerified: true,
-            password: await bcrypt.hash(password, 10),
-            createdAt: new Date().toISOString(),
+            avatar: picture,
+            isHaveAvatar: picture.length ? true : false,
+            password: await bcrypt.hash(`${date}:${email}-${name}`, 10),
+            createdAt: date,
           },
         });
 
@@ -244,6 +243,7 @@ export class AuthService {
         });
       }
 
+      console.log('user: ', user);
       return Promise.resolve(
         await this.createTokens(res, {
           login: user.email,
@@ -251,7 +251,11 @@ export class AuthService {
         })
       );
     } catch (error) {
-      throw new Error(error);
+      console.error(
+        'Error creating tokens: ',
+        error.response?.data || error.message
+      );
+      throw new Error('Failed to create tokens');
     }
   }
 
@@ -296,6 +300,7 @@ export class AuthService {
 
       return response.data;
     } catch (error) {
+      console.log(error.response.data);
       throw new Error(error);
     }
   }
