@@ -1,6 +1,6 @@
 import { Wrapper } from 'styles/Wrapper';
 import { Navbar } from 'templates/Navbar';
-import { useEffect, useLayoutEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useQuery } from '@apollo/client';
 import { Events, EventsWrapper, Shadow } from './Home.styled';
 import { Content } from 'styles/Content';
@@ -14,14 +14,11 @@ import { useGSAPOnload } from 'hooks/use-gsap-onload';
 import { Events as EventsEnum } from 'utils/events.enum';
 import { useSelf } from 'hooks/use-self';
 import { useTitle } from 'hooks/use-title';
+import { useGeolocation } from 'hooks/use-geolocation';
 
 export const Home = () => {
   const [date] = useState<Date>(new Date());
-  const [coords, setCoords] = useState({
-    latitude: 0,
-    longitude: 0,
-    height: 0,
-  });
+  const coords = useGeolocation();
   const { data: countryData, loading: countryLoading } = useQuery(
     GET_LOCATION,
     {
@@ -70,16 +67,6 @@ export const Home = () => {
       top: '50%',
     }
   );
-
-  useLayoutEffect(() => {
-    navigator.geolocation.getCurrentPosition(p => {
-      setCoords({
-        latitude: p.coords.latitude,
-        longitude: p.coords.longitude,
-        height: p.coords.altitude || 20,
-      });
-    });
-  }, []);
 
   useEffect(() => {
     if (countryData?.getLocation.countryName)

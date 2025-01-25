@@ -8,7 +8,6 @@ from fastapi.responses import RedirectResponse
 from google.auth.transport import requests
 from google.oauth2 import id_token
 from utils.keycloak_client import KeycloakClient
-from models.google_user import *
 
 
 router = APIRouter(prefix='/auth/oauth/google')
@@ -30,12 +29,6 @@ def oauth_connect() -> RedirectResponse:
 def verify_auth_token(token: str) -> dict[str, Any]:
     try:
         flow.fetch_token(code=token)
-
-        id_info = id_token.verify_oauth2_token(
-            flow.credentials.__dict__.get('_id_token'),
-            requests.Request(),
-            flow.client_config['client_id'],
-            clock_skew_in_seconds=10)
 
         return {
             "success": True,

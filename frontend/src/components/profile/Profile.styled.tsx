@@ -146,7 +146,7 @@ export const SpottedItems = styled('div')`
   justify-content: flex-start;
   width: 100%;
   height: 100%;
-  overflow-y: scroll;
+  overflow-y: auto;
 `;
 
 export const Spotted = styled('div')`

@@ -9,6 +9,7 @@ import { createBrowserRouter } from 'react-router-dom';
 import { DeleteUser } from 'components/messages/delete-user/Delete-user';
 import { Events } from 'components/events/Events';
 import { OAuth } from 'components/oauth/Oauth';
+import { Event } from 'components/event/Event';
 
 export const router = createBrowserRouter([
   {
@@ -54,5 +55,9 @@ export const router = createBrowserRouter([
   {
     path: '/oauth2/github',
     element: <OAuth query="githubAuth" />,
+  },
+  {
+    path: '/event/:type/:date',
+    element: <Event />,
   },
 ]);

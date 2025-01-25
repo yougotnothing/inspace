@@ -1,11 +1,6 @@
 import { Dispatch, FC, SetStateAction } from 'react';
 import { NearestBodies } from 'types/nearest-bodies';
-import {
-  EventColumn,
-  EventWrapper,
-  FieldHelperParagraph,
-  ModalWrapper,
-} from './Event-modal.styled';
+import { EventColumn, EventWrapper, ModalWrapper } from './Event-modal.styled';
 import { Header } from 'components/moon-phase/Moon-phase.styled';
 import { Paragraph } from 'styles/Paragraph';
 import { Button } from 'styles/Button';
@@ -14,6 +9,7 @@ import { useMutation } from '@apollo/client';
 import { useSelf } from 'hooks/use-self';
 import { SEND_EVENT_EMAIL } from 'mutation/email';
 import { MoonLoader } from 'react-spinners';
+import { FieldHelperParagraph } from 'styles/Field-helper-paragraph';
 
 interface CreateEventProps {
   type: string;

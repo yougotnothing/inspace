@@ -4,6 +4,7 @@ import { DateAndAltitude, Event } from 'styles/Eclipses';
 import { Paragraph } from 'styles/Paragraph';
 import { Button } from 'styles/Button';
 import { Loader } from './Loader';
+import { generatePath, useNavigate } from 'react-router-dom';
 
 interface Query {
   data: any;
@@ -14,6 +15,7 @@ export const Eclipse: FC<{
   query: Query;
   loading: boolean;
 }> = ({ query, loading }) => {
+  const navigate = useNavigate();
   const date = (() => {
     switch (query.type) {
       case 'local solar':
@@ -50,6 +52,14 @@ export const Eclipse: FC<{
     }
   })();
 
+  const handleBrowseMore = () =>
+    navigate(
+      generatePath('/event/:type/:date', {
+        type: `next-${query.type.replace(' ', '-')}-eclipse`.toLowerCase(),
+        date: new Date(date.concat(' GMT')).toISOString(),
+      })
+    );
+
   if (loading) return <Loader loading={loading} />;
 
   return (
@@ -63,7 +73,12 @@ export const Eclipse: FC<{
           {altitudeOrKind}
         </Event>
         <Event>
-          <Button style={{ margin: 'auto 0 0 auto' }}>browse more</Button>
+          <Button
+            style={{ margin: 'auto 0 0 auto' }}
+            onClick={handleBrowseMore}
+          >
+            browse more
+          </Button>
         </Event>
       </DateAndAltitude>
     </Event>
