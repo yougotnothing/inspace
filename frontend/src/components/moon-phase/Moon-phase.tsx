@@ -63,7 +63,7 @@ export const MoonPhase = () => {
     threeRef.current?.appendChild(renderer.domElement);
 
     const moonTextureHighRes = textureLoader.load(moonTexture, texture => {
-      texture.anisotropy = renderer.capabilities.getMaxAnisotropy(); // Включаем анизотропию
+      texture.anisotropy = renderer.capabilities.getMaxAnisotropy();
     });
     const moonDisplacementHighRes = textureLoader.load(
       moonDisplacement,
