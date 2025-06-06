@@ -16,7 +16,6 @@ import { Navbar } from 'templates/Navbar';
 import { Loader } from 'templates/Loader';
 import { Paragraph } from 'styles/Paragraph';
 import { FieldHelperParagraph } from 'styles/Field-helper-paragraph';
-import { Button } from 'styles/Button';
 import { Column } from './Event.styled';
 
 export const Event = () => {

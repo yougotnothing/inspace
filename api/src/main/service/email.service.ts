@@ -1,5 +1,5 @@
 import { MailerService } from '@nestjs-modules/mailer';
-import { Inject, Injectable, Logger, NotFoundException } from '@nestjs/common';
+import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { SchedulerRegistry } from '@nestjs/schedule';
 import { CronJob } from '@nestjs/schedule/node_modules/cron/dist/job';
@@ -11,7 +11,6 @@ import { RedisService } from 'service/redis';
 
 @Injectable()
 export class EmailService {
-  private readonly logger = new Logger(EmailService.name);
   private readonly FRONTEND_URL: string =
     this.configService.get<string>('FRONTEND_URL');
   private readonly EMAIL_CONTACT_ADDRESS: string =

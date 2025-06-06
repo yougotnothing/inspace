@@ -1,7 +1,7 @@
 import { Wrapper } from 'styles/Wrapper';
 import { Navbar } from 'templates/Navbar';
 import { useEffect, useState } from 'react';
-import { useQuery } from '@apollo/client';
+import { useLazyQuery, useQuery } from '@apollo/client';
 import { Events, EventsWrapper, Shadow } from './Home.styled';
 import { Content } from 'styles/Content';
 import { AirPollution } from 'templates/Air-pollution';
@@ -19,26 +19,27 @@ import { useGeolocation } from 'hooks/use-geolocation';
 export const Home = () => {
   const [date] = useState<Date>(new Date());
   const coords = useGeolocation();
-  const { data: countryData, loading: countryLoading } = useQuery(
-    GET_LOCATION,
-    {
-      variables: {
-        coordinates: {
-          latitude: coords.latitude,
-          longitude: coords.longitude,
-        },
+  const {
+    data: countryData,
+    loading: countryLoading,
+    error: countryError,
+  } = useQuery(GET_LOCATION, {
+    variables: {
+      coordinates: {
+        latitude: coords.latitude,
+        longitude: coords.longitude,
       },
-      refetchWritePolicy: 'overwrite',
-      fetchPolicy: 'cache-first',
-    }
-  );
-  const { data, loading } = useQuery(GET_ALL_EVENTS, {
+    },
+    refetchWritePolicy: 'overwrite',
+    fetchPolicy: 'cache-first',
+  });
+  const { data, loading, error } = useQuery(GET_ALL_EVENTS, {
     variables: {
       startTime: date,
       observer: coords,
       date,
       location: {
-        country: countryData?.getLocation.countryName,
+        country: countryData?.getLocation?.countryName || 'Poland',
         date,
       },
       coords: {
@@ -69,12 +70,15 @@ export const Home = () => {
   );
 
   useEffect(() => {
-    if (countryData?.getLocation.countryName)
-      localStorage.setItem('user-country', countryData.getLocation.countryName);
-  }, [countryData?.getLocation.countryName]);
+    localStorage.setItem(
+      'user-country',
+      countryData?.getLocation?.countryName || 'Poland'
+    );
+  }, [countryData?.getLocation?.countryName]);
 
   if (countryLoading || loading)
     return <Loader loading={countryLoading || loading} />;
+  if (error || countryError) console.error(error || countryError);
 
   return (
     <Wrapper>
@@ -84,7 +88,7 @@ export const Home = () => {
           <Navbar
             mappings={[
               '/profile',
-              `/moon-phase?country=${countryData.getLocation?.countryName}`,
+              `/moon-phase?country=${localStorage.getItem('user-country') || countryData?.getLocation?.countryName}`,
               '/events',
             ]}
           />
@@ -92,13 +96,7 @@ export const Home = () => {
             <Events>
               {Object.values(EventsEnum).map((type, index) => (
                 <EventsWrapper className="events" key={index}>
-                  <Eclipse
-                    loading={loading}
-                    query={{
-                      data,
-                      type: type as 'local solar' | 'global solar' | 'lunar',
-                    }}
-                  />
+                  <Eclipse loading={loading} query={{ data, type }} />
                 </EventsWrapper>
               ))}
             </Events>

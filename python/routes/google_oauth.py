@@ -1,8 +1,5 @@
-import os
-from starlette.exceptions import HTTPException
-from typing_extensions import Any, cast
+from typing_extensions import Any
 from fastapi import APIRouter
-from google.oauth2.credentials import Credentials
 from utils.google_client import flow
 from fastapi.responses import RedirectResponse
 from google.auth.transport import requests

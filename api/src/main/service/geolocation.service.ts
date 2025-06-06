@@ -9,9 +9,7 @@ export class GeolocationService {
   async parseLocation(coords: GeolocationInput): Promise<Geolocation> {
     try {
       const response = await this.httpService.axiosRef.get('/reverse', {
-        params: {
-          ...coords,
-        },
+        params: { ...coords },
       });
 
       return response.data;
