@@ -1,7 +1,7 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Field, InputType, ObjectType } from '@nestjs/graphql';
 import { CoordsDto } from 'dto/coords';
 
+/* eslint-disable @typescript-eslint/no-unused-vars */
 @InputType()
 export class GeolocationInput implements CoordsDto {
   @Field(type => Number)

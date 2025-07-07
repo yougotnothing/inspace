@@ -21,8 +21,8 @@ export const useGeolocation = () => {
           height: p.coords.altitude || 20,
         });
       },
-      err => console.error('Ошибка геолокации:', err),
-      { timeout: 10000, maximumAge: 0 }
+      console.error,
+      { timeout: 1000, maximumAge: 0, enableHighAccuracy: true }
     );
   }, []);
 
