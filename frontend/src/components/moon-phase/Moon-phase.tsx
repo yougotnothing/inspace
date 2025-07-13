@@ -44,6 +44,9 @@ export const MoonPhase = () => {
   useEffect(() => {
     if (loading || error || !data) return;
 
+    if (threeRef.current && data.getMoonPhase?.hemisphere === 'Southern')
+      threeRef.current.style.rotate = '180deg';
+
     const textureLoader = new THREE.TextureLoader();
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(
@@ -157,7 +160,11 @@ export const MoonPhase = () => {
         <>
           <Navbar mappings={['/profile', '/home', '/events']} />
           <HeaderWrapper>
-            <Moon className="moon" ref={threeRef}></Moon>
+            <Moon
+              className="moon"
+              ref={threeRef}
+              $rotate={data.getMoonPhase?.declination}
+            />
             <HeaderInfo>
               <Light className="light" />
               <Info className="current-phase">
@@ -172,6 +179,10 @@ export const MoonPhase = () => {
                   </Paragraph>
                   <Paragraph>
                     Declination: {data.getMoonPhase?.declination.toFixed(3)}°
+                  </Paragraph>
+                  <Paragraph>
+                    Distance: {data.getMoonPhase?.distance.toFixed(1)}{' '}
+                    {localStorage.getItem('shown_distance')!.toLowerCase()}
                   </Paragraph>
                 </MoonPhaseInfoWrapper>
               </Info>

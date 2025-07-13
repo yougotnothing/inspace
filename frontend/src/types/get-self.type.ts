@@ -7,6 +7,7 @@ export interface Self {
     isHaveAvatar: boolean;
     avatar: string;
     toSpotted: {
+      id: string;
       description: string;
       type: string;
       date: string;

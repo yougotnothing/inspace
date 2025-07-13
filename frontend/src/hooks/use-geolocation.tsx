@@ -8,11 +8,6 @@ export const useGeolocation = () => {
   });
 
   useEffect(() => {
-    if (!navigator.geolocation) {
-      console.error('Геолокация не поддерживается браузером');
-      return;
-    }
-
     navigator.geolocation.getCurrentPosition(
       p => {
         setCoords({

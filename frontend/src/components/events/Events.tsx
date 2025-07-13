@@ -69,13 +69,9 @@ export const Events = () => {
     });
 
   const handleScroll = (e: any) => {
-    if (
-      e.target.documentElement.scrollHeight -
-        (e.target.documentElement.scrollTop + window.innerHeight) <
-      100
-    ) {
+    const element = e.target.documentElement;
+    if (element.scrollHeight - (element.scrollTop + window.innerHeight) <= 100)
       setIsFetching(true);
-    }
   };
 
   useGSAPOnload(

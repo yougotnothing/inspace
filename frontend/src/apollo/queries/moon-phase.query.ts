@@ -7,6 +7,7 @@ export const GET_FULL_MOON_PHASE_DATA = gql`
       hemisphere
       illumination
       declination
+      distance
       emoji
       x
       z

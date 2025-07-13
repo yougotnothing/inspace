@@ -20,8 +20,8 @@ export const EventWrapper = styled('div')`
   display: flex;
   background-color: var(--wrapper-bg);
   border: 1px solid var(--border-color);
-  padding: 1.5rem;
-  border-radius: 2rem;
+  padding: 1rem;
+  border-radius: 1rem;
   position: relative;
   gap: 5rem;
 `;

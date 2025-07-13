@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-export const Moon = styled('div')`
+export const Moon = styled('div')<{ $rotate: number }>`
   display: flex;
   width: 600px;
   height: 600px;
@@ -9,6 +9,7 @@ export const Moon = styled('div')`
   opacity: 0;
   position: relative;
   top: 17px;
+  rotate: ${({ $rotate }) => $rotate}deg;
 
   & > canvas {
     width: 600px !important;

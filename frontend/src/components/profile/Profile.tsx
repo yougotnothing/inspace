@@ -40,11 +40,13 @@ import { LOGOUT } from 'mutation/auth';
 import { Button } from 'styles/Button';
 import { useSpottedKeys } from 'hooks/use-spotted-keys';
 import { useNavigate } from 'react-router-dom';
+import { SpottedModal } from './components/Spotted-modal';
 
 export const Profile = () => {
   const [isEmailWarningVisible, setIsEmailWarningVisible] = useState(true);
   const [isFocused, setIsFocused] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [spottedId, setSpottedId] = useState<string | null>(null);
   const userNameInputRef = useRef<HTMLInputElement>(null);
   const { data, loading, error } = useSelf('network-only');
   const [uploadAvatar, { loading: isUploadingAvatar }] =
@@ -107,6 +109,11 @@ export const Profile = () => {
     <>
       {data && (
         <>
+          <SpottedModal
+            id={spottedId}
+            isOpen={Boolean(spottedId)}
+            onClose={() => setSpottedId(null)}
+          />
           <DeleteUserModal
             isOpen={isModalOpen}
             email={data.getSelf?.email}
@@ -197,8 +204,8 @@ export const Profile = () => {
                     <Paragraph>You haven't spotted anything yet.</Paragraph>
                   ) : (
                     <SpottedItems>
-                      {data.getSelf.toSpotted.map((item, index) => (
-                        <Spotted key={index}>
+                      {data.getSelf.toSpotted.map(item => (
+                        <Spotted key={item.id}>
                           <SpottedColumn>
                             <Paragraph>
                               {item.description.split(' ')[0]}{' '}
@@ -215,7 +222,10 @@ export const Profile = () => {
                             <Paragraph>
                               {item.isSpotted ? 'spotted' : "didn't spotted"}
                             </Paragraph>
-                            <Button style={{ margin: 'auto 0 0 auto' }}>
+                            <Button
+                              style={{ margin: 'auto 0 0 auto' }}
+                              onClick={() => setSpottedId(item.id)}
+                            >
                               See more
                             </Button>
                           </SpottedColumn>

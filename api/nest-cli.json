@@ -12,6 +12,10 @@
       {
         "include": "main/templates/*.pug",
         "exclude": "dist/src"
+      },
+      {
+        "include": "src/global.d.ts",
+        "exclude": "dist/src"
       }
     ]
   }

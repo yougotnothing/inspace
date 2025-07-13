@@ -6,6 +6,7 @@ import { NorthernHemisphereCountries } from 'utils/northern-hemisphere-countries
 import { SouthernHemisphereCountries } from 'utils/southern-hemisphere-countries';
 import { daysSinceJ2000 } from 'utils/days-since-J2000';
 import { MoonPhase as searchMoonPhase } from 'astronomy-engine';
+import { toEnumCase } from 'utils/to-enum-case';
 
 @Injectable()
 export class MoonPhaseService {
@@ -23,19 +24,18 @@ export class MoonPhaseService {
   }
 
   private calculateLightCoordinates(date: Date): Coordinates {
-    const angleInDegrees = searchMoonPhase(date);
-    const angleInRadians = ((angleInDegrees - 100) * Math.PI) / 180;
+    const angleInRadians = ((searchMoonPhase(date) - 100) * Math.PI) / 180;
 
-    const x = +(5 * Math.cos(angleInRadians));
-    const z = +(5 * Math.sin(angleInRadians));
-
-    return { x, y: 0, z };
+    return {
+      x: +(5 * Math.cos(angleInRadians)),
+      y: 0,
+      z: +(5 * Math.sin(angleInRadians)),
+    };
   }
 
   private calculateMoonDeclination(daysSinceJ2000: number): number {
-    const meanLongitude = 218.316 + 13.176396 * daysSinceJ2000;
     const rad = Math.PI / 180;
-    const L = meanLongitude * rad;
+    const L = (218.316 + 13.176396 * daysSinceJ2000) * (Math.PI / 180);
     const sinDeclination = Math.sin(L) * Math.sin(5.145 * rad);
 
     return Math.asin(sinDeclination) * (180 / Math.PI);
@@ -44,17 +44,13 @@ export class MoonPhaseService {
   async getMoonPhase({ date, country }: MoonPhaseInput): Promise<MoonPhase> {
     let hemisphere: Hemisphere = Hemisphere.NORTHERN;
 
-    if (
-      SouthernHemisphereCountries[country.toUpperCase().replaceAll(' ', '_')]
-    ) {
+    if (SouthernHemisphereCountries[toEnumCase(country)]) {
       hemisphere = Hemisphere.SOUTHERN;
     }
 
     if (
-      !NorthernHemisphereCountries[
-        country.toUpperCase().replaceAll(' ', '_')
-      ] &&
-      !SouthernHemisphereCountries[country.toUpperCase().replaceAll(' ', '_')]
+      !NorthernHemisphereCountries[toEnumCase(country)] &&
+      !SouthernHemisphereCountries[toEnumCase(country)]
     ) {
       throw new HttpException('Unknown country', 434);
     }
@@ -65,6 +61,7 @@ export class MoonPhaseService {
       emoji: Moon.lunarPhaseEmoji(date, { hemisphere }),
       declination: this.calculateMoonDeclination(daysSinceJ2000(date)),
       illumination: this.calculateMoonIllumination(date),
+      distance: Moon.lunarDistance(date) * 6371,
       ...this.calculateLightCoordinates(date),
     };
   }

@@ -61,7 +61,9 @@ export class NearestBodiesService {
         }
       });
 
-      return bodies;
+      console.log(response.data);
+
+      return response.data;
     } catch (error) {
       throw new Error(error);
     }
@@ -69,6 +71,8 @@ export class NearestBodiesService {
 
   private convertResponse(data: any): NearestBodies[] {
     const result: NearestBodies[] = [];
+
+    if (!data.total) return [];
 
     for (let i = 0; i < data.data.length; i++) {
       const obj = {} as NearestBodies;

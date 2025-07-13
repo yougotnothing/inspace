@@ -8,7 +8,6 @@
     "module": "ESNext",
     "skipLibCheck": true,
 
-    /* Path Mappings */
     "paths": {
       "templates/*": ["./src/templates/*"],
       "components/*": ["./src/components/*"],
@@ -25,7 +24,6 @@
       "extensions/*": ["./src/extensions/*.extension"]
     },
 
-    /* Bundler mode */
     "moduleResolution": "bundler",
     "allowImportingTsExtensions": true,
     "resolveJsonModule": true,
@@ -34,7 +32,6 @@
     "noEmit": true,
     "jsx": "react-jsx",
 
-    /* Linting */
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,

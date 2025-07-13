@@ -36,6 +36,7 @@ export const GET_SELF = gql`
       isHaveAvatar
       isVerified
       toSpotted {
+        id
         description
         date
         type

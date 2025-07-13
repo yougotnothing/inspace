@@ -12,7 +12,11 @@ async function bootstrap() {
   app.use(cookieParser());
   app.use(
     cors({
-      origin: ['http://localhost:5173', 'https://lh3.googleusercontent.com'],
+      origin: [
+        'http://localhost:5173',
+        'https://lh3.googleusercontent.com',
+        'http://127.0.0.1:5173',
+      ],
       credentials: true,
     })
   );
