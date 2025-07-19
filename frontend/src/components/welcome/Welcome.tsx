@@ -6,10 +6,6 @@ import {
   TextWrapper,
   Wrapper,
 } from './Welcome.styled';
-import * as THREE from 'three';
-import { EffectComposer } from 'three/examples/jsm//postprocessing/EffectComposer.js';
-import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
-import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass.js';
 import { Header } from 'styles/Header';
 import { Paragraph } from 'styles/Paragraph';
 import { useGSAP } from '@gsap/react';
@@ -18,6 +14,10 @@ import { GithubIcon, InstagramIcon, TelegramIcon } from 'hugeicons-react';
 import { Link } from 'styles/Link';
 import { Button } from 'styles/Button';
 import { useNavigate } from 'react-router-dom';
+import * as THREE from 'three';
+import { EffectComposer } from 'three/examples/jsm//postprocessing/EffectComposer.js';
+import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
+import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass.js';
 
 export const Welcome = () => {
   const starfieldRef = useRef<HTMLDivElement>(null);
@@ -79,14 +79,13 @@ export const Welcome = () => {
 
     const composer = new EffectComposer(renderer);
     const renderPass = new RenderPass(scene, camera);
-    composer.addPass(renderPass);
-
     const bloomPass = new UnrealBloomPass(
       new THREE.Vector2(window.innerWidth, window.innerHeight),
       1.7,
       0.1,
       0.2
     );
+    composer.addPass(renderPass);
     composer.addPass(bloomPass);
 
     function needResize(renderer: THREE.WebGLRenderer) {
@@ -95,14 +94,12 @@ export const Welcome = () => {
       const height = canvas.clientHeight;
       const needResize = canvas.width !== width || canvas.height !== height;
 
-      if (needResize) {
-        renderer.setSize(width, height, false);
-      }
+      if (needResize) renderer.setSize(width, height, false);
 
       return needResize;
     }
 
-    function animate() {
+    (function animate() {
       requestAnimationFrame(animate);
 
       if (needResize(renderer)) {
@@ -113,9 +110,7 @@ export const Welcome = () => {
       scene.position.y = mouse.y * 0.1;
 
       composer.render();
-    }
-
-    animate();
+    })();
 
     window.addEventListener('mousemove', handleMouseMove);
 
