@@ -1,9 +1,6 @@
 import { useQuery } from '@apollo/client';
 import { GET_FULL_MOON_PHASE_DATA } from 'query/moon-phase';
 import { useEffect, useMemo, useRef } from 'react';
-import * as THREE from 'three';
-import moonTexture from '../../assets/moon-texture.jpg';
-import moonDisplacement from '../../assets/moon-displacement.jpg';
 import { useSearchParams } from 'react-router-dom';
 import {
   HeaderInfo,

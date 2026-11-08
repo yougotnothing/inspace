@@ -15,8 +15,9 @@ import { LunarEclipseModule } from 'module/lunar-eclipse';
 import { SolarEclipseModule } from 'module/solar-eclipse';
 import { LunarApsisModule } from 'module/lunar-apsis';
 import { UserAvatarModule } from 'module/user-avatar';
-import { EmailModule } from './email.module';
-import { NearestBodiesModule } from './nearest-bodies.module';
+import { EmailModule } from 'module/email';
+import { NearestBodiesModule } from 'module/nearest-bodies';
+import { PlanetaryAlignmentModule } from 'module/planetary-alignment';
 
 @Module({
   imports: [
@@ -43,6 +44,7 @@ import { NearestBodiesModule } from './nearest-bodies.module';
     UserAvatarModule,
     EmailModule,
     NearestBodiesModule,
+    PlanetaryAlignmentModule,
   ],
   providers: [PrismaService, EventResolver, EventService],
 })

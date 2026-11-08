@@ -17,7 +17,7 @@ export class PlanetaryAlignmentService {
     Body.Neptune,
   ];
 
-  async getPlanetsPosition(date: Date): Promise<PlanetPosition[]> {
+  private async getPlanetsPosition(date: Date): Promise<PlanetPosition[]> {
     const positions: PlanetPosition[] = [];
 
     for (const planet of this.planets) {

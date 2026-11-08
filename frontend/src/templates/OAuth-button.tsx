@@ -32,13 +32,11 @@ export const OAuthButton: FC<{ service: 'google' | 'github' }> = ({
       <GithubIcon size="1.5rem" />
     );
 
-  const handleGetCode = ((): string =>
-    service === 'google'
-      ? 'http://localhost:8000/auth/oauth/google/callback'
-      : 'http://localhost:8000/auth/oauth/github/callback')();
-
   return (
-    <A target="_self" href={handleGetCode}>
+    <A
+      target="_self"
+      href={`http://localhost:8000/auth/oauth/${service}/callback`}
+    >
       {Icon} {service}
     </A>
   );

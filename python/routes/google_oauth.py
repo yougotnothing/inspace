@@ -13,7 +13,7 @@ keycloak_client = KeycloakClient()
 
 @router.get('/callback')
 def oauth_connect() -> RedirectResponse:
-    auth_url, state = flow.authorization_url(
+    auth_url, _ = flow.authorization_url(
         access_type='offline',
         include_granted_scopes='true',
         prompt='consent'

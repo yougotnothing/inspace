@@ -15,12 +15,7 @@ export class MoonPhaseService {
   }
 
   private calculateMoonIllumination(date: Date): number {
-    const synodicMonth = 29.53058867;
-    const age = Moon.lunarAge(date);
-    const phaseAngle = (age / synodicMonth) * 360;
-    const illumination = (1 - Math.cos(this.degToRad(phaseAngle))) / 2;
-
-    return +(illumination * 100).toFixed(2);
+    return +(((1 - Math.cos(this.degToRad((Moon.lunarAge(date) / 29.53058867) * 360))) / 2) * 100).toFixed(2);
   }
 
   private calculateLightCoordinates(date: Date): Coordinates {
@@ -34,11 +29,9 @@ export class MoonPhaseService {
   }
 
   private calculateMoonDeclination(daysSinceJ2000: number): number {
-    const rad = Math.PI / 180;
-    const L = (218.316 + 13.176396 * daysSinceJ2000) * (Math.PI / 180);
-    const sinDeclination = Math.sin(L) * Math.sin(5.145 * rad);
-
-    return Math.asin(sinDeclination) * (180 / Math.PI);
+    return (
+      Math.asin(Math.sin((218.316 + 13.176396 * daysSinceJ2000) * (Math.PI / 180)) * Math.sin(5.145 * (Math.PI / 180))) * (180 / Math.PI)
+    );
   }
 
   async getMoonPhase({ date, country }: MoonPhaseInput): Promise<MoonPhase> {
@@ -48,10 +41,7 @@ export class MoonPhaseService {
       hemisphere = Hemisphere.SOUTHERN;
     }
 
-    if (
-      !NorthernHemisphereCountries[toEnumCase(country)] &&
-      !SouthernHemisphereCountries[toEnumCase(country)]
-    ) {
+    if (!NorthernHemisphereCountries[toEnumCase(country)] && !SouthernHemisphereCountries[toEnumCase(country)]) {
       throw new HttpException('Unknown country', 434);
     }
 
